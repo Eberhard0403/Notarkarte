@@ -1,7 +1,9 @@
 """Baut index.html aus data/notare_alle.csv.
 
-Aufgenommen werden nur Einträge mit der Amtsbezeichnung "Notar" oder "Notarin"
-(also keine Anwaltsnotare und keine Notariatsverwaltungen).
+Aufgenommen werden Einträge mit der Amtsbezeichnung "Notar" oder "Notarin" sowie
+Notariatsverwalter/innen im Gebiet der reinen Notare. Dieses Gebiet ergibt sich aus den
+Daten selbst: Orte, in denen Anwaltsnotare sitzen, gehören zum Anwaltsnotariat.
+Verwalter, die schon als Notar/in auf der Karte stehen, werden nicht doppelt aufgenommen.
 
 Koordinaten: Mittelpunkt der Postleitzahl (data/plz_geocoord.csv). Notare mit
 gleicher PLZ werden spiralförmig um den Mittelpunkt verteilt, damit jeder
@@ -19,6 +21,12 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 DATA = ROOT / "data"
 NUR_NOTAR = {"Notar", "Notarin"}
+VERWALTER = {"Notariatsverwalter", "Notariatsverwalterin"}
+
+
+def stadt(ort):
+    """Grundname eines Ortes: "Wesel am Rhein" -> "Wesel", "Duisburg-Hamborn" -> "Duisburg"."""
+    return re.split(r"[-,(]| am | an der ", ort)[0].strip()
 
 
 def load_plz():
@@ -33,7 +41,12 @@ def slug(text):
 
 def load_notare(plz):
     with open(DATA / "notare_alle.csv", encoding="utf-8") as f:
-        rows = [r for r in csv.DictReader(f, delimiter=";") if r["amt"] in NUR_NOTAR]
+        alle = list(csv.DictReader(f, delimiter=";"))
+    anwaltsorte = {stadt(r["ort"]) for r in alle if r["amt"].startswith("Rechtsanw")}
+    rows = [r for r in alle if r["amt"] in NUR_NOTAR]
+    notar_namen = {r["name"] for r in rows}
+    rows += [r for r in alle if r["amt"] in VERWALTER
+             and stadt(r["ort"]) not in anwaltsorte and r["name"] not in notar_namen]
     by_plz = defaultdict(list)
     for r in rows:
         by_plz[r["plz"]].append(r)

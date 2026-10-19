@@ -136,7 +136,7 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
 
 <header>
   <h1>Notarkarte Rheinland</h1>
-  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare (ohne Anwaltsnotare)</div>
+  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare im Gebiet der reinen Notare (ohne Anwaltsnotare)</div>
 </header>
 <main>
   <div id="mapwrap">
@@ -162,7 +162,7 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
       </div>
       <div class="scroll">
       <ul id="list"></ul>
-      <div class="note" id="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, alle 409 Treffer; aufgenommen sind nur Einträge mit der Amtsbezeichnung Notar oder Notarin. Kartenposition = Mittelpunkt der Postleitzahl.</div>
+      <div class="note" id="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, alle 409 Treffer; aufgenommen sind Notarinnen und Notare sowie Notariatsverwaltungen im Gebiet der reinen Notare, keine Anwaltsnotare. Kartenposition = Mittelpunkt der Postleitzahl.</div>
       </div>
     </div>
 
@@ -324,7 +324,7 @@ function renderList() {
       const li = document.createElement("li");
       li.className = "item";
       li.innerHTML = `<button><i class="dot ${hasGeb(n) ? "has" : "no"}"></i><span class="nm">${esc(n.name)}</span>
-        <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
+        <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${n.amt.startsWith("Notariatsverw") ? esc(n.amt) + " · " : ""}${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
       li.firstChild.onclick = () => open(n.id, true);
       frag.appendChild(li);
     });
