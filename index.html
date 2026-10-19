@@ -60,8 +60,15 @@ main { flex: 1; min-height: 0; display: flex; }
 .klabel { font-family: var(--body); fill: var(--muted); text-anchor: middle; pointer-events: none; letter-spacing: .06em; text-transform: uppercase; }
 .pin { cursor: pointer; fill: var(--surface); stroke: var(--seal); }
 .pin.has { fill: var(--seal); stroke: var(--surface); }
-.pin.sel { stroke: var(--focus); }
-.halo { fill: none; stroke: var(--focus); opacity: .45; pointer-events: none; }
+.pin { stroke-width: 2; pointer-events: none; }
+.pin.has { stroke-width: 1.5; }
+.pin.sel { stroke: var(--focus); stroke-width: 3; }
+.halo { fill: none; stroke: var(--focus); stroke-width: 5; opacity: .45; pointer-events: none; }
+.hit { fill: transparent; cursor: pointer; }
+.mk.group { cursor: pointer; }
+.cl { fill: var(--seal); stroke: var(--surface); stroke-width: 2.5; }
+.mk.group:hover .cl { stroke: var(--focus); }
+.cltx { fill: #fff; font: 600 11px var(--body); text-anchor: middle; pointer-events: none; font-variant-numeric: tabular-nums; }
 .zoom { position: absolute; right: max(12px, env(safe-area-inset-right, 0px)); top: 12px; display: flex; flex-direction: column; gap: 4px; }
 .zoom button, .iconbtn {
   width: 34px; height: 34px; font: 600 1.05rem var(--body); color: var(--ink);
@@ -74,6 +81,7 @@ main { flex: 1; min-height: 0; display: flex; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; box-sizing: border-box; }
 .dot.has { background: var(--seal); }
 .dot.no { border: 2px solid var(--seal); }
+.dot.grp { width: 16px; height: 16px; background: var(--seal); color: #fff; font: 600 9px/16px var(--body); text-align: center; font-style: normal; }
 
 /* Seitenleiste */
 aside { width: 390px; flex: none; border-left: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
@@ -93,16 +101,18 @@ input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px
 #list { list-style: none; margin: 0; padding: 0; }
 #list li.city { position: sticky; top: 0; z-index: 1; background: var(--surface); padding: 8px 16px 4px; font-family: var(--display); font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
 #list li.city span { color: var(--muted); font: .78rem var(--mono); }
-#list li.item { border-bottom: 1px solid var(--line); }
-#list li.item button {
+.gtitle { font-family: var(--display); font-weight: 600; font-size: 1rem; margin-left: 4px; }
+#glist { list-style: none; margin: 0; padding: 0; }
+#list li.item, #glist li.item { border-bottom: 1px solid var(--line); }
+:is(#list, #glist) li.item button {
   all: unset; box-sizing: border-box; width: 100%; padding: 9px 16px; cursor: pointer;
   display: grid; grid-template-columns: 12px 1fr auto; gap: 2px 10px; align-items: baseline;
 }
-#list li.item button:hover { background: var(--bg); }
-#list li.item button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-#list .nm { font-weight: 600; }
-#list .age { font: .78rem var(--mono); color: var(--muted); }
-#list .meta { grid-column: 2 / 4; color: var(--muted); font-size: .82rem; }
+:is(#list, #glist) li.item button:hover { background: var(--bg); }
+:is(#list, #glist) li.item button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+:is(#list, #glist) .nm { font-weight: 600; }
+:is(#list, #glist) .age { font: .78rem var(--mono); color: var(--muted); }
+:is(#list, #glist) .meta { grid-column: 2 / 4; color: var(--muted); font-size: .82rem; }
 .note { padding: 12px 16px 16px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
 
 /* Einzelansicht */
@@ -146,7 +156,7 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
       <button id="zout" aria-label="Herauszoomen">−</button>
       <button id="zreset" aria-label="Ganze Karte zeigen">⤢</button>
     </div>
-    <div class="legend"><span><i class="dot has"></i>Geburtsdatum erfasst</span><span><i class="dot no"></i>noch offen</span></div>
+    <div class="legend"><span><i class="dot has"></i>Geb.-Datum erfasst</span><span><i class="dot no"></i>offen</span><span><i class="dot grp">3</i>mehrere</span></div>
   </div>
 
   <aside>
@@ -164,6 +174,14 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
       <ul id="list"></ul>
       <div class="note" id="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, alle 409 Treffer; aufgenommen sind Notarinnen und Notare sowie Notariatsverwaltungen im Gebiet der reinen Notare, keine Anwaltsnotare. Kartenposition = Mittelpunkt der Postleitzahl.</div>
       </div>
+    </div>
+
+    <div class="view" id="v-group" hidden>
+      <div class="dbar">
+        <button class="back" id="g-back">‹ Liste</button>
+        <span class="gtitle" id="g-title"></span>
+      </div>
+      <div class="scroll"><ul id="glist" class="plain"></ul></div>
     </div>
 
     <div class="view" id="v-detail" hidden>
@@ -248,9 +266,12 @@ function age(iso) {
 
 // ---------- Karte ----------
 const svg = d3.select("#map");
-const root = svg.append("g");
-const gK = root.append("g"), gL = root.append("g"), gH = root.append("g"), gP = root.append("g");
-let projection, k = 1, W = 0, H = 0;
+const root = svg.append("g");                       // Grundkarte, folgt dem Zoom
+const gK = root.append("g"), gL = root.append("g");
+const gPins = svg.append("g");                      // Punkte in Bildschirmkoordinaten, immer gleich groß
+let projection, W = 0, H = 0, T = d3.zoomIdentity;
+const GAP = 18;          // Punkte, die näher als 18 px beieinander liegen, werden zu einer Gruppe
+const MAX_ZOOM = 250;
 
 function layout() {
   ({ width: W, height: H } = svg.node().getBoundingClientRect());
@@ -263,42 +284,98 @@ function layout() {
     .attr("transform", d => `translate(${path.centroid(d)})`).text(d => d.properties.name);
 }
 
+// Gruppiert Punkte, die sich auf dem Bildschirm überdecken würden. Der ausgewählte Notar bleibt immer einzeln.
+function clusters() {
+  const pts = [];
+  for (const n of shown) {
+    const sx = T.applyX(n.x), sy = T.applyY(n.y);
+    if (sx > -GAP && sx < W + GAP && sy > -GAP && sy < H + GAP) pts.push({ n, sx, sy });
+  }
+  const qt = d3.quadtree(pts, p => p.sx, p => p.sy);
+  const used = new Set(), out = [];
+  for (const p of pts) {
+    if (used.has(p.n.id)) continue;
+    if (p.n.id === selected) { used.add(p.n.id); out.push({ members: [p.n], sx: p.sx, sy: p.sy }); continue; }
+    const m = [];
+    qt.visit((node, x0, y0, x1, y1) => {
+      if (!node.length) {
+        for (let d = node; d; d = d.next) {
+          const q = d.data;
+          if (!used.has(q.n.id) && q.n.id !== selected && Math.hypot(q.sx - p.sx, q.sy - p.sy) < GAP) { used.add(q.n.id); m.push(q); }
+        }
+      }
+      return x0 > p.sx + GAP || x1 < p.sx - GAP || y0 > p.sy + GAP || y1 < p.sy - GAP;
+    });
+    out.push({ members: m.map(q => q.n), sx: d3.mean(m, q => q.sx), sy: d3.mean(m, q => q.sy) });
+  }
+  return out;
+}
+
 function drawPins() {
-  gP.selectAll("circle").data(shown, d => d.id).join("circle")
-    .attr("cx", d => d.x).attr("cy", d => d.y)
-    .attr("class", d => "pin" + (hasGeb(d) ? " has" : "") + (d.id === selected ? " sel" : ""))
-    .on("click", (e, d) => { e.stopPropagation(); open(d.id, false); })
-    .call(s => s.selectAll("title").data(d => [d]).join("title").text(d => `${d.name}, ${d.ort}`));
-  const sel = selected && shown.find(n => n.id === selected);
-  gH.selectAll("circle").data(sel ? [sel] : []).join("circle").attr("class", "halo")
-    .attr("cx", d => d.x).attr("cy", d => d.y);
-  gP.selectAll("circle.sel").raise();
-  sizePins();
+  const cl = clusters();
+  cl.sort((a, b) => (a.members[0].id === selected) - (b.members[0].id === selected));
+  gPins.selectAll("g").data(cl).join("g")
+    .attr("transform", c => `translate(${c.sx},${c.sy})`)
+    .attr("class", c => c.members.length > 1 ? "mk group" : "mk")
+    .each(function (c) {
+      const g = d3.select(this);
+      g.selectAll("*").remove();
+      if (c.members.length > 1) {
+        const done = c.members.filter(hasGeb).length;
+        g.append("circle").attr("class", "cl").attr("r", 10 + Math.min(6, c.members.length));
+        g.append("text").attr("class", "cltx").attr("dy", "0.35em").text(c.members.length);
+        g.append("title").text(`${c.members.length} Notare – antippen zum Auffächern\n` +
+          c.members.map(n => n.name).join("\n") + (done ? `\n(${done} mit Geburtsdatum)` : ""));
+        g.on("click", e => { e.stopPropagation(); openCluster(c.members); });
+      } else {
+        const n = c.members[0], sel = n.id === selected;
+        if (sel) g.append("circle").attr("class", "halo").attr("r", 14);
+        g.append("circle").attr("class", "pin" + (hasGeb(n) ? " has" : "") + (sel ? " sel" : ""))
+          .attr("r", sel ? 8 : 6);
+        g.append("circle").attr("class", "hit").attr("r", 11);   // größere Tippfläche
+        g.append("title").text(`${n.name}, ${n.ort}`);
+        g.on("click", e => { e.stopPropagation(); open(n.id, false); });
+      }
+    });
 }
 
-function sizePins() {
-  const s = Math.sqrt(k);
-  gP.selectAll("circle").attr("r", d => (d.id === selected ? 7.5 : 4.6) / s)
-    .attr("stroke-width", d => (d.id === selected ? 3 : hasGeb(d) ? 1.1 : 1.8) / s);
-  gH.selectAll("circle").attr("r", 13 / s).attr("stroke-width", 5 / s);
-  gL.selectAll("text").attr("font-size", 9 / k).attr("display", k >= 1.8 || W > 700 ? null : "none");
-}
-
-const zoom = d3.zoom().scaleExtent([1, 60]).on("zoom", e => {
-  k = e.transform.k; root.attr("transform", e.transform); sizePins();
+let frame = 0;
+const zoom = d3.zoom().scaleExtent([1, MAX_ZOOM]).on("zoom", e => {
+  T = e.transform;
+  root.attr("transform", T);
+  gL.selectAll("text").attr("font-size", 9 / T.k).attr("display", T.k >= 1.8 || W > 700 ? null : "none");
+  if (!frame) frame = requestAnimationFrame(() => { frame = 0; drawPins(); });
 });
-svg.call(zoom).on("click", () => { if (selected) closeDetail(); });
+svg.call(zoom).on("click", () => { if (selected || group) closeAll(); });
 $("zin").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1.8);
 $("zout").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8);
 $("zreset").onclick = () => svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
 
+function zoomTo(x, y, s) {
+  svg.transition().duration(500).call(zoom.transform,
+    d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-x, -y));
+}
+
 function panTo(n, minZoom) {
-  const t = d3.zoomTransform(svg.node());
-  const [sx, sy] = t.apply([n.x, n.y]);
-  const s = Math.max(t.k, minZoom);
-  if (s === t.k && sx > 40 && sx < W - 40 && sy > 40 && sy < H - 40) return; // schon gut sichtbar
-  svg.transition().duration(450).call(zoom.transform,
-    d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-n.x, -n.y));
+  const [sx, sy] = T.apply([n.x, n.y]);
+  const s = Math.max(T.k, minZoom);
+  if (s === T.k && sx > 40 && sx < W - 40 && sy > 40 && sy < H - 40) return; // schon gut sichtbar
+  zoomTo(n.x, n.y, s);
+}
+
+// Gruppe antippen: hineinzoomen, bis die Punkte einzeln liegen (große Gruppen schrittweise).
+function openCluster(members) {
+  let minD = Infinity;
+  for (let i = 0; i < members.length; i++)
+    for (let j = i + 1; j < members.length; j++)
+      minD = Math.min(minD, Math.hypot(members[i].x - members[j].x, members[i].y - members[j].y));
+  const need = (GAP + 6) / minD;
+  const [x0, x1] = d3.extent(members, n => n.x), [y0, y1] = d3.extent(members, n => n.y);
+  const target = need <= MAX_ZOOM ? Math.max(need, T.k * 1.6) : T.k * 3;
+  const s = Math.min(MAX_ZOOM, target);
+  // Kleine Gruppen und Gruppen, die sich nicht mehr auffächern lassen, zusätzlich als Auswahlliste
+  if (members.length <= 6 || s < T.k * 1.05) showGroup(members);
+  if (s >= T.k * 1.05) zoomTo((x0 + x1) / 2, (y0 + y1) / 2, s);
 }
 
 // ---------- Liste ----------
@@ -319,18 +396,49 @@ function renderList() {
     const h = document.createElement("li");
     h.className = "city"; h.innerHTML = `${esc(city)} <span>${byCity.get(city).length}</span>`;
     frag.appendChild(h);
-    byCity.get(city).forEach(n => {
-      const a = age(extra[n.id]?.geburtsdatum);
-      const li = document.createElement("li");
-      li.className = "item";
-      li.innerHTML = `<button><i class="dot ${hasGeb(n) ? "has" : "no"}"></i><span class="nm">${esc(n.name)}</span>
-        <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${n.amt.startsWith("Notariatsverw") ? esc(n.amt) + " · " : ""}${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
-      li.firstChild.onclick = () => open(n.id, true);
-      frag.appendChild(li);
-    });
+    byCity.get(city).forEach(n => frag.appendChild(itemLi(n, true)));
   });
   list.replaceChildren(frag);
+  if (group) renderGroup();
 }
+
+function itemLi(n, fromList) {
+  const a = age(extra[n.id]?.geburtsdatum);
+  const li = document.createElement("li");
+  li.className = "item";
+  li.innerHTML = `<button><i class="dot ${hasGeb(n) ? "has" : "no"}"></i><span class="nm">${esc(n.name)}</span>
+    <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${n.amt.startsWith("Notariatsverw") ? esc(n.amt) + " · " : ""}${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
+  li.firstChild.onclick = () => { if (fromList) group = null; open(n.id, fromList); };
+  return li;
+}
+
+// ---------- Auswahl bei überlappenden Punkten ----------
+let group = null;   // Notare der angetippten Gruppe, solange die Auswahl offen ist
+function showGroup(members) {
+  flushSave();
+  selected = null;
+  group = [...members].sort((a, b) => a.strasse.localeCompare(b.strasse, "de") || a.name.localeCompare(b.name, "de"));
+  showView("v-group");
+  renderGroup();
+  drawPins();
+}
+function renderGroup() {
+  const same = new Set(group.map(n => n.strasse + n.plz)).size === 1;
+  $("g-title").textContent = same ? `${group.length} Notare unter dieser Adresse` : `${group.length} Notare an dieser Stelle`;
+  const frag = document.createDocumentFragment();
+  group.forEach(n => frag.appendChild(itemLi(n, false)));
+  $("glist").replaceChildren(frag);
+}
+function showView(id) {
+  for (const v of ["v-list", "v-group", "v-detail"]) $(v).hidden = v !== id;
+}
+function closeAll() {
+  flushSave();
+  selected = null; group = null;
+  showView("v-list");
+  drawPins();
+}
+$("g-back").onclick = closeAll;
 
 function render() {
   shown = filtered();
@@ -338,6 +446,8 @@ function render() {
   shown.sort((a, b) => a.ort.localeCompare(b.ort, "de") || a.name.localeCompare(b.name, "de"));
   drawPins();
   renderList();
+  if (group) group = group.filter(n => shown.includes(n));
+  if (group && !group.length) closeAll();
   if (selected) updatePos();
 }
 
@@ -354,7 +464,8 @@ function open(id, fromList) {
   flushSave();
   selected = id;
   const n = byId.get(id);
-  $("v-list").hidden = true; $("v-detail").hidden = false;
+  showView("v-detail");
+  $("back").textContent = group ? "‹ Auswahl" : "‹ Liste";
   document.querySelector(".dbody").scrollTop = 0;
   $("d-amt").textContent = n.amt;
   $("d-name").textContent = n.name;
@@ -370,23 +481,27 @@ function open(id, fromList) {
   panTo(n, fromList ? 4 : 1);
 }
 
+// Vor/Zurück blättert innerhalb der angetippten Gruppe, sonst durch die ganze Liste
+const navList = () => group || shown;
 function updatePos() {
-  const i = shown.findIndex(n => n.id === selected);
-  $("pos").textContent = i >= 0 ? `${i + 1} / ${shown.length}` : "";
+  const nl = navList(), i = nl.findIndex(n => n.id === selected);
+  $("pos").textContent = i >= 0 ? `${i + 1} / ${nl.length}` : "";
   $("prev").disabled = i <= 0;
-  $("next").disabled = i < 0 || i >= shown.length - 1;
+  $("next").disabled = i < 0 || i >= nl.length - 1;
 }
 
 function step(d) {
-  const i = shown.findIndex(n => n.id === selected);
-  const n = shown[i + d];
-  if (n) open(n.id, true);
+  const nl = navList(), i = nl.findIndex(n => n.id === selected);
+  const n = nl[i + d];
+  if (n) open(n.id, !group);
 }
 
 function closeDetail() {
+  if (!group) return closeAll();
   flushSave();
   selected = null;
-  $("v-detail").hidden = true; $("v-list").hidden = false;
+  showView("v-group");
+  renderGroup();
   drawPins();
 }
 
