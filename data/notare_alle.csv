@@ -1,0 +1,410 @@
+pdf_seite;amt;name;strasse;plz;ort
+1;Notar;Jan Töben;Hauptstraße 11-13;50226;Frechen
+1;Notar;Dr. Karl Schindeldecker;Comesstraße 1-15;50321;Brühl
+1;Notar;Dr. Henryk Haibt;Königsallee 2;40212;Düsseldorf
+1;Notar;Dr. Benjamin Marc Schmitz;Posthof 6;53783;Eitorf
+1;Notarin;Dr. Nicole Plate;Kriegerstraße 17;53359;Rheinbach
+1;Rechtsanwältin und Notarin;Meike Schloß;Düsseldorfer Straße 269;45481;Mülheim an der Ruhr
+2;Notar;Dr. Rainer Oppermann;Königsallee 31;40212;Düsseldorf
+2;Notar;Dr. Timo Hartlich LL.M.;Kurfürstenstraße 1;53639;Königswinter
+2;Notar;Dr. Dominik Kölmel;Hennefer Straße 5;53757;Sankt Augustin
+2;Rechtsanwalt und Notar;Ingo Neumann;Königshardter Straße 103;46145;Oberhausen
+2;Notar;Dr. Peter Marian Stelmaszczyk;Hauptstraße 70;51399;Burscheid
+2;Notar;Dr. Andreas Goetze;Uerdinger Straße 95;47799;Krefeld
+3;Notar;Dr. Thorsten Führ;Weierstraße 14-16;53721;Siegburg
+3;Notar;Dr. Tobias Roth;Ufergarten 22;42651;Solingen
+3;Rechtsanwalt und Notar;Jens Kassen;Elsa-Brändström-Str. 1;46045;Oberhausen
+4;Notar;Dr. Wilhelm Droste;Königsallee 2;40212;Düsseldorf
+4;Notar;Mark Neukirchen;Wettinerstraße 51;42287;Wuppertal-Barmen
+4;Rechtsanwalt und Notar;Olaf Sobirey;Wallstraße 6;46483;Wesel
+4;Notarin;Dr. Anne-Kathrin Lingk;Von-Diergardt-Straße 19;51375;Leverkusen
+4;Rechtsanwalt und Notar;Ulrich Güldenberg;Schemkesweg 50;47057;Duisburg
+4;Notar;Philip Scholz;Hauptstraße 41;51674;Wiehl
+5;Notar;Thomas Klosky;Trierer Straße 93;52156;Monschau
+5;Notar;Dr. Tobias Clevinghaus;Bahnhofstraße 11;50169;Kerpen
+5;Notar;Dr. Stefan Wehrstedt;Königsallee 96;40212;Düsseldorf
+5;Notar;Dr. Philipp Müller;Elisabeth-Breuer-Straße 11;51065;Köln-Mülheim
+5;Notar;Dr. Robert Mödl;Am Stadion 18-24;51465;Bergisch Gladbach
+5;Notarin;Dr. Anna Zöbeley;Hammer Landstraße 1a;41460;Neuss
+6;Rechtsanwalt und Notar;Dr. Christian Keller;Muhrenkamp 11;45468;Mülheim an der Ruhr
+6;Notar;Dr. Tobias Wilms;Viersener Straße 61;41751;Viersen
+6;Notar;Dr. Peter Coenen;Weberstraße 19;52538;Gangelt
+7;Notar;Dr. Heiko Worm LL.M.;Königstraße 156;53332;Bornheim
+7;Rechtsanwalt und Notar;Jörg Tölle n;Großenbaumer Straße 93;45481;Mülheim an der Ruhr
+7;Notar;Dr. Christian Hartmann;Robert-Bosch-Straße 2;41363;Jüchen
+7;Notar;Dr. Florian Braunfels;Königsallee 31;40212;Düsseldorf
+7;Notar;Dr. Christof Wagner LL.M. (Cambridge);Reitmeisterweg 14;52223;Stolberg (Rheinland)
+8;Notar;Martin Johannes Rudersdorf LL.M.;Bahnhofstraße 1;52064;Aachen
+8;Notar;Stefan Wegerhoff;Dickstraße 35;53773;Hennef
+8;Notarin;Dr. Christiane Kluge;Hauptstraße 27a;53604;Bad Honnef
+8;Notarin;Dr. Susanna Welling;Luegallee 67;40545;Düsseldorf
+8;Rechtsanwalt und Notar;Stefan Schwarz;Bahnstraße 44;45468;Mülheim an der Ruhr
+8;Notar;Dr. Albert Rabl;Willy-Brandt-Allee 16;53113;Bonn
+9;Rechtsanwalt und Notar;Frank Dubbratz;Schillerstraße 73;46535;Dinslaken
+9;Rechtsanwalt und Notar;Maik Zyber;Lothringerstraße 35;46045;Oberhausen
+9;Notarin;Dr. Karin Raude;Schloss-Rahe-Straße 15;52072;Aachen
+9;Notar;Christian Mach;In den Weiern 24;53937;Schleiden
+10;Notar;Ingo Schreinert LL.M. Eur.;Bonner Straße 21;50374;Erftstadt
+10;Notarin;Ute Weyland;Talstraße 7;51643;Gummersbach
+10;Notar;Dr. Maximilian Johannes Eble LL.M. (Cambridge);Bismarckstraße 143;52066;Aachen
+10;Notar;Dr. Julian Stefan Klein LL.M.;Dürerstraße 37;42549;Velbert
+10;Rechtsanwalt und Notar;Harald Rutert;Stresemannstr. 78;47051;Duisburg
+11;Notar;Dr. Dominik Braun LL.M. (Univ. of Chicago);Holzstraße 32;52349;Düren
+11;Notar;Dr. Christoph Neumeyer;Elisabethstraße 5;40217;Düsseldorf
+11;Notar;Dr. Christopher Björn Lutz;Holzmarkt 8;47495;Rheinberg
+11;Rechtsanwältin und Notarin;Dr. Birgitta Konrad;Köhnenstr. 11;47051;Duisburg
+11;Notar;Dr. Thomas Breiken;Scharrenbroicher Straße 4;51503;Rösrath
+11;Notar;Marc Heggen;Hans-Tenhaeff-Str. 1;47638;Straelen
+12;Notar;Dr. Thilo Weimer;Von-Diergardt-Straße 19;51375;Leverkusen
+12;Notarin;Dr. Carolin Opgenhoff;Königsallee 82-84;40212;Düsseldorf
+12;Rechtsanwältin und Notarin;Melanie Stobbe;Gerhard-Malina-Straße 1a;46537;Dinslaken
+12;Notar;Dr. Jan Henning Berg;Am Wallgraben 38;40625;Düsseldorf-Gerresheim
+13;Notar;Dr. Joachim Tebben LL.M. (Michigan);Grünstraße 25;40212;Düsseldorf
+13;Notar;Dr. Askan von Rintelen;Haydnstraße 52;40593;Düsseldorf
+13;Notarin;Lisa Johanna Mörchen;Bahnhofstraße 23;53721;Siegburg
+13;Rechtsanwalt und Notar;Martin J. Schmülling;Herzogenring 22;46483;Wesel
+13;Notar;Dr. Marc Hermanns;Habsburgerring 2;50674;Köln
+13;Notar;Dr. Christoph Dorsel LL.M.;Poppelsdorfer Allee 3N;53115;Bonn
+14;Notar;Dr. Marc Grotheer;Inselstraße 13;40479;Düsseldorf
+14;Notar;Dirk Höfinghoff;Wilhelmstraße 62;53721;Siegburg
+14;Notar;Dr. Jens Heinig;Poststraße 6;40789;Monheim am Rhein
+14;Notar;Dr. Armin Winnen;Bismarckstraße 143;52066;Aachen
+14;Notar;Dr. Stefan Heinze;Gereonshof 2;50670;Köln
+14;Notar;Dr. Dieter Stöhr;Sindorfer Straße 4;50171;Kerpen
+15;Notar;Dr. Stephan Bleisteiner;Kreuzgasse 2a;50667;Köln
+15;Notarin;Astrid Gageik;Berliner Allee 26;40212;Düsseldorf
+15;Notar;Dr. Dominik Gassen;Willy-Brandt-Allee 16;53113;Bonn
+16;Notar;Hans Joachim Schaller;Apostelnstraße 15-17;50667;Köln
+16;Notar;Dr. Benedikt Berthold;Kölner Straße 45;41812;Erkelenz
+16;Notar;Martin Strahl;Alter Römerweg 3;53937;Schleiden
+16;Notar;Dr. Tobias Kruse;Erftstraße 86;41460;Neuss
+16;Rechtsanwältin und Notarin;Christiane Bruckmann-Hölscher;Duisburger Straße 73;46535;Dinslaken
+16;Notarin;Dr. Yvonne Abicht;Heinrich-Heine-Straße 18-20;52349;Düren
+17;Notar;Edgar Mörtenkötter;Rathausstr. 28;53225;Bonn-Beuel
+17;Notar;Dr. Ulrich Temme;Kaiserswerther Straße 107;40476;Düsseldorf
+17;Notarin;Dr. Nicola Hegerfeld LL.M.;Ostwall 231;47798;Krefeld
+17;Rechtsanwalt und Notar;Stefan Barkowski;Kapitelstraße 9;46459;Rees
+17;Notar;Peter Dobberahn;Dürener Straße 282;50935;Köln
+17;Notar;Dr. Daniel Seebach;Thomas-Mann-Str. 55;53111;Bonn
+18;Notar;Simon Lindow;Theodor-Heuss-Ring 23;50668;Köln
+18;Notarin;Kornelia Rudolph-Alexander;Schorndorfer Straße 15;47906;Kempen
+18;Notarin;Dr. Katja Grage;Bismarckstraße 51;47799;Krefeld
+19;Notar;Markus Bohlscheid;Am Stadion 18-24;51465;Bergisch Gladbach
+19;Rechtsanwältin und Notarin;Gabriele Winterscheidt;Brüner Straße 4-6;46499;Hamminkeln
+19;Notar;Leontin Schulte-Thoma;Elsa-Brändström-Str. 8;50668;Köln
+19;Notar;Dr. Reinhard Busse;Neanderstraße 68;40822;Mettmann
+19;Rechtsanwalt und Notar;Marco Blumberg LL.M.;Tannenbergstr. 1;46045;Oberhausen
+20;Notar;Marc Christian Lehmann;Sebastian-Kneipp-Promenade 28;53902;Bad Münstereifel
+20;Rechtsanwalt und Notar;Torsten Feldkamp;Moselstr. 32;47051;Duisburg
+20;Notar;Dr. Carsten Lindner;Am Wallgraben 38;40625;Düsseldorf-Gerresheim
+20;Notarin;Tanja Derks (früher Dahlmanns);Rathausplatz 5;47918;Tönisvorst
+20;Notar;Dr. Andreas Hariefeld;Kärntener Straße 9a;42697;Solingen
+20;Rechtsanwältin und Notarin;Dr. Ina-Maria Böning;Stresemannstraße 20-22;47051;Duisburg
+21;Notar;Dr. Florian Krauss;Südring 41;47574;Goch
+21;Notar;Dr. Lars Göhmann;Weierstraße 14-16;53721;Siegburg
+21;Notar;Dr. Alexander Kiesgen LL.M.;Neusser Straße 49A;50181;Bedburg
+21;Rechtsanwalt und Notar;Helmut Eckart Ziegler;Königstraße 1-5;47051;Duisburg
+22;Notar;Dr. Matthias Geuder;Hessenring 3;47906;Kempen, Niederrhein
+22;Notar;Dr. Markus Dohr;Funckstraße 54;42115;Wuppertal
+22;Notar;Nikolaus Bardenhewer;Erftstraße 72;41460;Neuss
+22;Notar;Dr. Stephan Oelers;Viersener Straße 26;41751;Viersen
+22;Notar;Dr. Christian Pelz LL.M.;Niederstraße 26;47829;Krefeld-Uerdingen
+23;Rechtsanwältin und Notarin;Bianca Pogadetz;Hülsermannshof 5b;47179;Duisburg
+23;Rechtsanwältin und Notarin;Karoline de Smidt;Krausstraße 59 a;47119;Duisburg-Ruhrort
+23;Notar;Dr. Christian Schmitz;Rheinbahnstraße 36;41063;Mönchengladbach
+23;Notar;Dr. Robert Schumacher;Habsburgerring 2;50674;Köln
+23;Rechtsanwältin und Notarin;Christiane Claaßen;Poppelbaumstraße 22;46483;Wesel am Rhein
+23;Rechtsanwalt und Notar;Dr. Peter Müller-Peddinghaus;Am Münhlenberg 16;47051;Duisburg
+24;Notar;Dr. Andreas Pützhoven;Atelierstraße 5;41812;Erkelenz
+24;Rechtsanwalt und Notar;Carsten Marker;Tonhallensitr. 1;47051;Duisburg
+24;Rechtsanwalt und Notar;Dr. Werner Neyen;Börsenstraße 4;47051;Duisburg
+24;Notarin;Dr. Silvia Schäfer;Dieker Straße 103;42781;Haan
+25;Notarin;Dr. Erne Jessica Meise;Pescher Straße 124;41352;Korschenbroich
+25;Notar;Stephan Römer;Pfarrer-Kenntemich-Platz 1;53840;Troisdorf
+25;Notar;Dr. Andreas Brandt;Parkhofstraße 23;41836;Hückelhoven
+25;Notar;Dr. André Fisch;Elenastraße 17;47441;Moers
+25;Notar;Dr. Niklas Mairose;Mittelstraße 36-38;40721;Hilden
+25;Notar;Dr. Martin Kley;Marienstraße 37;52249;Eschweiler
+26;Notarin;Dr. Laura Maibaum;Dycker Feld 72;42653;Solingen
+26;Rechtsanwalt und Notar;Oliver Bielitzki;Elsa-Brändström-Straße 1;46045;Oberhausen
+26;Notar;Dr. Hannes Klühs;Königsallee 92 a;40212;Düsseldorf
+26;Notar;Dr. Jens Axel Tersteegen;Drususgasse 1-5;50667;Köln
+26;Notar;Dr. Klaus Oertel;Martin-Luther-Platz 22;40212;Düsseldorf
+26;Notar;Dr. Michael Lergon;Königsallee 30;40212;Düsseldorf
+27;Notar;Benno Garschina;Mainzer Straße 34;53179;Bonn
+27;Rechtsanwältin und Notarin;Janka Maria Groetschel;Kapitelstraße 9;46459;Rees
+27;Notarin;Sabine Uedelhoven (früher Dillmann);Kölner Straße 62;53840;Troisdorf
+28;Rechtsanwältin und Notarin;Andrea Thul;Antoniestraße 83;46119;Oberhausen
+28;Notar;Dr. Tim Kasper;Hauptstraße 41;51674;Wiehl
+28;Notar;Oliver Baetzgen;Regentenstraße 43;41061;Mönchengladbach
+28;Rechtsanwalt und Notar;Karl-Heinz Dasbach;Am Weißen Stein 30;47178;Duisburg
+28;Notar;Dr. Dirk Eckhardt;Paffrather Straße 80;51465;Bergisch Gladbach
+28;Notar;Martin Rachuy;Bahnstraße 4;40699;Erkrath
+29;Rechtsanwalt und Notar;Heinz Jürgen Steiniger;Börsenstraße 4;47051;Duisburg
+29;Notar;Hon.-Prof. Dr. Sebastian Blasche;Mittelstraße 1;42579;Heiligenhaus
+29;Notarin;Dr. Eva Frankenberger;Niederkasseler Straße 96;40547;Düsseldorf
+29;Notar;Dr. Rene Zöller;Kirchweg 2;50858;Köln
+29;Rechtsanwalt und Notar;Frank Menken;Mülheimer Straße 206;47057;Duisburg
+29;Rechtsanwalt und Notar;Philipp Binger;Philosophenweg 6-8;47051;Duisburg
+30;Notar;Peter Pana;Oberländer Ufer 154a;50968;Köln
+30;Notar;Dr. Mario Leitzen;Kleine Heeg 13;53359;Rheinbach
+30;Notar;Dr. Nils Overhoff M.A.;Annastraße 8;52477;Alsdorf, Rheinland
+31;Rechtsanwältin und Notarin;Anne Meyer;Poststr. 7;46045;Oberhausen
+31;Notar;Dr. Wolfgang Reetz;Schildergasse 120;50667;Köln
+31;Rechtsanwalt und Notar;Paul Noël;Gabelsbergerstraße 7-9;47137;Duisburg-Ruhrort
+31;Notariatsverwalter;Matthias Höyng;Am Rutenwall 2;46535;Dinslaken
+31;Notar;Dr. Jens Bormann LL.M. (Harvard);Grabenstraße 15;40878;Ratingen
+31;Notar;Jan Peterßen;Morlaixplatz 27;52146;Würselen
+32;Notar;Dr. Stefan Daniel Josef Schmitz;Thomas-Mann-Str. 34;53111;Bonn
+32;Rechtsanwalt und Notar;Dr. Thomas Steeger;Gerhart-Hauptmann-Str. 84;47058;Duisburg
+32;Notar;Dr. Kai Franken;Steinmetzstraße 23;41061;Mönchengladbach
+32;Rechtsanwalt und Notar;Lutz Benninghoff;August-Thyssen-Straße 8-10;47166;Duisburg
+32;Notar;Erich R. Thies;Hohenstaufenring 57;50674;Köln
+32;Rechtsanwalt und Notar;Andy Wüsthoff;Friedrich-Ebert-Straße 26;46535;Dinslaken
+33;Notar;Dr. Georg Wochner LL.M.;Gereonstraße 1-3;50670;Köln
+33;Rechtsanwalt und Notar;Dr. Hans Christian Schüler;Am Münhlenberg 16;47051;Duisburg
+33;Notar;Andre Fabian Gerold;Römerstraße 39;50389;Wesseling
+34;Rechtsanwalt und Notar;Agron Berisha;Duisburger Straße 73;46535;Dinslaken
+34;Notarin;Dr. Irene Kämper LL.M.;Marktstraße 1a;41516;Grevenbroich
+34;Notar;Dr. Patrick Flesner LL.M., MBA;Tiergartenstraße 64;47533;Kleve, Niederrhein
+34;Notar;Dr. Christoph Huhn;Sieglarer Straße 2c;53840;Troisdorf
+34;Notar;Dr. Paul Sebastian Hager;Kaiserstraße 28;51545;Waldbröl
+34;Rechtsanwalt und Notar;Dirk Grotstollen;Dammstr. 11a;47119;Duisburg-Ruhrort
+35;Notar;Manuel Patrick Busch;Richard-Wagner-Straße 1-3;50859;Köln
+35;Rechtsanwalt und Notar;Dr. Sebastian Friedrich Hahn;Düsseldorfer Straße 67;45481;Mülheim an der Ruhr
+35;Notar;Dr. Sebastian Kremer;Carlsplatz 18;40213;Düsseldorf
+35;Notar;Dr. Jochen Mues;Haihover Straße 12;52511;Geilenkirchen
+35;Rechtsanwalt und Notar;Oliver Güldenberg;Alnwicker Ring 12;46562;Voerde (Niederrhein)
+35;Notar;Jonas Thebille;Oststraße 2-4;51766;Engelskirchen
+36;Rechtsanwältin und Notarin;Linda Blumberg-Heise;Tannenbergstr. 1;46045;Oberhausen
+36;Rechtsanwalt und Notar;Dr. André Heidermann;Schepersweg 1;46485;Wesel
+36;Notar;Jan Martin Stascheit;Marktstraße 46;42369;Wuppertal
+37;Notar;Dr. Christian Lettmann;Haagstraße 16;47441;Moers
+37;Rechtsanwältin und Notarin;Cornelia Barbara Schroers;Lindnerstr. 165;46149;Oberhausen
+37;Rechtsanwältin und Notarin;Susanne Göttker gen. Schnetmann;Stresemannstr. 78;47051;Duisburg
+37;Notar;Dr. Sebastian Grever;Apolloniastraße 1;52134;Herzogenrath
+37;Rechtsanwältin und Notarin;Heike Hertger;Alte Weseler Straße 18;46569;Hünxe
+37;Rechtsanwalt und Notar;Dr. Kurt-Georg Eger R;Helmholtzstr. 112;46045;Oberhausen
+38;Rechtsanwalt und Notar;Tim Lühl;Bocholter Straße 1-3;46499;Hamminkeln
+38;Notar;Dr. Jörn Pfennig;Oelgasse 3;41515;Grevenbroich
+38;Notar;Dr. Johannes Fetsch;Helmholtzstr. 4;53123;Bonn
+38;Notar;Dr. Jürgen Kallrath;Kaiser-Wilhelm-Ring 15;50672;Köln
+38;Notarin;Dr. Julia Saß LL.M. (Columbia);Kaiser-Wilhelm-Ring 22;50672;Köln
+38;Notar;Dr. Till Gröne;Bahnhofstraße 44;51143;Köln
+39;Notar;Dr. Georg Böcker;Ahrstraße 59;53945;Blankenheim
+39;Notar;Dr. Moritz Lennart Jäschke;Karthaus 4-6;46509;Xanten
+39;Notarin;Dr. Christine Kaufmann;Hülchrather Str. 7;50670;Köln
+40;Notar;Wolfgang Gruntkowski;Kirchweg 2;50858;Köln
+40;Rechtsanwalt und Notar;Oliver Paust;Duisburger Straße 69;46535;Dinslaken
+40;Notarin;Andrea Bergermann;Königsallee 4;40212;Düsseldorf
+40;Notar;Dr. Christian Kutschmann LL.M. (Univ. of Virginia);Haagstraße 4;47441;Moers
+40;Notar;Dirk Piegsa;Feldstraße 140;41239;Mönchengladbach
+41;Notar;Dr. Stefan Lange-Parpart;Bahnstadtchaussee 13;51379;Leverkusen-Opladen
+41;Notar;Dr. Martin Thelen;Hauptstr. Ro 30;50996;Köln
+41;Notar;Dr. Hanno Naumann;Südweststraße 26;50126;Bergheim
+41;Notarin;Susanne Karsten;Breidenbachstraße 46;51373;Leverkusen
+41;Notar;Dr. Martin Kindler;Comesstraße 1-15;50321;Brühl
+41;Notar;Dr. Sebastian Barry;Buddestraße 10;51429;Bergisch Gladbach-Bensberg
+42;Notar;Dr. Martin Lohr;Erftstraße 94;41460;Neuss
+42;Notar;Dr. Marcus Sommer;Franzstraße 53;52064;Aachen
+42;Notar;Dr. Benjamin Matthias Schulz;Peter-Neuenheuser-Straße 12;51379;Leverkusen-Opladen
+42;Notar;Dr. Stefan Koroch;Veybachstraße 19;53879;Euskirchen
+43;Notar;Dr. Adrian Cavin LL.M. (Georgetown University);Grefrather Straße 22;41749;Viersen
+43;Notar;Christian Cramer;Königsallee 82-84;40212;Düsseldorf
+43;Rechtsanwalt und Notar;Christian Dückinghaus;Helmholtzstr. 28;46045;Oberhausen
+43;Notar;Dr. Oliver Schwarz;Malkastenstraße 2;40211;Düsseldorf
+43;Notar;Dr. Paul Terner LL.M.;Kanalstraße 4;41460;Neuss
+43;Rechtsanwalt und Notar;Georg Lommen;Neuer Steinweg 20;46446;Emmerich am Rhein
+44;Notar;Dr. Stefan Meyer;An der Feuerwache 2;42929;Wermelskirchen
+44;Notar;Dr. Jens Fleischhauer LL.M.;Gereonstraße 1-3;50670;Köln
+44;Rechtsanwalt und Notar;Christian Häbel;Wallstraße 1;45468;Mülheim an der Ruhr
+44;Notar;Dr. Leif Böttcher;Blumenstraße 28;40212;Düsseldorf
+44;Rechtsanwalt und Notar;Stefan Walbohm;Am Halben Mond 2;46446;Emmerich am Rhein
+44;Notar;Dr. Michael Schüller;Steinstraße 4;40212;Düsseldorf
+45;Notar;Dr. Marcus Leinenweber;Elisabeth-Breuer-Straße 11;51065;Köln
+45;Notarin;Dr. Miriam Pascale Rosenberger;Sambeck 10;42555;Velbert
+45;Notarin;Dr. Nikola Halding-Hoppenheit;Talstraße 7;51643;Gummersbach
+46;Rechtsanwältin und Notarin;Susanne Haferkamp;Vinckeweg 19;47119;Duisburg-Ruhrort
+46;Notarin;Dr. Anna von Bonin;Heinrich-Heine-Allee 22;40213;Düsseldorf
+46;Notar;Dr. Alexander Rezori;Uerdinger Straße 95;47799;Krefeld
+46;Notar;Dr. Manfred Schaal;Feldstraße 33a;52525;Heinsberg
+46;Notariatsverwalter;Dr. Sebastian Friedrich Hahn;Düsseldorfer Straße 67;45481;Mülheim an der Ruhr
+46;Notar;Bernhard Auernhammer;Karmeliterstraße 6;52064;Aachen
+47;Notar;Jehannes Trömer;Kölner Straße 102;51702;Bergneustadt
+47;Rechtsanwalt und Notar;Dr. Dominik Jan Sauer LL.M.;Duisburger Straße 95;46535;Dinslaken
+47;Notar;Klaus Striewski;Dönhoffstraße 40;51373;Leverkusen
+47;Notar;Dr. Marcus Kämpfer LL.M.;Königsallee 4;40212;Düsseldorf
+47;Notar;Jon Meyer;Grafenberger Allee 125;40237;Düsseldorf
+47;Rechtsanwalt und Notar;Christian Winter;Köhnenstr. 11;47051;Duisburg
+48;Notariatsverwalter;Timo Steffes-Holländer;Bismarckstraße 8;52351;Düren
+48;Notar;Dr. Johannes Hushahn LL.M.;Robert-Bosch-Straße 2;41363;Jüchen
+48;Notarin;Julia Priemer-Bleisteiner (früher Priemer);Kalscheurener Straße 2;50354;Hürth
+49;Notar;Dr. Peter Kolb;Kapuzinerstr. 11;53111;Bonn
+49;Notar;Dr. Daniel Doetsch M. Jur. (Oxford);Bankstraße 23;42103;Wuppertal
+49;Rechtsanwalt und Notar;Georg Althaus;Königstr. 61;47051;Duisburg
+49;Rechtsanwalt und Notar;Dr. Olaf Suchsland;Florastraße 9;46459;Rees
+49;Notarin;Dr. Antonia Clarissa Harbecke (früher Bautsch);Am Brauhof 2;53721;Siegburg
+49;Rechtsanwalt und Notar;Marian Nierhaus;Königstr. 8;47051;Duisburg
+50;Notar;Dr. Julian Winkler;Kölner Straße 73;53879;Euskirchen
+50;Notar;Johannes Christian Freuen;Bahnhofstraße 36;41844;Wegberg
+50;Rechtsanwalt und Notar;Jan-Gerrit Vagedes;Dudelerstr. 22;46147;Oberhausen
+50;Notarin;Johanna Vogel (früher Jürgens) MJur (Oxford);Kanalstraße 4;41460;Neuss
+50;Notar;Dr. Jens Todtenhöfer LL.M.;Neustraße 19;47441;Moers
+50;Notar;Dr. Georg Schneider;Königswinterer Str.;53227;Bonn
+51;Notar;Dominik Hüren;Gottfried-Hagen-Str. 20;51105;Köln-Kalk
+51;Notariatsverwalter;Manfred Schmitz-Henrich;Düsseldorfer Straße 269;45481;Mülheim an der Ruhr
+51;Notar;Christian Haas;Kitschburger Straße 1;50935;Köln
+52;Notar;Dr. Till Bremkamp LL.M.;Thomas-Mann-Str. 55;53111;Bonn
+52;Rechtsanwältin und Notarin;Petra Harms;Schmachtendorfer Straße 106;46147;Oberhausen
+52;Notar;Caspar Heckscher;Geschwister-Scholl-Platz 2;42275;Wuppertal-Barmen
+52;Notar;Dr. Alexander Stallknecht;Birkerstraße 1;42651;Solingen
+52;Rechtsanwalt und Notar;Jan Pannenbecker;Baustraße 8;46483;Wesel
+52;Notar;Dr. Tobias Hausch LL.M.;Königsallee 11;40212;Düsseldorf
+53;Notar;Dr. Christian Wolf;Hoffmannallee 55;47533;Kleve
+53;Notar;Ulrich Sauer;Kitschburger Straße 1;50935;Köln
+53;Notariatsverwalter;Stefan Weidemann;Herzogenring 4;46483;Wesel am Rhein
+53;Notar;Dr. Maximilian Bönner LL.M.;Alte Freiheit 26;42103;Wuppertal
+53;Notarin;Ursula Schumacher-Hey;Steinstraße 16-18;40212;Düsseldorf
+53;Notar;Dr. Georg Specks;Theaterstraße 17;52062;Aachen
+54;Notar;Dr. Harald Peters;Friedrich-Wilhelm-Platz 5-6;52062;Aachen
+54;Notarin;Dr. Michaela Tschon;Hohenzollernring 25;50672;Köln
+54;Notar;Dr. Robert Kleba;Dürener Straße 350;50935;Köln
+55;Notarin;Dr. Catharina Sophie von Hertzberg-Bölch;Mülgaustraße 5;41199;Mönchengladbach
+55;Rechtsanwältin und Notarin;Laura Claas;Dammstr. 11a;47119;Duisburg-Ruhrort
+55;Notar;Dr. Stefan Klein LL.M.;Kaiser-Wilhelm-Ring 7-9;50672;Köln
+55;Notarin;Dr. Ulrike Josefine Gisbertz;Küstersgäßchen 9;41849;Wassenberg
+55;Notar;Dr. Robert Thoma;Martin-Luther-Platz 22;40212;Düsseldorf
+55;Notar;Dr. Martin Rüßmann;Burgmauer 60;50667;Köln
+56;Notariatsverwalter;Dr. Frank Ellenbeck;Hohenzollernring 2-10;50672;Köln
+56;Notar;Dr. Stefan Heimsoeth;Beethovenstraße 59;41061;Mönchengladbach
+56;Notar;Dr. Guido Perau;Gangolfusstraße 34;52525;Heinsberg
+56;Notarin;Dr. Anika Gilberg;Elenastraße 17;47441;Moers
+56;Notar;Dr. Andreas Sailer;Bahnstraße 2;42327;Wuppertal
+56;Rechtsanwalt und Notar;Karsten Tieben;Baustraße 8;46483;Wesel
+57;Rechtsanwalt und Notar;Dr. Christoph Gallina;Brüner Straße 4-6;46499;Hamminkeln
+57;Notar;Dr. Michael Oyda;Am Nierspark 9;47608;Geldern
+57;Rechtsanwalt und Notar;Peter Bäcker;Sedanstr. 63;46045;Oberhausen
+58;Notar;Dr. Thomas Förl;Altdorfstraße 12;52066;Aachen
+58;Rechtsanwalt und Notar;Thomas Wulf Pogadetz;Düsseldorfer Straße 508;47055;Duisburg
+58;Notarin;Dr. Sabine Krampen-Lietzke;Düsseldorfer Straße 83;40667;Meerbusch
+58;Notar;Dr. Dirk Ittner;Breite Straße 29;40213;Düsseldorf
+58;Rechtsanwalt und Notar;Christoph Henneken;Schillerstraße 6;47179;Duisburg-Hamborn
+58;Notar;Dr. Guido Kordel LL.M.;Kleine Heeg 13;53359;Rheinbach
+59;Notar;Dr. Dirk Solveen;Münsterstr. 20;53111;Bonn
+59;Notar;Dr. Volker Hustedt;Erftstraße 72;41460;Neuss
+59;Notar;Michael Danzeglocke LL.M.;Breiter Weg 1a;53797;Lohmar
+59;Rechtsanwältin und Notarin;Dr. Eva Maria Klatt;Stresemannstraße 20-22;47051;Duisburg
+59;Notar;Dr. Thomas Kerstan LL.M.(Cambridge);Oskar-Graemer-Straße 15;41236;Mönchengladbach
+59;Notar;Dr. Christian Vaupel;Ellbachstraße 1;52428;Jülich
+60;Notarin;Dr. Svenja Gelshorn;Alter Postweg 2;41334;Nettetal
+60;Notar;Dr. Richard Böhr;Hohenzollernring 58;50672;Köln
+60;Notar;Dr. Peter Schmitz;Elsa-Brändström-Str. 8;50668;Köln
+61;Rechtsanwalt und Notar;Christoph Mantell;Am Münhlenberg 16;47051;Duisburg
+61;Notar;Dr. Armin Hauschild;Blumenstraße 28;40212;Düsseldorf
+61;Rechtsanwalt und Notar;Bernd Franken;Geistmarkt 22;46446;Emmerich am Rhein
+61;Notar;Mikolaj Pogorzelski LL.M. (Harvard);Dycker Feld 72;42653;Solingen
+61;Notar;Dr. Alexander Völzmann;Subbelrather Straße 249;50825;Köln
+61;Rechtsanwalt und Notar;Marcel Kosfeld LL.M.;Börsenstraße 4;47051;Duisburg
+62;Notar;Christoph Stiefel;Solinger Straße 76;40764;Langenfeld (Rheinland)
+62;Rechtsanwalt und Notar;Thomas Diehl;Hanielstr. 3;47119;Duisburg
+62;Notar;Dr. Thomas Schultz;Bismarckplatz 9;41061;Mönchengladbach
+62;Notar;Dr. Wolf-Heinrich Geißel;Kesselstraße 11;47546;Kalkar
+62;Rechtsanwalt und Notar;Matthias Aengenvoort;Bahnhofstr. 51;46145;Oberhausen
+62;Rechtsanwältin und Notarin;Andrea Böhm;Weseler Straße 5a;46514;Schermbeck
+63;Rechtsanwalt und Notar;Dr. Michael Schneider;Duisburger Straße 470;45478;Mülheim an der Ruhr
+63;Rechtsanwalt und Notar;Maik Christoph Scheeren;Am Rutenwall 2;46535;Dinslaken
+63;Notar;Dr. Alexander Bücken;Dürener Straße 485;52249;Eschweiler
+64;Notar;Dr. Maximilian Freiherr von Proff zu Irnich;Hohe Straße 160-168;50667;Köln
+64;Notar;Waldemar Hindemit;Bankstraße 23;42103;Wuppertal
+64;Notariatsverwalter;Matthias Christian Forster;Venloer Straße 67-69;47623;Kevelaer
+64;Rechtsanwalt und Notar;David Decka;Baustraße 8;46483;Wesel
+64;Rechtsanwalt und Notar;Dr. Andreas Grüter;Stresemannstraße 20-22;47051;Duisburg
+64;Rechtsanwalt und Notar;Ulrich Hintzen;Bahnhofstr. 18;46145;Oberhausen
+65;Notar;Bernd Olaf Alexander von Schwander;Hauptstr. Zü 249;51143;Köln-Porz
+65;Notar;Dr. Thomas Schwerin;Wettinerstraße 51;42287;Wuppertal-Barmen
+65;Rechtsanwalt und Notar;Arnd Waffenschmidt;Gabelsbergerstraße 7-9;47137;Duisburg
+65;Notar;Dr. Markus Buschbaum LL.M.;Theodor-Heuss-Ring 23;50668;Köln
+65;Notar;Christoph Dahlkamp;Erholungstraße 14;42103;Wuppertal
+65;Notar;Dr. Jörg Ihle;Schloßstraße 20;51429;Bergisch Gladpacn
+66;Rechtsanwalt und Notar;Thomas Schwiegelshohn;Fuldastr. 8;47051;Duisburg
+66;Notar;Dr. Oliver Gehse;Willy-Brandt-Ring 33;41747;Viersen
+66;Notar;Dr. Jan Heskamp;Friedrichstraße 22;47475;Kamp-Lintfort
+67;Notar;Dr. Thomas Flues;Venloer Straße 85;50259;Pulheim
+67;Notar;Dr. Jan Link;Grabenstraße 15;40878;Ratingen
+67;Notar;Dr. Philipp Perzborn;Hauptstraße 11-13;50226;Frechen
+67;Rechtsanwalt und Notar;Mike Steinhauf;Baustraße 8;46483;Wesel
+67;Notarin;Hanna Bamberger;Am Kurpark 3;53177;Bonn
+67;Notar;Dr. Jochen Lohaus LL.M.;Hafenstraße 24;47533;Kleve
+68;Notar;Dr. Markus Zahn;Kölner Straße 64;42897;Remscheid
+68;Notar;Dr. Matthias Neuhausen;Kaiserstraße 51;41061;Mönchengladbach
+68;Notariatsverwalterin;Andrea Laubenstein;Friedrichstraße 5;45468;Mülheim an der Ruhr
+68;Notar;Dr. Andreas Bürger;Martinstraße 3;50667;Köln
+68;Notar;Dr. Alexander Grein;Remigiusstr. 16;53111;Bonn
+68;Notariatsverwalter;Dr. Magnus Bleifeld;Drahtzieherweg 15;47877;Willich
+69;Notar;Dr. Tom Oliver Bader;Kaiser-Wilhelm-Ring 22;50672;Köln
+69;Notarin;Katharina Tschernoster;Moltkestraße 45;52351;Düren
+69;Notar;Dr. Ulrich Becker;Bismarckplatz 9;41061;Mönchengladbach
+70;Notar;Dr. Klaus-Jürgen Dinstühler;Kaiser-Wilhelm-Ring 13;50672;Köln
+70;Rechtsanwalt und Notar;Peter Troost;Wallstraße 1;45468;Mülheim an der Ruhr
+70;Rechtsanwalt und Notar;Stephan Kupka;Düsseldorfer Straße 133;45481;Mülheim an der Ruhr
+70;Notarin;Dr. Julie Francastel L.L.M.;Haagstraße 4;47441;Moers
+70;Notar;Dr. Stefan Schmitz;Reitmeisterweg 14;52223;Stolberg
+70;Notar;Fabian Alexander Schwarz;Münsterstraße 35;53909;Zülpich
+71;Notar;Dr. Daniel Berresheim;Markt 10-12;53111;Bonn
+71;Notar;Holger Fruh;Oskar-Graemer-Straße 15;41236;Mönchengladbach
+71;Notariatsverwalter;Maik Zyber;Lothringer Straße 35;46045;Oberhausen
+71;Notar;Dr. Dirk Esser;Heinrich-Heine-Allee 4;40213;Düsseldorf
+71;Rechtsanwalt und Notar;Stephan Nicolai;Großer Markt 13-15;46483;Wesel
+71;Rechtsanwalt und Notar;Josef Könitz;Schillerstraße 73-75;46535;Dinslaken
+72;Notar;Dr. Tim Klawitter;Arndtstr. 11;47226;Duisburg-Rheinhausen
+72;Rechtsanwalt und Notar;Jens Hermanns;Beykozplatz 5;45470;Mülheim an der Ruhr
+72;Rechtsanwalt und Notar;Norbert Johannknecht;Saarner Straße 314;45478;Mülheim an der Ruhr
+73;Notar;Dr. Henrich Fabis;Geschwister-Scholl-Platz 2;42275;Wuppertal-Barmen
+73;Rechtsanwalt und Notar;Lothar Wiegand;Friedrichstraße 20;45468;Mülheim an der Ruhr
+73;Notar;Thomas Karl Müsgen;Friedrich-Wilhelm-Platz 5-6;52062;Aachen
+73;Notar;Dr. Hans-Jürgen Heil;Ostwall 165;47798;Krefeld
+73;Rechtsanwalt und Notar;Philipp Spiske;Friedrich-Ebert-Str. 209;47179;Duisburg-Hamborn
+73;Notariatsverwalterin;Dr. Clara Thekla Constanze Fornefeld;Alleestraße 72;42853;Remscheid
+74;Rechtsanwalt und Notar;Markus Seele;Duisburger Straße 227;47166;Duisburg-Hamborn
+74;Notar;Dr. Thiemo Soester;Lenneper Straße 11;51688;Wipperfürth
+74;Notar;Dr. Andreas Rethmeier;Drususgasse 1-5;50667;Köln
+74;Notar;Michael Stutz;Spicher Straße 30;53859;Niederkassel
+74;Notar;Dr. Martin Konstantin Thelen LL.M. (Columbia);Am Brauhof 2;53721;Siegburg
+74;Rechtsanwalt und Notar;Olaf Funke;Schmachtendorfer Straße 106;46147;Oberhausen
+75;Notar;Dr. Frank Ellenbeck;Hohenzollernring 2-10;50672;Köln
+75;Notarin;Dr. Britta Spitzbart;Kaiserstraße 164;42477;Radevormwald
+75;Rechtsanwalt und Notar;Björn Richter;Köhnenstr. 11;47051;Duisburg
+76;Notarin;Dr. Sarah König;Veybachstraße 19;53879;Euskirchen
+76;Rechtsanwalt und Notar;Jan Braumann;Friedrich-Ebert-Straße 32;45468;Mülheim an der Ruhr
+76;Notar;Dr. Julian Boor LL.M.;Karmeliterstraße 6;52064;Aachen
+76;Rechtsanwältin und Notarin;Heide Hülsemann;Hohlstraße 15;46539;Dinslaken
+76;Notar;Dennis Theus;Wilhelmstraße 96;42489;Wülfrath
+76;Notar;Dr. Patrick Flockenhaus LL.M. (Köln);Buddestraße 10;51429;Bergisch Gladbach-Bensberg
+77;Notarin;Dr. Viola Kruse;Venloer Straße 85;50259;Pulheim
+77;Rechtsanwältin und Notarin;Andrea Laubenstein;Friedrichstraße 5;45468;Mülheim an der Ruhr
+77;Rechtsanwältin und Notarin;Heike Schmitz;Dr.-Hans-Böckler-Str. 10;47179;Duisburg
+77;Notarin;Chiara Fischer;Eichenhofstraße 1;51789;Lindlar
+77;Notarin;Christina Bartels;Kaiser-Wilhelm-Ring 7-9;50672;Köln
+77;Rechtsanwalt und Notar;Lothar Staudinger;Dudelerstr. 22;46147;Oberhausen
+78;Rechtsanwalt und Notar;Andreas Jaekel;Gneisenaustraße 25;45472;Mülheim an der Ruhr
+78;Notar;Andreas Schmitz-Vornmoor;Alleestraße 72;42853;Remscheid
+78;Rechtsanwalt und Notar;Marcus Hennig;Wallstraße 3;45468;Mülheim an der Ruhr
+79;Rechtsanwalt und Notar;Frank Nass;Am Halben Mond 2;46446;Emmerich am Rhein
+79;Rechtsanwältin und Notarin;Maren Krauße;Marktstraße 42-44;46045;Oberhausen
+79;Notar;Marius Klingler;Königsallee 24;40212;Düsseldorf
+79;Notariatsverwalter;Dr. Felix Flöck;Erholungstraße 14;42103;Wuppertal
+79;Notar;Dr. Thomas Köther;Ellbachstraße 1;52428;Jülich
+79;Notar;Prof. Dr. Christian Kesseler;Bismarckstraße 2;52351;Düren, Rheinland
+80;Notar;Dr. Peter Baumann;Helmholtzstr. 4;53123;Bonn-Duisdorf
+80;Notarin;Dr. Thekla Schleifenbaum;Prinz-Albert-Str. 14;53113;Bonn
+80;Notar;Dr. Edgar Küperkoch;Kaiserswerther Straße 107;40476;Düsseldorf
+80;Rechtsanwältin und Notarin;Dr. Charlotte Weber;Stresemannstraße 20-22;47051;Duisburg
+80;Notar;Dr. Markus Lepper;Südweststraße 26;50126;Bergheim
+80;Notar;Dr. Wilfried Lülsdorf;Römerstraße 24a;41539;Dormagen
+81;Notar;Prof. Dr. Christoph Terbrack;Aachener-und-Münchener-Allee 1;52074;Aachen
+81;Rechtsanwältin und Notarin;Friederike Bolley;Reichspräsidentenstraße 25;45470;Mülheim an der Ruhr
+81;Rechtsanwalt und Notar;Joachim Weiss;Lothringerstraße 35;46045;Oberhausen
+82;Notar;Dr. Timm Starke;Münsterstr. 20;53111;Bonn
+82;Notar;Dr. Hagen Monath;Holzstraße 1;52349;Düren
+82;Notar;Dr. Kai Bischoff;Martinstraße 3;50667;Köln
+82;Notar;Dr. Paul Rombach LL.M.;Königsallee 70;40212;Düsseldorf

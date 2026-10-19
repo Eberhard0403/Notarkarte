@@ -1,17 +1,24 @@
-"""Baut index.html aus data/notare.csv.
+"""Baut index.html aus data/notare_alle.csv.
 
-Koordinaten: Mittelpunkt der Postleitzahl (data/plz_geocoord.csv), Notare mit
-gleicher PLZ werden leicht im Kreis verteilt, damit sie einzeln anklickbar sind.
+Aufgenommen werden nur Einträge mit der Amtsbezeichnung "Notar" oder "Notarin"
+(also keine Anwaltsnotare und keine Notariatsverwaltungen).
+
+Koordinaten: Mittelpunkt der Postleitzahl (data/plz_geocoord.csv). Notare mit
+gleicher PLZ werden spiralförmig um den Mittelpunkt verteilt, damit jeder
+einzeln anklickbar ist.
 Grundkarte: Kreisgrenzen der Regierungsbezirke Köln und Düsseldorf (data/kreise.geo.json).
 """
 import csv
 import json
 import math
+import re
+import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 DATA = ROOT / "data"
+NUR_NOTAR = {"Notar", "Notarin"}
 
 
 def load_plz():
@@ -19,27 +26,33 @@ def load_plz():
         return {r[""]: (float(r["lat"]), float(r["lng"])) for r in csv.DictReader(f)}
 
 
+def slug(text):
+    text = unicodedata.normalize("NFKD", text.replace("ß", "ss")).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+
 def load_notare(plz):
-    with open(DATA / "notare.csv", encoding="utf-8") as f:
-        rows = list(csv.DictReader(f, delimiter=";"))
+    with open(DATA / "notare_alle.csv", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f, delimiter=";") if r["amt"] in NUR_NOTAR]
     by_plz = defaultdict(list)
     for r in rows:
         by_plz[r["plz"]].append(r)
     out = []
     for code, group in by_plz.items():
         lat, lng = plz[code]
+        group.sort(key=lambda r: r["strasse"])
         for i, r in enumerate(group):
-            if len(group) > 1:
-                a = 2 * math.pi * i / len(group)
-                lat_i = lat + 0.0025 * math.sin(a)
-                lng_i = lng + 0.004 * math.cos(a)
-            else:
-                lat_i, lng_i = lat, lng
+            # Sonnenblumen-Spirale: gleichmäßiger Abstand auch bei vielen Notaren je PLZ
+            rad, ang = 0.0011 * math.sqrt(i), i * 2.39996
             out.append({
+                "id": f"{code}-{slug(r['name'])}"[:120],
                 "amt": r["amt"], "name": r["name"], "strasse": r["strasse"],
-                "plz": r["plz"], "ort": r["ort"], "seite": int(r["seite"]),
-                "lat": round(lat_i, 5), "lng": round(lng_i, 5),
+                "plz": code, "ort": r["ort"],
+                "lat": round(lat + rad * math.sin(ang), 5),
+                "lng": round(lng + 1.55 * rad * math.cos(ang), 5),
             })
+    ids = [n["id"] for n in out]
+    assert len(ids) == len(set(ids)), "doppelte IDs"
     out.sort(key=lambda r: (r["ort"], r["name"]))
     return out
 

@@ -4,20 +4,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: Kopfzeile, darunter Karte (links, flexibel) + Verzeichnis (rechts, 380px); am Handy untereinander. */
+/* Layout: schmale Kopfzeile; darunter Karte mit Seitenleiste (Liste oder ein einzelner Notar). Handy: Karte oben, Leiste unten. */
 :root {
-  --bg: #f3f4f6;
+  --bg: #f2f3f5;
   --surface: #ffffff;
   --ink: #18202e;
-  --muted: #5d6676;
+  --muted: #5b6474;
   --line: #d9dde4;
-  --land: #e7eaef;
-  --land-alt: #dde2e9;
-  --border: #b9c0cb;
-  --seal: #a3262a;        /* hauptberufliche Notare: Siegelrot */
-  --lawyer: #1f5c99;      /* Anwaltsnotare */
-  --admin: #8a6a12;       /* Notariatsverwaltung */
+  --land: #e6e9ee;
+  --land-alt: #dce1e8;
+  --border: #b6bdc9;
+  --seal: #a3262a;
+  --seal-soft: #f6e3e3;
+  --link: #1f5c99;
   --focus: #e0a400;
+  --ok: #2c7a4b;
   --display: "Spectral", Georgia, "Times New Roman", serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -25,114 +26,117 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
-    --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
-    --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+    --land: #1f2530; --land-alt: #252c38; --border: #3c4554;
+    --seal: #e0585c; --seal-soft: #3a2224; --link: #6aa8e6; --focus: #ffd257; --ok: #5cc28a;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
-  --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
-  --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+  --land: #1f2530; --land-alt: #252c38; --border: #3c4554;
+  --seal: #e0585c; --seal-soft: #3a2224; --link: #6aa8e6; --focus: #ffd257; --ok: #5cc28a;
   color-scheme: dark;
 }
+[hidden] { display: none !important; }
 html, body { height: 100%; }
-body {
-  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px;
-  display: flex; flex-direction: column;
-}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px; display: flex; flex-direction: column; }
 header {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 14px 12px;
-  border-bottom: 1px solid var(--line);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px;
+  padding-block: 12px 10px; border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px;
 }
-h1 { font-family: var(--display); font-weight: 600; font-size: 1.6rem; margin: 0; letter-spacing: .01em; text-wrap: balance; }
-.sub { color: var(--muted); font-size: .85rem; }
+h1 { font-family: var(--display); font-weight: 600; font-size: 1.45rem; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: .84rem; }
 .sub b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.legend { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
-.chip {
-  font: inherit; font-size: .8rem; display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px;
-  background: var(--surface); color: var(--ink); cursor: pointer;
-}
-.chip[aria-pressed="false"] { opacity: .45; }
-.chip .n { color: var(--muted); font-variant-numeric: tabular-nums; }
-.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
-.dot.notar { background: var(--seal); }
-.dot.anwalt { background: var(--lawyer); }
-.dot.verwalter { background: transparent; border: 2.5px solid var(--admin); width: 9px; height: 9px; }
 main { flex: 1; min-height: 0; display: flex; }
-#mapwrap { flex: 1; min-width: 0; position: relative; background: var(--bg); }
+
+/* Karte */
+#mapwrap { flex: 1; min-width: 0; position: relative; }
 #map { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
 #map:active { cursor: grabbing; }
 .kreis { fill: var(--land); stroke: var(--border); stroke-width: .8; vector-effect: non-scaling-stroke; }
 .kreis.bez-Köln { fill: var(--land-alt); }
 .klabel { font-family: var(--body); fill: var(--muted); text-anchor: middle; pointer-events: none; letter-spacing: .06em; text-transform: uppercase; }
-.pin { cursor: pointer; stroke: var(--surface); }
-.pin.notar { fill: var(--seal); }
-.pin.anwalt { fill: var(--lawyer); }
-.pin.verwalter { fill: var(--surface); stroke: var(--admin); }
+.pin { cursor: pointer; fill: var(--surface); stroke: var(--seal); }
+.pin.has { fill: var(--seal); stroke: var(--surface); }
 .pin.sel { stroke: var(--focus); }
-.zoom { position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 4px; }
-.zoom button {
-  width: 34px; height: 34px; font: 600 1.1rem var(--body); color: var(--ink);
-  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+.halo { fill: none; stroke: var(--focus); opacity: .45; pointer-events: none; }
+.zoom { position: absolute; right: max(12px, env(safe-area-inset-right, 0px)); top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.zoom button, .iconbtn {
+  width: 34px; height: 34px; font: 600 1.05rem var(--body); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+  display: inline-grid; place-items: center; padding: 0;
 }
-#card {
-  position: absolute; left: 12px; bottom: 12px; max-width: min(340px, calc(100% - 24px));
-  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
-  padding: 12px 14px; box-shadow: 0 6px 20px rgb(0 0 0 / .12);
-}
-#card .amt { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-#card .nm { font-family: var(--display); font-size: 1.2rem; font-weight: 600; margin: 2px 0 6px; }
-#card .adr { line-height: 1.45; }
-#card .row { display: flex; gap: 12px; margin-top: 8px; font-size: .82rem; flex-wrap: wrap; }
-#card a { color: var(--lawyer); }
-#card .close { position: absolute; right: 6px; top: 4px; border: 0; background: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
-aside {
-  width: 380px; flex: none; border-left: 1px solid var(--line); background: var(--surface);
-  display: flex; flex-direction: column; min-height: 0;
-}
-.search { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
-.search input {
+.iconbtn:disabled { opacity: .35; cursor: default; }
+.legend { position: absolute; left: 12px; bottom: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: .78rem; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; box-sizing: border-box; }
+.dot.has { background: var(--seal); }
+.dot.no { border: 2px solid var(--seal); }
+
+/* Seitenleiste */
+aside { width: 390px; flex: none; border-left: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
+.view { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+.search { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+input, textarea {
   font: inherit; font-size: 16px; width: 100%; box-sizing: border-box; padding: 8px 10px;
-  border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink);
 }
-.search .count { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
-#list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
-#list li { border-bottom: 1px solid var(--line); }
-#list button {
-  all: unset; box-sizing: border-box; width: 100%; padding: 10px 16px; cursor: pointer;
-  display: grid; grid-template-columns: 12px 1fr; gap: 2px 10px; align-items: baseline;
+textarea { resize: vertical; min-height: 84px; line-height: 1.4; }
+input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: inherit; font-size: .8rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.count { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.scroll { overflow-y: auto; flex: 1; min-height: 0; }
+#list { list-style: none; margin: 0; padding: 0; }
+#list li.city { position: sticky; top: 0; z-index: 1; background: var(--surface); padding: 8px 16px 4px; font-family: var(--display); font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+#list li.city span { color: var(--muted); font: .78rem var(--mono); }
+#list li.item { border-bottom: 1px solid var(--line); }
+#list li.item button {
+  all: unset; box-sizing: border-box; width: 100%; padding: 9px 16px; cursor: pointer;
+  display: grid; grid-template-columns: 12px 1fr auto; gap: 2px 10px; align-items: baseline;
 }
-#list button:hover { background: var(--bg); }
-#list button:focus-visible, .chip:focus-visible, .zoom button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-#list li.sel button { background: var(--bg); box-shadow: inset 3px 0 0 var(--focus); }
+#list li.item button:hover { background: var(--bg); }
+#list li.item button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 #list .nm { font-weight: 600; }
-#list .meta { grid-column: 2; color: var(--muted); font-size: .82rem; line-height: 1.4; }
-#list .plz { font-family: var(--mono); font-size: .78rem; }
-.city { position: sticky; top: 0; background: var(--surface); padding: 8px 16px 4px; font-family: var(--display); font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
-.city span { color: var(--muted); font: .78rem var(--mono); }
-.note { padding: 10px 16px; color: var(--muted); font-size: .78rem; border-top: 1px solid var(--line); line-height: 1.45; }
+#list .age { font: .78rem var(--mono); color: var(--muted); }
+#list .meta { grid-column: 2 / 4; color: var(--muted); font-size: .82rem; }
+.note { padding: 12px 16px 16px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
+
+/* Einzelansicht */
+.dbar { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.back { font: 500 .88rem var(--body); color: var(--link); background: none; border: 0; cursor: pointer; padding: 6px 4px; }
+.pos { margin-left: auto; color: var(--muted); font: .8rem var(--mono); font-variant-numeric: tabular-nums; }
+.dbody { overflow-y: auto; flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.eyebrow { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.dname { font-family: var(--display); font-weight: 600; font-size: 1.5rem; line-height: 1.2; margin: 2px 0 0; text-wrap: balance; }
+.adr { line-height: 1.5; font-size: .95rem; }
+.adr .plz { font-family: var(--mono); }
+.links { display: flex; gap: 14px; flex-wrap: wrap; font-size: .84rem; }
+.links a { color: var(--link); }
+fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 14px; margin: 0; display: grid; gap: 12px; }
+legend { font-family: var(--display); font-weight: 600; font-size: 1rem; padding: 0 6px; margin-left: -6px; }
+label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
+.agebadge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--seal-soft); color: var(--seal); font: 500 .78rem var(--mono); }
+.status { font-size: .78rem; color: var(--muted); min-height: 1.2em; }
+.status.ok { color: var(--ok); }
+.status.err { color: var(--seal); }
+
 @media (max-width: 760px) {
   main { flex-direction: column; }
-  html, body { height: auto; }
-  main { flex: none; }
-  #mapwrap { flex: none; height: 58vh; }
-  aside { width: auto; border-left: 0; border-top: 1px solid var(--line); }
-  #list { overflow: visible; }
-  .legend { margin-left: 0; }
-  #card { left: 8px; bottom: 8px; }
+  #mapwrap { flex: none; height: 46%; }
+  aside { width: auto; border-left: 0; border-top: 1px solid var(--line); flex: 1; }
+  .legend { left: 8px; bottom: 8px; }
+  .dname { font-size: 1.3rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
 <header>
   <h1>Notarkarte Rheinland</h1>
-  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare erfasst</div>
-  <div class="legend" id="legend"></div>
+  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare (ohne Anwaltsnotare)</div>
 </header>
 <main>
   <div id="mapwrap">
@@ -142,162 +146,309 @@ aside {
       <button id="zout" aria-label="Herauszoomen">−</button>
       <button id="zreset" aria-label="Ganze Karte zeigen">⤢</button>
     </div>
-    <div id="card" hidden></div>
+    <div class="legend"><span><i class="dot has"></i>Geburtsdatum erfasst</span><span><i class="dot no"></i>noch offen</span></div>
   </div>
+
   <aside>
-    <div class="search">
-      <input id="q" type="search" placeholder="Name, Straße, PLZ oder Ort suchen" autocomplete="off">
-      <div class="count" id="count"></div>
+    <div class="view" id="v-list">
+      <div class="search">
+        <input id="q" type="search" placeholder="Name, Straße, PLZ oder Ort" autocomplete="off" aria-label="Suchen">
+        <div class="chips" id="chips">
+          <button class="chip" id="c-all" data-f="all" aria-pressed="true">Alle</button>
+          <button class="chip" id="c-open" data-f="open" aria-pressed="false">Geburtsdatum offen</button>
+          <button class="chip" id="c-has" data-f="has" aria-pressed="false">Geburtsdatum erfasst</button>
+        </div>
+        <div class="count" id="count"></div>
+      </div>
+      <div class="scroll">
+      <ul id="list"></ul>
+      <div class="note" id="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, alle 409 Treffer; aufgenommen sind nur Einträge mit der Amtsbezeichnung Notar oder Notarin. Kartenposition = Mittelpunkt der Postleitzahl.</div>
+      </div>
     </div>
-    <ul id="list"></ul>
-    <div class="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, Ergebnisseiten <span id="pages"></span>. Position = Mittelpunkt der Postleitzahl, nicht die genaue Hausnummer.</div>
+
+    <div class="view" id="v-detail" hidden>
+      <div class="dbar">
+        <button class="back" id="back">‹ Liste</button>
+        <span class="pos" id="pos"></span>
+        <button class="iconbtn" id="prev" aria-label="Vorheriger Notar">‹</button>
+        <button class="iconbtn" id="next" aria-label="Nächster Notar">›</button>
+      </div>
+      <div class="dbody">
+        <div>
+          <div class="eyebrow" id="d-amt"></div>
+          <h2 class="dname" id="d-name"></h2>
+        </div>
+        <div class="adr" id="d-adr"></div>
+        <div class="links" id="d-links"></div>
+        <fieldset id="form">
+          <legend>Eigene Angaben</legend>
+          <label for="f-geb">Geburtsdatum <span id="d-age"></span>
+            <input id="f-geb" type="date" max="2010-12-31">
+          </label>
+          <label for="f-tel">Telefon
+            <input id="f-tel" type="tel" autocomplete="off">
+          </label>
+          <label for="f-mail">E-Mail
+            <input id="f-mail" type="email" autocomplete="off">
+          </label>
+          <label for="f-notiz">Notiz
+            <textarea id="f-notiz" rows="3"></textarea>
+          </label>
+          <div class="status" id="status"></div>
+        </fieldset>
+      </div>
+    </div>
   </aside>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
-const NOTARE = [{"amt": "Notar", "name": "Dr. Julian Boor LL.M.", "strasse": "Karmeliterstraße 6", "plz": "52064", "ort": "Aachen", "seite": 26, "lat": 50.76807, "lng": 6.08015}, {"amt": "Notar", "name": "Prof. Dr. Christoph Terbrack", "strasse": "Aachener-und-Münchener-Allee 1", "plz": "52074", "ort": "Aachen", "seite": 27, "lat": 50.77796, "lng": 6.04041}, {"amt": "Notar", "name": "Thomas Karl Müsgen", "strasse": "Friedrich-Wilhelm-Platz 5-6", "plz": "52062", "ort": "Aachen", "seite": 24, "lat": 50.77805, "lng": 6.08877}, {"amt": "Notar", "name": "Dr. Markus Lepper", "strasse": "Südweststraße 26", "plz": "50126", "ort": "Bergheim", "seite": 27, "lat": 50.96065, "lng": 6.62098}, {"amt": "Notar", "name": "Dr. Patrick Flockenhaus LL.M. (Köln)", "strasse": "Buddestraße 10", "plz": "51429", "ort": "Bergisch Gladbach-Bensberg", "seite": 26, "lat": 50.96806, "lng": 7.2024}, {"amt": "Notar", "name": "Dr. Alexander Grein", "strasse": "Remigiusstr. 16", "plz": "53111", "ort": "Bonn", "seite": 24, "lat": 50.74195, "lng": 7.09904}, {"amt": "Notar", "name": "Dr. Daniel Berresheim", "strasse": "Markt 10-12", "plz": "53111", "ort": "Bonn", "seite": 25, "lat": 50.74411, "lng": 7.09304}, {"amt": "Notarin", "name": "Dr. Thekla Schleifenbaum", "strasse": "Prinz-Albert-Str. 14", "plz": "53113", "ort": "Bonn", "seite": 27, "lat": 50.71942, "lng": 7.12211}, {"amt": "Notar", "name": "Dr. Timm Starke", "strasse": "Münsterstr. 20", "plz": "53111", "ort": "Bonn", "seite": 28, "lat": 50.73978, "lng": 7.09304}, {"amt": "Notarin", "name": "Hanna Bamberger", "strasse": "Am Kurpark 3", "plz": "53177", "ort": "Bonn", "seite": 23, "lat": 50.67438, "lng": 7.13357}, {"amt": "Notar", "name": "Dr. Peter Baumann", "strasse": "Helmholtzstr. 4", "plz": "53123", "ort": "Bonn-Duisdorf", "seite": 27, "lat": 50.71386, "lng": 7.04204}, {"amt": "Rechtsanwältin und Notarin", "name": "Heide Hülsemann", "strasse": "Hohlstraße 15", "plz": "46539", "ort": "Dinslaken", "seite": 26, "lat": 51.58175, "lng": 6.79718}, {"amt": "Rechtsanwalt und Notar", "name": "Josef Könitz", "strasse": "Schillerstraße 73-75", "plz": "46535", "ort": "Dinslaken", "seite": 25, "lat": 51.55913, "lng": 6.7314}, {"amt": "Notar", "name": "Dr. Wilfried Lülsdorf", "strasse": "Römerstraße 24a", "plz": "41539", "ort": "Dormagen", "seite": 27, "lat": 51.09968, "lng": 6.84532}, {"amt": "Rechtsanwalt und Notar", "name": "Björn Richter", "strasse": "Köhnenstr. 11", "plz": "47051", "ort": "Duisburg", "seite": 25, "lat": 51.4328, "lng": 6.77483}, {"amt": "Rechtsanwältin und Notarin", "name": "Dr. Charlotte Weber", "strasse": "Stresemannstraße 20 - 22", "plz": "47051", "ort": "Duisburg", "seite": 27, "lat": 51.4328, "lng": 6.76683}, {"amt": "Rechtsanwältin und Notarin", "name": "Heike Schmitz", "strasse": "Dr.-Hans-Böckler-Str. 10", "plz": "47179", "ort": "Duisburg", "seite": 27, "lat": 51.52635, "lng": 6.74619}, {"amt": "Rechtsanwalt und Notar", "name": "Markus Seele", "strasse": "Duisburger Straße 227", "plz": "47166", "ort": "Duisburg-Hamborn", "seite": 25, "lat": 51.49359, "lng": 6.76895}, {"amt": "Rechtsanwalt und Notar", "name": "Philipp Spiske", "strasse": "Friedrich-Ebert-Str. 209", "plz": "47179", "ort": "Duisburg-Hamborn", "seite": 24, "lat": 51.52635, "lng": 6.75419}, {"amt": "Notar", "name": "Dr. Tim Klawitter", "strasse": "Arndtstr. 11", "plz": "47226", "ort": "Duisburg-Rheinhausen", "seite": 24, "lat": 51.40426, "lng": 6.71728}, {"amt": "Notar", "name": "Dr. Hagen Monath", "strasse": "Holzstraße 1", "plz": "52349", "ort": "Düren", "seite": 28, "lat": 50.80445, "lng": 6.47018}, {"amt": "Notarin", "name": "Katharina Tschernoster", "strasse": "Moltkestraße 45", "plz": "52351", "ort": "Düren", "seite": 23, "lat": 50.7944, "lng": 6.5141}, {"amt": "Notar", "name": "Prof. Dr. Christian Kesseler", "strasse": "Bismarckstraße 2", "plz": "52351", "ort": "Düren", "seite": 26, "lat": 50.7944, "lng": 6.5061}, {"amt": "Notar", "name": "Dr. Dirk Esser", "strasse": "Heinrich-Heine-Allee 4", "plz": "40213", "ort": "Düsseldorf", "seite": 25, "lat": 51.22209, "lng": 6.77271}, {"amt": "Notar", "name": "Dr. Edgar Küperkoch", "strasse": "Kaiserswerther Straße 107", "plz": "40476", "ort": "Düsseldorf", "seite": 27, "lat": 51.24801, "lng": 6.77902}, {"amt": "Notar", "name": "Dr. Paul Rombach LL.M.", "strasse": "Königsallee 70", "plz": "40212", "ort": "Düsseldorf", "seite": 28, "lat": 51.2236, "lng": 6.77653}, {"amt": "Notar", "name": "Marius Klingler", "strasse": "Königsallee 24", "plz": "40212", "ort": "Düsseldorf", "seite": 26, "lat": 51.2236, "lng": 6.78453}, {"amt": "Rechtsanwalt und Notar", "name": "Frank Nass", "strasse": "Am Halben Mond 2", "plz": "46446", "ort": "Emmerich am Rhein", "seite": 26, "lat": 51.84551, "lng": 6.24301}, {"amt": "Notarin", "name": "Dr. Sarah König", "strasse": "Veybachstraße 19", "plz": "53879", "ort": "Euskirchen", "seite": 26, "lat": 50.65332, "lng": 6.78877}, {"amt": "Notar", "name": "Dr. Philipp Perzborn", "strasse": "Hauptstraße 11-13", "plz": "50226", "ort": "Frechen", "seite": 23, "lat": 50.90894, "lng": 6.7921}, {"amt": "Notar", "name": "Dr. Thomas Köther", "strasse": "Ellbachstraße 1", "plz": "52428", "ort": "Jülich", "seite": 26, "lat": 50.94189, "lng": 6.39443}, {"amt": "Notar", "name": "Dr. Jochen Lohaus LL.M.", "strasse": "Hafenstraße 24", "plz": "47533", "ort": "Kleve", "seite": 23, "lat": 51.80916, "lng": 6.12801}, {"amt": "Notar", "name": "Dr. Hans-Jürgen Heil", "strasse": "Ostwall 165", "plz": "47798", "ort": "Krefeld", "seite": 24, "lat": 51.32891, "lng": 6.55991}, {"amt": "Notarin", "name": "Christina Bartels", "strasse": "Kaiser-Wilhelm-Ring 7-9", "plz": "50672", "ort": "Köln", "seite": 27, "lat": 50.94108, "lng": 6.937}, {"amt": "Notar", "name": "Dr. Andreas Bürger", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "seite": 24, "lat": 50.93864, "lng": 6.95788}, {"amt": "Notar", "name": "Dr. Andreas Rethmeier", "strasse": "Drususgasse 1-5", "plz": "50667", "ort": "Köln", "seite": 25, "lat": 50.94081, "lng": 6.95188}, {"amt": "Notar", "name": "Dr. Frank Ellenbeck", "strasse": "Hohenzollernring 2-10", "plz": "50672", "ort": "Köln", "seite": 25, "lat": 50.94358, "lng": 6.933}, {"amt": "Notar", "name": "Dr. Kai Bischoff", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "seite": 28, "lat": 50.93648, "lng": 6.95188}, {"amt": "Notar", "name": "Dr. Klaus-Jürgen Dinstühler", "strasse": "Kaiser-Wilhelm-Ring 13", "plz": "50672", "ort": "Köln", "seite": 23, "lat": 50.94358, "lng": 6.941}, {"amt": "Notar", "name": "Dr. Tom Oliver Bader", "strasse": "Kaiser-Wilhelm-Ring 22", "plz": "50672", "ort": "Köln", "seite": 23, "lat": 50.94608, "lng": 6.937}, {"amt": "Notarin", "name": "Chiara Fischer", "strasse": "Eichenhofstraße 1", "plz": "51789", "ort": "Lindlar", "seite": 27, "lat": 51.0218, "lng": 7.34917}, {"amt": "Notarin", "name": "Dr. Julie Francastel L.L.M.", "strasse": "Haagstraße 4", "plz": "47441", "ort": "Moers", "seite": 23, "lat": 51.44628, "lng": 6.62755}, {"amt": "Notar", "name": "Dr. Matthias Neuhausen", "strasse": "Kaiserstraße 51", "plz": "41061", "ort": "Mönchengladbach", "seite": 24, "lat": 51.19419, "lng": 6.42552}, {"amt": "Notar", "name": "Dr. Ulrich Becker", "strasse": "Bismarckplatz 9", "plz": "41061", "ort": "Mönchengladbach", "seite": 23, "lat": 51.19419, "lng": 6.43352}, {"amt": "Notar", "name": "Holger Fruh", "strasse": "Oskar-Graemer-Straße 15", "plz": "41236", "ort": "Mönchengladbach", "seite": 25, "lat": 51.16683, "lng": 6.44949}, {"amt": "Notariatsverwalterin", "name": "Andrea Laubenstein", "strasse": "Friedrichstraße 5", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.42844, "lng": 6.88468}, {"amt": "Rechtsanwältin und Notarin", "name": "Andrea Laubenstein", "strasse": "Friedrichstraße 5", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 27, "lat": 51.42411, "lng": 6.88468}, {"amt": "Rechtsanwalt und Notar", "name": "Andreas Jaekel", "strasse": "Gneisenaustraße 25", "plz": "45472", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.43155, "lng": 6.92743}, {"amt": "Rechtsanwältin und Notarin", "name": "Friederike Bolley", "strasse": "Reichspräsidentenstraße 25", "plz": "45470", "ort": "Mülheim an der Ruhr", "seite": 27, "lat": 51.40595, "lng": 6.91038}, {"amt": "Rechtsanwalt und Notar", "name": "Jan Braumann", "strasse": "Friedrich-Ebert-Straße 32", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.42628, "lng": 6.87868}, {"amt": "Rechtsanwalt und Notar", "name": "Jens Hermanns", "strasse": "Beykozplatz 5", "plz": "45470", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.40595, "lng": 6.91838}, {"amt": "Rechtsanwalt und Notar", "name": "Lothar Wiegand", "strasse": "Friedrichstraße 20", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.42844, "lng": 6.88068}, {"amt": "Rechtsanwalt und Notar", "name": "Marcus Hennig", "strasse": "Wallstraße 3", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.42411, "lng": 6.88068}, {"amt": "Rechtsanwalt und Notar", "name": "Norbert Johannknecht", "strasse": "Saarner Straße 314", "plz": "45478", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.43697, "lng": 6.83524}, {"amt": "Rechtsanwalt und Notar", "name": "Peter Troost", "strasse": "Wallstraße 1", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 23, "lat": 51.42628, "lng": 6.88668}, {"amt": "Rechtsanwalt und Notar", "name": "Stephan Kupka", "strasse": "Düsseldorfer Straße 133", "plz": "45481", "ort": "Mülheim an der Ruhr", "seite": 23, "lat": 51.38827, "lng": 6.85661}, {"amt": "Notar", "name": "Michael Stutz", "strasse": "Spicher Straße 30", "plz": "53859", "ort": "Niederkassel", "seite": 25, "lat": 50.80958, "lng": 7.05635}, {"amt": "Rechtsanwalt und Notar", "name": "Joachim Weiss", "strasse": "Lothringerstraße 35", "plz": "46045", "ort": "Oberhausen", "seite": 27, "lat": 51.46524, "lng": 6.8541}, {"amt": "Rechtsanwalt und Notar", "name": "Lothar Staudinger", "strasse": "Dudelerstr. 22", "plz": "46147", "ort": "Oberhausen", "seite": 27, "lat": 51.54336, "lng": 6.81726}, {"amt": "Notariatsverwalter", "name": "Maik Zyber", "strasse": "Lothringer Straße 35", "plz": "46045", "ort": "Oberhausen", "seite": 25, "lat": 51.46741, "lng": 6.8601}, {"amt": "Rechtsanwältin und Notarin", "name": "Maren Krauße", "strasse": "Marktstraße 42 - 44", "plz": "46045", "ort": "Oberhausen", "seite": 26, "lat": 51.46957, "lng": 6.8541}, {"amt": "Rechtsanwalt und Notar", "name": "Olaf Funke", "strasse": "Schmachtendorfer Straße 106", "plz": "46147", "ort": "Oberhausen", "seite": 25, "lat": 51.54336, "lng": 6.82526}, {"amt": "Notar", "name": "Dr. Thomas Flues", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "seite": 23, "lat": 50.99303, "lng": 6.79029}, {"amt": "Notarin", "name": "Dr. Viola Kruse", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "seite": 27, "lat": 50.99303, "lng": 6.78229}, {"amt": "Notarin", "name": "Dr. Britta Spitzbart", "strasse": "Kaiserstraße 164", "plz": "42477", "ort": "Radevormwald", "seite": 25, "lat": 51.20944, "lng": 7.37208}, {"amt": "Notar", "name": "Dr. Jan Link", "strasse": "Grabenstraße 15", "plz": "40878", "ort": "Ratingen", "seite": 23, "lat": 51.29644, "lng": 6.85063}, {"amt": "Notar", "name": "Andreas Schmitz-Vornmoor", "strasse": "Alleestraße 72", "plz": "42853", "ort": "Remscheid", "seite": 26, "lat": 51.1833, "lng": 7.1759}, {"amt": "Notariatsverwalterin", "name": "Dr. Clara Thekla Constanze Fornefeld", "strasse": "Alleestraße 72", "plz": "42853", "ort": "Remscheid", "seite": 24, "lat": 51.1833, "lng": 7.1839}, {"amt": "Notar", "name": "Dr. Markus Zahn", "strasse": "Kölner Straße 64", "plz": "42897", "ort": "Remscheid", "seite": 24, "lat": 51.17301, "lng": 7.28228}, {"amt": "Notar", "name": "Dr. Martin Konstantin Thelen LL.M. (Columbia)", "strasse": "Am Brauhof 2", "plz": "53721", "ort": "Siegburg", "seite": 25, "lat": 50.80005, "lng": 7.21184}, {"amt": "Notar", "name": "Dr. Stefan Schmitz", "strasse": "Reitmeisterweg 14", "plz": "52223", "ort": "Stolberg", "seite": 23, "lat": 50.74795, "lng": 6.21442}, {"amt": "Rechtsanwalt und Notar", "name": "Mike Steinhauf", "strasse": "Baustraße 8", "plz": "46483", "ort": "Wesel", "seite": 23, "lat": 51.66333, "lng": 6.62322}, {"amt": "Rechtsanwalt und Notar", "name": "Stephan Nicolai", "strasse": "Großer Markt 13 - 15", "plz": "46483", "ort": "Wesel", "seite": 25, "lat": 51.66333, "lng": 6.61522}, {"amt": "Notariatsverwalter", "name": "Dr. Magnus Bleifeld", "strasse": "Drahtzieherweg 15", "plz": "47877", "ort": "Willich", "seite": 24, "lat": 51.26081, "lng": 6.50757}, {"amt": "Notar", "name": "Dr. Thiemo Soester", "strasse": "Lenneper Straße 11", "plz": "51688", "ort": "Wipperfürth", "seite": 25, "lat": 51.10273, "lng": 7.39724}, {"amt": "Notariatsverwalter", "name": "Dr. Felix Flöck", "strasse": "Erholungstraße 14", "plz": "42103", "ort": "Wuppertal", "seite": 26, "lat": 51.25549, "lng": 7.14661}, {"amt": "Notar", "name": "Dr. Henrich Fabis", "strasse": "Geschwister-Scholl-Platz 2", "plz": "42275", "ort": "Wuppertal-Barmen", "seite": 24, "lat": 51.27362, "lng": 7.20544}, {"amt": "Notar", "name": "Dennis Theus", "strasse": "Wilhelmstraße 96", "plz": "42489", "ort": "Wülfrath", "seite": 26, "lat": 51.28792, "lng": 7.03828}, {"amt": "Notar", "name": "Fabian Alexander Schwarz", "strasse": "Münsterstraße 35", "plz": "53909", "ort": "Zülpich", "seite": 23, "lat": 50.67725, "lng": 6.645}];
+const NOTARE = [{"id": "52064-bernhard-auernhammer", "amt": "Notar", "name": "Bernhard Auernhammer", "strasse": "Karmeliterstraße 6", "plz": "52064", "ort": "Aachen", "lat": 50.76652, "lng": 6.08036}, {"id": "52066-dr-armin-winnen", "amt": "Notar", "name": "Dr. Armin Winnen", "strasse": "Bismarckstraße 143", "plz": "52066", "ort": "Aachen", "lat": 50.75179, "lng": 6.1126}, {"id": "52062-dr-georg-specks", "amt": "Notar", "name": "Dr. Georg Specks", "strasse": "Theaterstraße 17", "plz": "52062", "ort": "Aachen", "lat": 50.7765, "lng": 6.08898}, {"id": "52062-dr-harald-peters", "amt": "Notar", "name": "Dr. Harald Peters", "strasse": "Friedrich-Wilhelm-Platz 5-6", "plz": "52062", "ort": "Aachen", "lat": 50.77805, "lng": 6.08877}, {"id": "52064-dr-julian-boor-ll-m", "amt": "Notar", "name": "Dr. Julian Boor LL.M.", "strasse": "Karmeliterstraße 6", "plz": "52064", "ort": "Aachen", "lat": 50.76958, "lng": 6.08195}, {"id": "52072-dr-karin-raude", "amt": "Notarin", "name": "Dr. Karin Raude", "strasse": "Schloss-Rahe-Straße 15", "plz": "52072", "ort": "Aachen", "lat": 50.82472, "lng": 6.04407}, {"id": "52064-dr-marcus-sommer", "amt": "Notar", "name": "Dr. Marcus Sommer", "strasse": "Franzstraße 53", "plz": "52064", "ort": "Aachen", "lat": 50.76881, "lng": 6.07889}, {"id": "52066-dr-maximilian-johannes-eble-ll-m-cambridge", "amt": "Notar", "name": "Dr. Maximilian Johannes Eble LL.M. (Cambridge)", "strasse": "Bismarckstraße 143", "plz": "52066", "ort": "Aachen", "lat": 50.75409, "lng": 6.11113}, {"id": "52066-dr-thomas-forl", "amt": "Notar", "name": "Dr. Thomas Förl", "strasse": "Altdorfstraße 12", "plz": "52066", "ort": "Aachen", "lat": 50.75334, "lng": 6.11239}, {"id": "52064-martin-johannes-rudersdorf-ll-m", "amt": "Notar", "name": "Martin Johannes Rudersdorf LL.M.", "strasse": "Bahnhofstraße 1", "plz": "52064", "ort": "Aachen", "lat": 50.76807, "lng": 6.08015}, {"id": "52074-prof-dr-christoph-terbrack", "amt": "Notar", "name": "Prof. Dr. Christoph Terbrack", "strasse": "Aachener-und-Münchener-Allee 1", "plz": "52074", "ort": "Aachen", "lat": 50.77796, "lng": 6.04041}, {"id": "52062-thomas-karl-musgen", "amt": "Notar", "name": "Thomas Karl Müsgen", "strasse": "Friedrich-Wilhelm-Platz 5-6", "plz": "52062", "ort": "Aachen", "lat": 50.77879, "lng": 6.08751}, {"id": "52477-dr-nils-overhoff-m-a", "amt": "Notar", "name": "Dr. Nils Overhoff M.A.", "strasse": "Annastraße 8", "plz": "52477", "ort": "Alsdorf, Rheinland", "lat": 50.86482, "lng": 6.17566}, {"id": "53604-dr-christiane-kluge", "amt": "Notarin", "name": "Dr. Christiane Kluge", "strasse": "Hauptstraße 27a", "plz": "53604", "ort": "Bad Honnef", "lat": 50.64978, "lng": 7.27809}, {"id": "53902-marc-christian-lehmann", "amt": "Notar", "name": "Marc Christian Lehmann", "strasse": "Sebastian-Kneipp-Promenade 28", "plz": "53902", "ort": "Bad Münstereifel", "lat": 50.53266, "lng": 6.80491}, {"id": "50181-dr-alexander-kiesgen-ll-m", "amt": "Notar", "name": "Dr. Alexander Kiesgen LL.M.", "strasse": "Neusser Straße 49A", "plz": "50181", "ort": "Bedburg", "lat": 51.01888, "lng": 6.51679}, {"id": "50126-dr-hanno-naumann", "amt": "Notar", "name": "Dr. Hanno Naumann", "strasse": "Südweststraße 26", "plz": "50126", "ort": "Bergheim", "lat": 50.96065, "lng": 6.62098}, {"id": "50126-dr-markus-lepper", "amt": "Notar", "name": "Dr. Markus Lepper", "strasse": "Südweststraße 26", "plz": "50126", "ort": "Bergheim", "lat": 50.96139, "lng": 6.61972}, {"id": "51465-dr-dirk-eckhardt", "amt": "Notar", "name": "Dr. Dirk Eckhardt", "strasse": "Paffrather Straße 80", "plz": "51465", "ort": "Bergisch Gladbach", "lat": 50.99512, "lng": 7.16362}, {"id": "51465-dr-robert-modl", "amt": "Notar", "name": "Dr. Robert Mödl", "strasse": "Am Stadion 18-24", "plz": "51465", "ort": "Bergisch Gladbach", "lat": 50.99667, "lng": 7.16341}, {"id": "51465-markus-bohlscheid", "amt": "Notar", "name": "Markus Bohlscheid", "strasse": "Am Stadion 18-24", "plz": "51465", "ort": "Bergisch Gladbach", "lat": 50.99741, "lng": 7.16215}, {"id": "51429-dr-patrick-flockenhaus-ll-m-koln", "amt": "Notar", "name": "Dr. Patrick Flockenhaus LL.M. (Köln)", "strasse": "Buddestraße 10", "plz": "51429", "ort": "Bergisch Gladbach-Bensberg", "lat": 50.9688, "lng": 7.20115}, {"id": "51429-dr-sebastian-barry", "amt": "Notar", "name": "Dr. Sebastian Barry", "strasse": "Buddestraße 10", "plz": "51429", "ort": "Bergisch Gladbach-Bensberg", "lat": 50.96806, "lng": 7.2024}, {"id": "51429-dr-jorg-ihle", "amt": "Notar", "name": "Dr. Jörg Ihle", "strasse": "Schloßstraße 20", "plz": "51429", "ort": "Bergisch Gladpacn", "lat": 50.96651, "lng": 7.20261}, {"id": "51702-jehannes-tromer", "amt": "Notar", "name": "Jehannes Trömer", "strasse": "Kölner Straße 102", "plz": "51702", "ort": "Bergneustadt", "lat": 51.02214, "lng": 7.66946}, {"id": "53945-dr-georg-bocker", "amt": "Notar", "name": "Dr. Georg Böcker", "strasse": "Ahrstraße 59", "plz": "53945", "ort": "Blankenheim", "lat": 50.413, "lng": 6.7376}, {"id": "53179-benno-garschina", "amt": "Notar", "name": "Benno Garschina", "strasse": "Mainzer Straße 34", "plz": "53179", "ort": "Bonn", "lat": 50.66003, "lng": 7.18341}, {"id": "53113-dr-albert-rabl", "amt": "Notar", "name": "Dr. Albert Rabl", "strasse": "Willy-Brandt-Allee 16", "plz": "53113", "ort": "Bonn", "lat": 50.72016, "lng": 7.12085}, {"id": "53111-dr-alexander-grein", "amt": "Notar", "name": "Dr. Alexander Grein", "strasse": "Remigiusstr. 16", "plz": "53111", "ort": "Bonn", "lat": 50.74156, "lng": 7.09168}, {"id": "53115-dr-christoph-dorsel-ll-m", "amt": "Notar", "name": "Dr. Christoph Dorsel LL.M.", "strasse": "Poppelsdorfer Allee 3N", "plz": "53115", "ort": "Bonn", "lat": 50.72139, "lng": 7.08982}, {"id": "53111-dr-daniel-berresheim", "amt": "Notar", "name": "Dr. Daniel Berresheim", "strasse": "Markt 10-12", "plz": "53111", "ort": "Bonn", "lat": 50.74269, "lng": 7.09378}, {"id": "53111-dr-daniel-seebach", "amt": "Notar", "name": "Dr. Daniel Seebach", "strasse": "Thomas-Mann-Str. 55", "plz": "53111", "ort": "Bonn", "lat": 50.74455, "lng": 7.09395}, {"id": "53111-dr-dirk-solveen", "amt": "Notar", "name": "Dr. Dirk Solveen", "strasse": "Münsterstr. 20", "plz": "53111", "ort": "Bonn", "lat": 50.7404, "lng": 7.09525}, {"id": "53113-dr-dominik-gassen", "amt": "Notar", "name": "Dr. Dominik Gassen", "strasse": "Willy-Brandt-Allee 16", "plz": "53113", "ort": "Bonn", "lat": 50.71787, "lng": 7.12232}, {"id": "53227-dr-georg-schneider", "amt": "Notar", "name": "Dr. Georg Schneider", "strasse": "Königswinterer Str.", "plz": "53227", "ort": "Bonn", "lat": 50.72257, "lng": 7.15573}, {"id": "53123-dr-johannes-fetsch", "amt": "Notar", "name": "Dr. Johannes Fetsch", "strasse": "Helmholtzstr. 4", "plz": "53123", "ort": "Bonn", "lat": 50.71386, "lng": 7.04204}, {"id": "53111-dr-peter-kolb", "amt": "Notar", "name": "Dr. Peter Kolb", "strasse": "Kapuzinerstr. 11", "plz": "53111", "ort": "Bonn", "lat": 50.74195, "lng": 7.09504}, {"id": "53111-dr-stefan-daniel-josef-schmitz", "amt": "Notar", "name": "Dr. Stefan Daniel Josef Schmitz", "strasse": "Thomas-Mann-Str. 34", "plz": "53111", "ort": "Bonn", "lat": 50.74063, "lng": 7.09825}, {"id": "53113-dr-thekla-schleifenbaum", "amt": "Notarin", "name": "Dr. Thekla Schleifenbaum", "strasse": "Prinz-Albert-Str. 14", "plz": "53113", "ort": "Bonn", "lat": 50.71942, "lng": 7.12211}, {"id": "53111-dr-till-bremkamp-ll-m", "amt": "Notar", "name": "Dr. Till Bremkamp LL.M.", "strasse": "Thomas-Mann-Str. 55", "plz": "53111", "ort": "Bonn", "lat": 50.73936, "lng": 7.09296}, {"id": "53111-dr-timm-starke", "amt": "Notar", "name": "Dr. Timm Starke", "strasse": "Münsterstr. 20", "plz": "53111", "ort": "Bonn", "lat": 50.74346, "lng": 7.09683}, {"id": "53177-hanna-bamberger", "amt": "Notarin", "name": "Hanna Bamberger", "strasse": "Am Kurpark 3", "plz": "53177", "ort": "Bonn", "lat": 50.67438, "lng": 7.13357}, {"id": "53225-edgar-mortenkotter", "amt": "Notar", "name": "Edgar Mörtenkötter", "strasse": "Rathausstr. 28", "plz": "53225", "ort": "Bonn-Beuel", "lat": 50.75895, "lng": 7.11578}, {"id": "53123-dr-peter-baumann", "amt": "Notar", "name": "Dr. Peter Baumann", "strasse": "Helmholtzstr. 4", "plz": "53123", "ort": "Bonn-Duisdorf", "lat": 50.7146, "lng": 7.04078}, {"id": "53332-dr-heiko-worm-ll-m", "amt": "Notar", "name": "Dr. Heiko Worm LL.M.", "strasse": "Königstraße 156", "plz": "53332", "ort": "Bornheim", "lat": 50.77309, "lng": 6.96844}, {"id": "50321-dr-karl-schindeldecker", "amt": "Notar", "name": "Dr. Karl Schindeldecker", "strasse": "Comesstraße 1-15", "plz": "50321", "ort": "Brühl", "lat": 50.82041, "lng": 6.87533}, {"id": "50321-dr-martin-kindler", "amt": "Notar", "name": "Dr. Martin Kindler", "strasse": "Comesstraße 1-15", "plz": "50321", "ort": "Brühl", "lat": 50.82115, "lng": 6.87407}, {"id": "51399-dr-peter-marian-stelmaszczyk", "amt": "Notar", "name": "Dr. Peter Marian Stelmaszczyk", "strasse": "Hauptstraße 70", "plz": "51399", "ort": "Burscheid", "lat": 51.07771, "lng": 7.12452}, {"id": "41539-dr-wilfried-lulsdorf", "amt": "Notar", "name": "Dr. Wilfried Lülsdorf", "strasse": "Römerstraße 24a", "plz": "41539", "ort": "Dormagen", "lat": 51.09968, "lng": 6.84532}, {"id": "47226-dr-tim-klawitter", "amt": "Notar", "name": "Dr. Tim Klawitter", "strasse": "Arndtstr. 11", "plz": "47226", "ort": "Duisburg-Rheinhausen", "lat": 51.40426, "lng": 6.71728}, {"id": "52349-dr-dominik-braun-ll-m-univ-of-chicago", "amt": "Notar", "name": "Dr. Dominik Braun LL.M. (Univ. of Chicago)", "strasse": "Holzstraße 32", "plz": "52349", "ort": "Düren", "lat": 50.8029, "lng": 6.47039}, {"id": "52349-dr-hagen-monath", "amt": "Notar", "name": "Dr. Hagen Monath", "strasse": "Holzstraße 1", "plz": "52349", "ort": "Düren", "lat": 50.8052, "lng": 6.46892}, {"id": "52349-dr-yvonne-abicht", "amt": "Notarin", "name": "Dr. Yvonne Abicht", "strasse": "Heinrich-Heine-Straße 18-20", "plz": "52349", "ort": "Düren", "lat": 50.80445, "lng": 6.47018}, {"id": "52351-katharina-tschernoster", "amt": "Notarin", "name": "Katharina Tschernoster", "strasse": "Moltkestraße 45", "plz": "52351", "ort": "Düren", "lat": 50.79514, "lng": 6.50884}, {"id": "52351-prof-dr-christian-kesseler", "amt": "Notar", "name": "Prof. Dr. Christian Kesseler", "strasse": "Bismarckstraße 2", "plz": "52351", "ort": "Düren, Rheinland", "lat": 50.7944, "lng": 6.5101}, {"id": "40212-andrea-bergermann", "amt": "Notarin", "name": "Andrea Bergermann", "strasse": "Königsallee 4", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22708, "lng": 6.78222}, {"id": "40212-astrid-gageik", "amt": "Notarin", "name": "Astrid Gageik", "strasse": "Berliner Allee 26", "plz": "40212", "ort": "Düsseldorf", "lat": 51.2236, "lng": 6.78053}, {"id": "40212-christian-cramer", "amt": "Notar", "name": "Christian Cramer", "strasse": "Königsallee 82-84", "plz": "40212", "ort": "Düsseldorf", "lat": 51.21938, "lng": 6.77968}, {"id": "40213-dr-anna-von-bonin", "amt": "Notarin", "name": "Dr. Anna von Bonin", "strasse": "Heinrich-Heine-Allee 22", "plz": "40213", "ort": "Düsseldorf", "lat": 51.22054, "lng": 6.77292}, {"id": "40212-dr-armin-hauschild", "amt": "Notar", "name": "Dr. Armin Hauschild", "strasse": "Blumenstraße 28", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22205, "lng": 6.78074}, {"id": "40593-dr-askan-von-rintelen", "amt": "Notar", "name": "Dr. Askan von Rintelen", "strasse": "Haydnstraße 52", "plz": "40593", "ort": "Düsseldorf", "lat": 51.14031, "lng": 6.86854}, {"id": "40212-dr-carolin-opgenhoff", "amt": "Notarin", "name": "Dr. Carolin Opgenhoff", "strasse": "Königsallee 82-84", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22697, "lng": 6.77686}, {"id": "40217-dr-christoph-neumeyer", "amt": "Notar", "name": "Dr. Christoph Neumeyer", "strasse": "Elisabethstraße 5", "plz": "40217", "ort": "Düsseldorf", "lat": 51.21273, "lng": 6.7754}, {"id": "40213-dr-dirk-esser", "amt": "Notar", "name": "Dr. Dirk Esser", "strasse": "Heinrich-Heine-Allee 4", "plz": "40213", "ort": "Düsseldorf", "lat": 51.2236, "lng": 6.7745}, {"id": "40213-dr-dirk-ittner", "amt": "Notar", "name": "Dr. Dirk Ittner", "strasse": "Breite Straße 29", "plz": "40213", "ort": "Düsseldorf", "lat": 51.22209, "lng": 6.77271}, {"id": "40476-dr-edgar-kuperkoch", "amt": "Notar", "name": "Dr. Edgar Küperkoch", "strasse": "Kaiserswerther Straße 107", "plz": "40476", "ort": "Düsseldorf", "lat": 51.24875, "lng": 6.77776}, {"id": "40547-dr-eva-frankenberger", "amt": "Notarin", "name": "Dr. Eva Frankenberger", "strasse": "Niederkasseler Straße 96", "plz": "40547", "ort": "Düsseldorf", "lat": 51.24193, "lng": 6.74772}, {"id": "40212-dr-florian-braunfels", "amt": "Notar", "name": "Dr. Florian Braunfels", "strasse": "Königsallee 31", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22045, "lng": 6.78281}, {"id": "40212-dr-hannes-kluhs", "amt": "Notar", "name": "Dr. Hannes Klühs", "strasse": "Königsallee 92 a", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22644, "lng": 6.78574}, {"id": "40212-dr-henryk-haibt", "amt": "Notar", "name": "Dr. Henryk Haibt", "strasse": "Königsallee 2", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22228, "lng": 6.78375}, {"id": "40212-dr-joachim-tebben-ll-m-michigan", "amt": "Notar", "name": "Dr. Joachim Tebben LL.M. (Michigan)", "strasse": "Grünstraße 25", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22512, "lng": 6.78233}, {"id": "40212-dr-klaus-oertel", "amt": "Notar", "name": "Dr. Klaus Oertel", "strasse": "Martin-Luther-Platz 22", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22031, "lng": 6.78566}, {"id": "40212-dr-leif-bottcher", "amt": "Notar", "name": "Dr. Leif Böttcher", "strasse": "Blumenstraße 28", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22435, "lng": 6.77927}, {"id": "40479-dr-marc-grotheer", "amt": "Notar", "name": "Dr. Marc Grotheer", "strasse": "Inselstraße 13", "plz": "40479", "ort": "Düsseldorf", "lat": 51.23328, "lng": 6.78371}, {"id": "40212-dr-marcus-kampfer-ll-m", "amt": "Notar", "name": "Dr. Marcus Kämpfer LL.M.", "strasse": "Königsallee 4", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22169, "lng": 6.77542}, {"id": "40212-dr-michael-lergon", "amt": "Notar", "name": "Dr. Michael Lergon", "strasse": "Königsallee 30", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22467, "lng": 6.78506}, {"id": "40212-dr-michael-schuller", "amt": "Notar", "name": "Dr. Michael Schüller", "strasse": "Steinstraße 4", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22428, "lng": 6.78827}, {"id": "40211-dr-oliver-schwarz", "amt": "Notar", "name": "Dr. Oliver Schwarz", "strasse": "Malkastenstraße 2", "plz": "40211", "ort": "Düsseldorf", "lat": 51.23011, "lng": 6.79288}, {"id": "40212-dr-paul-rombach-ll-m", "amt": "Notar", "name": "Dr. Paul Rombach LL.M.", "strasse": "Königsallee 70", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22275, "lng": 6.78653}, {"id": "40212-dr-rainer-oppermann", "amt": "Notar", "name": "Dr. Rainer Oppermann", "strasse": "Königsallee 31", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22486, "lng": 6.7758}, {"id": "40212-dr-robert-thoma", "amt": "Notar", "name": "Dr. Robert Thoma", "strasse": "Martin-Luther-Platz 22", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22839, "lng": 6.78019}, {"id": "40213-dr-sebastian-kremer", "amt": "Notar", "name": "Dr. Sebastian Kremer", "strasse": "Carlsplatz 18", "plz": "40213", "ort": "Düsseldorf", "lat": 51.22283, "lng": 6.77145}, {"id": "40212-dr-stefan-wehrstedt", "amt": "Notar", "name": "Dr. Stefan Wehrstedt", "strasse": "Königsallee 96", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22379, "lng": 6.77351}, {"id": "40545-dr-susanna-welling", "amt": "Notarin", "name": "Dr. Susanna Welling", "strasse": "Luegallee 67", "plz": "40545", "ort": "Düsseldorf", "lat": 51.2284, "lng": 6.75437}, {"id": "40212-dr-tobias-hausch-ll-m", "amt": "Notar", "name": "Dr. Tobias Hausch LL.M.", "strasse": "Königsallee 11", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22322, "lng": 6.77717}, {"id": "40476-dr-ulrich-temme", "amt": "Notar", "name": "Dr. Ulrich Temme", "strasse": "Kaiserswerther Straße 107", "plz": "40476", "ort": "Düsseldorf", "lat": 51.24801, "lng": 6.77902}, {"id": "40212-dr-wilhelm-droste", "amt": "Notar", "name": "Dr. Wilhelm Droste", "strasse": "Königsallee 2", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22621, "lng": 6.77944}, {"id": "40237-jon-meyer", "amt": "Notar", "name": "Jon Meyer", "strasse": "Grafenberger Allee 125", "plz": "40237", "ort": "Düsseldorf", "lat": 51.23574, "lng": 6.80917}, {"id": "40212-marius-klingler", "amt": "Notar", "name": "Marius Klingler", "strasse": "Königsallee 24", "plz": "40212", "ort": "Düsseldorf", "lat": 51.22102, "lng": 6.77845}, {"id": "40212-ursula-schumacher-hey", "amt": "Notarin", "name": "Ursula Schumacher-Hey", "strasse": "Steinstraße 16-18", "plz": "40212", "ort": "Düsseldorf", "lat": 51.21983, "lng": 6.77564}, {"id": "40625-dr-carsten-lindner", "amt": "Notar", "name": "Dr. Carsten Lindner", "strasse": "Am Wallgraben 38", "plz": "40625", "ort": "Düsseldorf-Gerresheim", "lat": 51.23659, "lng": 6.85106}, {"id": "40625-dr-jan-henning-berg", "amt": "Notar", "name": "Dr. Jan Henning Berg", "strasse": "Am Wallgraben 38", "plz": "40625", "ort": "Düsseldorf-Gerresheim", "lat": 51.23584, "lng": 6.85232}, {"id": "53783-dr-benjamin-marc-schmitz", "amt": "Notar", "name": "Dr. Benjamin Marc Schmitz", "strasse": "Posthof 6", "plz": "53783", "ort": "Eitorf", "lat": 50.76477, "lng": 7.44014}, {"id": "51766-jonas-thebille", "amt": "Notar", "name": "Jonas Thebille", "strasse": "Oststraße 2-4", "plz": "51766", "ort": "Engelskirchen", "lat": 50.97557, "lng": 7.41673}, {"id": "50374-ingo-schreinert-ll-m-eur", "amt": "Notar", "name": "Ingo Schreinert LL.M. Eur.", "strasse": "Bonner Straße 21", "plz": "50374", "ort": "Erftstadt", "lat": 50.79481, "lng": 6.77746}, {"id": "41812-dr-andreas-putzhoven", "amt": "Notar", "name": "Dr. Andreas Pützhoven", "strasse": "Atelierstraße 5", "plz": "41812", "ort": "Erkelenz", "lat": 51.07165, "lng": 6.31954}, {"id": "41812-dr-benedikt-berthold", "amt": "Notar", "name": "Dr. Benedikt Berthold", "strasse": "Kölner Straße 45", "plz": "41812", "ort": "Erkelenz", "lat": 51.07239, "lng": 6.31829}, {"id": "40699-martin-rachuy", "amt": "Notar", "name": "Martin Rachuy", "strasse": "Bahnstraße 4", "plz": "40699", "ort": "Erkrath", "lat": 51.22085, "lng": 6.92827}, {"id": "52249-dr-alexander-bucken", "amt": "Notar", "name": "Dr. Alexander Bücken", "strasse": "Dürener Straße 485", "plz": "52249", "ort": "Eschweiler", "lat": 50.82357, "lng": 6.26364}, {"id": "52249-dr-martin-kley", "amt": "Notar", "name": "Dr. Martin Kley", "strasse": "Marienstraße 37", "plz": "52249", "ort": "Eschweiler", "lat": 50.82431, "lng": 6.26238}, {"id": "53879-dr-julian-winkler", "amt": "Notar", "name": "Dr. Julian Winkler", "strasse": "Kölner Straße 73", "plz": "53879", "ort": "Euskirchen", "lat": 50.65332, "lng": 6.78877}, {"id": "53879-dr-sarah-konig", "amt": "Notarin", "name": "Dr. Sarah König", "strasse": "Veybachstraße 19", "plz": "53879", "ort": "Euskirchen", "lat": 50.65177, "lng": 6.78898}, {"id": "53879-dr-stefan-koroch", "amt": "Notar", "name": "Dr. Stefan Koroch", "strasse": "Veybachstraße 19", "plz": "53879", "ort": "Euskirchen", "lat": 50.65406, "lng": 6.78751}, {"id": "50226-dr-philipp-perzborn", "amt": "Notar", "name": "Dr. Philipp Perzborn", "strasse": "Hauptstraße 11-13", "plz": "50226", "ort": "Frechen", "lat": 50.90968, "lng": 6.79084}, {"id": "50226-jan-toben", "amt": "Notar", "name": "Jan Töben", "strasse": "Hauptstraße 11-13", "plz": "50226", "ort": "Frechen", "lat": 50.90894, "lng": 6.7921}, {"id": "52538-dr-peter-coenen", "amt": "Notar", "name": "Dr. Peter Coenen", "strasse": "Weberstraße 19", "plz": "52538", "ort": "Gangelt", "lat": 51.01611, "lng": 5.98177}, {"id": "52511-dr-jochen-mues", "amt": "Notar", "name": "Dr. Jochen Mues", "strasse": "Haihover Straße 12", "plz": "52511", "ort": "Geilenkirchen", "lat": 50.96672, "lng": 6.12678}, {"id": "47608-dr-michael-oyda", "amt": "Notar", "name": "Dr. Michael Oyda", "strasse": "Am Nierspark 9", "plz": "47608", "ort": "Geldern", "lat": 51.52483, "lng": 6.30377}, {"id": "47574-dr-florian-krauss", "amt": "Notar", "name": "Dr. Florian Krauss", "strasse": "Südring 41", "plz": "47574", "ort": "Goch", "lat": 51.70309, "lng": 6.13121}, {"id": "41516-dr-irene-kamper-ll-m", "amt": "Notarin", "name": "Dr. Irene Kämper LL.M.", "strasse": "Marktstraße 1a", "plz": "41516", "ort": "Grevenbroich", "lat": 51.1069, "lng": 6.62946}, {"id": "41515-dr-jorn-pfennig", "amt": "Notar", "name": "Dr. Jörn Pfennig", "strasse": "Oelgasse 3", "plz": "41515", "ort": "Grevenbroich", "lat": 51.08212, "lng": 6.60384}, {"id": "51643-dr-nikola-halding-hoppenheit", "amt": "Notarin", "name": "Dr. Nikola Halding-Hoppenheit", "strasse": "Talstraße 7", "plz": "51643", "ort": "Gummersbach", "lat": 51.02587, "lng": 7.54204}, {"id": "51643-ute-weyland", "amt": "Notarin", "name": "Ute Weyland", "strasse": "Talstraße 7", "plz": "51643", "ort": "Gummersbach", "lat": 51.02513, "lng": 7.5433}, {"id": "42781-dr-silvia-schafer", "amt": "Notarin", "name": "Dr. Silvia Schäfer", "strasse": "Dieker Straße 103", "plz": "42781", "ort": "Haan", "lat": 51.2058, "lng": 7.00425}, {"id": "42579-hon-prof-dr-sebastian-blasche", "amt": "Notar", "name": "Hon.-Prof. Dr. Sebastian Blasche", "strasse": "Mittelstraße 1", "plz": "42579", "ort": "Heiligenhaus", "lat": 51.32377, "lng": 6.96728}, {"id": "52525-dr-guido-perau", "amt": "Notar", "name": "Dr. Guido Perau", "strasse": "Gangolfusstraße 34", "plz": "52525", "ort": "Heinsberg", "lat": 51.04194, "lng": 6.10284}, {"id": "52525-dr-manfred-schaal", "amt": "Notar", "name": "Dr. Manfred Schaal", "strasse": "Feldstraße 33a", "plz": "52525", "ort": "Heinsberg", "lat": 51.04119, "lng": 6.1041}, {"id": "53773-stefan-wegerhoff", "amt": "Notar", "name": "Stefan Wegerhoff", "strasse": "Dickstraße 35", "plz": "53773", "ort": "Hennef", "lat": 50.76354, "lng": 7.29461}, {"id": "52134-dr-sebastian-grever", "amt": "Notar", "name": "Dr. Sebastian Grever", "strasse": "Apolloniastraße 1", "plz": "52134", "ort": "Herzogenrath", "lat": 50.88402, "lng": 6.10866}, {"id": "40721-dr-niklas-mairose", "amt": "Notar", "name": "Dr. Niklas Mairose", "strasse": "Mittelstraße 36-38", "plz": "40721", "ort": "Hilden", "lat": 51.16905, "lng": 6.9154}, {"id": "41836-dr-andreas-brandt", "amt": "Notar", "name": "Dr. Andreas Brandt", "strasse": "Parkhofstraße 23", "plz": "41836", "ort": "Hückelhoven", "lat": 51.04543, "lng": 6.22225}, {"id": "50354-julia-priemer-bleisteiner-fruher-priemer", "amt": "Notarin", "name": "Julia Priemer-Bleisteiner (früher Priemer)", "strasse": "Kalscheurener Straße 2", "plz": "50354", "ort": "Hürth", "lat": 50.86315, "lng": 6.85962}, {"id": "41363-dr-christian-hartmann", "amt": "Notar", "name": "Dr. Christian Hartmann", "strasse": "Robert-Bosch-Straße 2", "plz": "41363", "ort": "Jüchen", "lat": 51.09348, "lng": 6.49485}, {"id": "41363-dr-johannes-hushahn-ll-m", "amt": "Notar", "name": "Dr. Johannes Hushahn LL.M.", "strasse": "Robert-Bosch-Straße 2", "plz": "41363", "ort": "Jüchen", "lat": 51.09422, "lng": 6.4936}, {"id": "52428-dr-christian-vaupel", "amt": "Notar", "name": "Dr. Christian Vaupel", "strasse": "Ellbachstraße 1", "plz": "52428", "ort": "Jülich", "lat": 50.94189, "lng": 6.39443}, {"id": "52428-dr-thomas-kother", "amt": "Notar", "name": "Dr. Thomas Köther", "strasse": "Ellbachstraße 1", "plz": "52428", "ort": "Jülich", "lat": 50.94264, "lng": 6.39317}, {"id": "47546-dr-wolf-heinrich-geissel", "amt": "Notar", "name": "Dr. Wolf-Heinrich Geißel", "strasse": "Kesselstraße 11", "plz": "47546", "ort": "Kalkar", "lat": 51.75749, "lng": 6.30334}, {"id": "47475-dr-jan-heskamp", "amt": "Notar", "name": "Dr. Jan Heskamp", "strasse": "Friedrichstraße 22", "plz": "47475", "ort": "Kamp-Lintfort", "lat": 51.51335, "lng": 6.51366}, {"id": "47906-kornelia-rudolph-alexander", "amt": "Notarin", "name": "Kornelia Rudolph-Alexander", "strasse": "Schorndorfer Straße 15", "plz": "47906", "ort": "Kempen", "lat": 51.37124, "lng": 6.4261}, {"id": "47906-dr-matthias-geuder", "amt": "Notar", "name": "Dr. Matthias Geuder", "strasse": "Hessenring 3", "plz": "47906", "ort": "Kempen, Niederrhein", "lat": 51.37049, "lng": 6.42736}, {"id": "50171-dr-dieter-stohr", "amt": "Notar", "name": "Dr. Dieter Stöhr", "strasse": "Sindorfer Straße 4", "plz": "50171", "ort": "Kerpen", "lat": 50.85303, "lng": 6.67386}, {"id": "50169-dr-tobias-clevinghaus", "amt": "Notar", "name": "Dr. Tobias Clevinghaus", "strasse": "Bahnhofstraße 11", "plz": "50169", "ort": "Kerpen", "lat": 50.87546, "lng": 6.73811}, {"id": "47533-dr-christian-wolf", "amt": "Notar", "name": "Dr. Christian Wolf", "strasse": "Hoffmannallee 55", "plz": "47533", "ort": "Kleve", "lat": 51.8099, "lng": 6.12675}, {"id": "47533-dr-jochen-lohaus-ll-m", "amt": "Notar", "name": "Dr. Jochen Lohaus LL.M.", "strasse": "Hafenstraße 24", "plz": "47533", "ort": "Kleve", "lat": 51.80916, "lng": 6.12801}, {"id": "47533-dr-patrick-flesner-ll-m-mba", "amt": "Notar", "name": "Dr. Patrick Flesner LL.M., MBA", "strasse": "Tiergartenstraße 64", "plz": "47533", "ort": "Kleve, Niederrhein", "lat": 51.80761, "lng": 6.12822}, {"id": "41352-dr-erne-jessica-meise", "amt": "Notarin", "name": "Dr. Erne Jessica Meise", "strasse": "Pescher Straße 124", "plz": "41352", "ort": "Korschenbroich", "lat": 51.19565, "lng": 6.54506}, {"id": "47799-dr-alexander-rezori", "amt": "Notar", "name": "Dr. Alexander Rezori", "strasse": "Uerdinger Straße 95", "plz": "47799", "ort": "Krefeld", "lat": 51.33702, "lng": 6.57564}, {"id": "47799-dr-andreas-goetze", "amt": "Notar", "name": "Dr. Andreas Goetze", "strasse": "Uerdinger Straße 95", "plz": "47799", "ort": "Krefeld", "lat": 51.33931, "lng": 6.57417}, {"id": "47798-dr-hans-jurgen-heil", "amt": "Notar", "name": "Dr. Hans-Jürgen Heil", "strasse": "Ostwall 165", "plz": "47798", "ort": "Krefeld", "lat": 51.32891, "lng": 6.55991}, {"id": "47799-dr-katja-grage", "amt": "Notarin", "name": "Dr. Katja Grage", "strasse": "Bismarckstraße 51", "plz": "47799", "ort": "Krefeld", "lat": 51.33857, "lng": 6.57543}, {"id": "47798-dr-nicola-hegerfeld-ll-m", "amt": "Notarin", "name": "Dr. Nicola Hegerfeld LL.M.", "strasse": "Ostwall 231", "plz": "47798", "ort": "Krefeld", "lat": 51.32965, "lng": 6.55865}, {"id": "47829-dr-christian-pelz-ll-m", "amt": "Notar", "name": "Dr. Christian Pelz LL.M.", "strasse": "Niederstraße 26", "plz": "47829", "ort": "Krefeld-Uerdingen", "lat": 51.37403, "lng": 6.64686}, {"id": "50935-christian-haas", "amt": "Notar", "name": "Christian Haas", "strasse": "Kitschburger Straße 1", "plz": "50935", "ort": "Köln", "lat": 50.91955, "lng": 6.89709}, {"id": "50672-christina-bartels", "amt": "Notarin", "name": "Christina Bartels", "strasse": "Kaiser-Wilhelm-Ring 7-9", "plz": "50672", "ort": "Köln", "lat": 50.94464, "lng": 6.94153}, {"id": "50825-dr-alexander-volzmann", "amt": "Notar", "name": "Dr. Alexander Völzmann", "strasse": "Subbelrather Straße 249", "plz": "50825", "ort": "Köln", "lat": 50.95166, "lng": 6.91103}, {"id": "50667-dr-andreas-burger", "amt": "Notar", "name": "Dr. Andreas Bürger", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "lat": 50.94125, "lng": 6.9528}, {"id": "50667-dr-andreas-rethmeier", "amt": "Notar", "name": "Dr. Andreas Rethmeier", "strasse": "Drususgasse 1-5", "plz": "50667", "ort": "Köln", "lat": 50.94016, "lng": 6.95568}, {"id": "50670-dr-christine-kaufmann", "amt": "Notarin", "name": "Dr. Christine Kaufmann", "strasse": "Hülchrather Str. 7", "plz": "50670", "ort": "Köln", "lat": 50.95125, "lng": 6.94527}, {"id": "50672-dr-frank-ellenbeck", "amt": "Notar", "name": "Dr. Frank Ellenbeck", "strasse": "Hohenzollernring 2-10", "plz": "50672", "ort": "Köln", "lat": 50.94358, "lng": 6.937}, {"id": "50670-dr-georg-wochner-ll-m", "amt": "Notar", "name": "Dr. Georg Wochner LL.M.", "strasse": "Gereonstraße 1-3", "plz": "50670", "ort": "Köln", "lat": 50.95048, "lng": 6.94222}, {"id": "50667-dr-jens-axel-tersteegen", "amt": "Notar", "name": "Dr. Jens Axel Tersteegen", "strasse": "Drususgasse 1-5", "plz": "50667", "ort": "Köln", "lat": 50.93709, "lng": 6.9541}, {"id": "50670-dr-jens-fleischhauer-ll-m", "amt": "Notar", "name": "Dr. Jens Fleischhauer LL.M.", "strasse": "Gereonstraße 1-3", "plz": "50670", "ort": "Köln", "lat": 50.94819, "lng": 6.94369}, {"id": "50672-dr-julia-sass-ll-m-columbia", "amt": "Notarin", "name": "Dr. Julia Saß LL.M. (Columbia)", "strasse": "Kaiser-Wilhelm-Ring 22", "plz": "50672", "ort": "Köln", "lat": 50.94226, "lng": 6.94022}, {"id": "50672-dr-jurgen-kallrath", "amt": "Notar", "name": "Dr. Jürgen Kallrath", "strasse": "Kaiser-Wilhelm-Ring 15", "plz": "50672", "ort": "Köln", "lat": 50.94319, "lng": 6.93364}, {"id": "50667-dr-kai-bischoff", "amt": "Notar", "name": "Dr. Kai Bischoff", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "lat": 50.93606, "lng": 6.95181}, {"id": "50672-dr-klaus-jurgen-dinstuhler", "amt": "Notar", "name": "Dr. Klaus-Jürgen Dinstühler", "strasse": "Kaiser-Wilhelm-Ring 13", "plz": "50672", "ort": "Köln", "lat": 50.94509, "lng": 6.9388}, {"id": "50674-dr-marc-hermanns", "amt": "Notar", "name": "Dr. Marc Hermanns", "strasse": "Habsburgerring 2", "plz": "50674", "ort": "Köln", "lat": 50.93465, "lng": 6.93314}, {"id": "51065-dr-marcus-leinenweber", "amt": "Notar", "name": "Dr. Marcus Leinenweber", "strasse": "Elisabeth-Breuer-Straße 11", "plz": "51065", "ort": "Köln", "lat": 50.95691, "lng": 7.00974}, {"id": "50668-dr-markus-buschbaum-ll-m", "amt": "Notar", "name": "Dr. Markus Buschbaum LL.M.", "strasse": "Theodor-Heuss-Ring 23", "plz": "50668", "ort": "Köln", "lat": 50.95009, "lng": 6.96475}, {"id": "50667-dr-martin-russmann", "amt": "Notar", "name": "Dr. Martin Rüßmann", "strasse": "Burgmauer 60", "plz": "50667", "ort": "Köln", "lat": 50.93939, "lng": 6.95263}, {"id": "50996-dr-martin-thelen", "amt": "Notar", "name": "Dr. Martin Thelen", "strasse": "Hauptstr. Ro 30", "plz": "50996", "ort": "Köln", "lat": 50.8816, "lng": 6.989}, {"id": "50667-dr-maximilian-freiherr-von-proff-zu-irnich", "amt": "Notar", "name": "Dr. Maximilian Freiherr von Proff zu Irnich", "strasse": "Hohe Straße 160-168", "plz": "50667", "ort": "Köln", "lat": 50.93826, "lng": 6.95053}, {"id": "50672-dr-michaela-tschon", "amt": "Notarin", "name": "Dr. Michaela Tschon", "strasse": "Hohenzollernring 25", "plz": "50672", "ort": "Köln", "lat": 50.94432, "lng": 6.93575}, {"id": "50668-dr-peter-schmitz", "amt": "Notar", "name": "Dr. Peter Schmitz", "strasse": "Elsa-Brändström-Str. 8", "plz": "50668", "ort": "Köln", "lat": 50.94932, "lng": 6.96169}, {"id": "50858-dr-rene-zoller", "amt": "Notar", "name": "Dr. Rene Zöller", "strasse": "Kirchweg 2", "plz": "50858", "ort": "Köln", "lat": 50.921, "lng": 6.85414}, {"id": "50672-dr-richard-bohr", "amt": "Notar", "name": "Dr. Richard Böhr", "strasse": "Hohenzollernring 58", "plz": "50672", "ort": "Köln", "lat": 50.94203, "lng": 6.93721}, {"id": "50935-dr-robert-kleba", "amt": "Notar", "name": "Dr. Robert Kleba", "strasse": "Dürener Straße 350", "plz": "50935", "ort": "Köln", "lat": 50.92184, "lng": 6.89563}, {"id": "50674-dr-robert-schumacher", "amt": "Notar", "name": "Dr. Robert Schumacher", "strasse": "Habsburgerring 2", "plz": "50674", "ort": "Köln", "lat": 50.93539, "lng": 6.93188}, {"id": "50670-dr-stefan-heinze", "amt": "Notar", "name": "Dr. Stefan Heinze", "strasse": "Gereonshof 2", "plz": "50670", "ort": "Köln", "lat": 50.94974, "lng": 6.94347}, {"id": "50672-dr-stefan-klein-ll-m", "amt": "Notar", "name": "Dr. Stefan Klein LL.M.", "strasse": "Kaiser-Wilhelm-Ring 7-9", "plz": "50672", "ort": "Köln", "lat": 50.94099, "lng": 6.93492}, {"id": "50667-dr-stephan-bleisteiner", "amt": "Notar", "name": "Dr. Stephan Bleisteiner", "strasse": "Kreuzgasse 2a", "plz": "50667", "ort": "Köln", "lat": 50.93732, "lng": 6.9571}, {"id": "51143-dr-till-grone", "amt": "Notar", "name": "Dr. Till Gröne", "strasse": "Bahnhofstraße 44", "plz": "51143", "ort": "Köln", "lat": 50.85787, "lng": 7.03567}, {"id": "50672-dr-tom-oliver-bader", "amt": "Notar", "name": "Dr. Tom Oliver Bader", "strasse": "Kaiser-Wilhelm-Ring 22", "plz": "50672", "ort": "Köln", "lat": 50.94618, "lng": 6.93592}, {"id": "50667-dr-wolfgang-reetz", "amt": "Notar", "name": "Dr. Wolfgang Reetz", "strasse": "Schildergasse 120", "plz": "50667", "ort": "Köln", "lat": 50.93971, "lng": 6.95841}, {"id": "50674-erich-r-thies", "amt": "Notar", "name": "Erich R. Thies", "strasse": "Hohenstaufenring 57", "plz": "50674", "ort": "Köln", "lat": 50.9331, "lng": 6.93335}, {"id": "50667-hans-joachim-schaller", "amt": "Notar", "name": "Hans Joachim Schaller", "strasse": "Apostelnstraße 15-17", "plz": "50667", "ort": "Köln", "lat": 50.93864, "lng": 6.95388}, {"id": "50668-leontin-schulte-thoma", "amt": "Notar", "name": "Leontin Schulte-Thoma", "strasse": "Elsa-Brändström-Str. 8", "plz": "50668", "ort": "Köln", "lat": 50.94857, "lng": 6.96295}, {"id": "50859-manuel-patrick-busch", "amt": "Notar", "name": "Manuel Patrick Busch", "strasse": "Richard-Wagner-Straße 1-3", "plz": "50859", "ort": "Köln", "lat": 50.95348, "lng": 6.83581}, {"id": "50935-peter-dobberahn", "amt": "Notar", "name": "Peter Dobberahn", "strasse": "Dürener Straße 282", "plz": "50935", "ort": "Köln", "lat": 50.9211, "lng": 6.89688}, {"id": "50968-peter-pana", "amt": "Notar", "name": "Peter Pana", "strasse": "Oberländer Ufer 154a", "plz": "50968", "ort": "Köln", "lat": 50.90377, "lng": 6.96822}, {"id": "50668-simon-lindow", "amt": "Notar", "name": "Simon Lindow", "strasse": "Theodor-Heuss-Ring 23", "plz": "50668", "ort": "Köln", "lat": 50.94702, "lng": 6.96316}, {"id": "50935-ulrich-sauer", "amt": "Notar", "name": "Ulrich Sauer", "strasse": "Kitschburger Straße 1", "plz": "50935", "ort": "Köln", "lat": 50.92261, "lng": 6.89868}, {"id": "50858-wolfgang-gruntkowski", "amt": "Notar", "name": "Wolfgang Gruntkowski", "strasse": "Kirchweg 2", "plz": "50858", "ort": "Köln", "lat": 50.92174, "lng": 6.85288}, {"id": "51105-dominik-huren", "amt": "Notar", "name": "Dominik Hüren", "strasse": "Gottfried-Hagen-Str. 20", "plz": "51105", "ort": "Köln-Kalk", "lat": 50.92284, "lng": 6.99934}, {"id": "51065-dr-philipp-muller", "amt": "Notar", "name": "Dr. Philipp Müller", "strasse": "Elisabeth-Breuer-Straße 11", "plz": "51065", "ort": "Köln-Mülheim", "lat": 50.95616, "lng": 7.011}, {"id": "51143-bernd-olaf-alexander-von-schwander", "amt": "Notar", "name": "Bernd Olaf Alexander von Schwander", "strasse": "Hauptstr. Zü 249", "plz": "51143", "ort": "Köln-Porz", "lat": 50.85861, "lng": 7.03441}, {"id": "53639-dr-timo-hartlich-ll-m", "amt": "Notar", "name": "Dr. Timo Hartlich LL.M.", "strasse": "Kurfürstenstraße 1", "plz": "53639", "ort": "Königswinter", "lat": 50.69245, "lng": 7.26292}, {"id": "40764-christoph-stiefel", "amt": "Notar", "name": "Christoph Stiefel", "strasse": "Solinger Straße 76", "plz": "40764", "ort": "Langenfeld (Rheinland)", "lat": 51.11899, "lng": 6.96257}, {"id": "51375-dr-anne-kathrin-lingk", "amt": "Notarin", "name": "Dr. Anne-Kathrin Lingk", "strasse": "Von-Diergardt-Straße 19", "plz": "51375", "ort": "Leverkusen", "lat": 51.03479, "lng": 7.05396}, {"id": "51375-dr-thilo-weimer", "amt": "Notar", "name": "Dr. Thilo Weimer", "strasse": "Von-Diergardt-Straße 19", "plz": "51375", "ort": "Leverkusen", "lat": 51.03554, "lng": 7.0527}, {"id": "51373-klaus-striewski", "amt": "Notar", "name": "Klaus Striewski", "strasse": "Dönhoffstraße 40", "plz": "51373", "ort": "Leverkusen", "lat": 51.02913, "lng": 6.98495}, {"id": "51373-susanne-karsten", "amt": "Notarin", "name": "Susanne Karsten", "strasse": "Breidenbachstraße 46", "plz": "51373", "ort": "Leverkusen", "lat": 51.02839, "lng": 6.98621}, {"id": "51379-dr-benjamin-matthias-schulz", "amt": "Notar", "name": "Dr. Benjamin Matthias Schulz", "strasse": "Peter-Neuenheuser-Straße 12", "plz": "51379", "ort": "Leverkusen-Opladen", "lat": 51.07046, "lng": 6.99532}, {"id": "51379-dr-stefan-lange-parpart", "amt": "Notar", "name": "Dr. Stefan Lange-Parpart", "strasse": "Bahnstadtchaussee 13", "plz": "51379", "ort": "Leverkusen-Opladen", "lat": 51.06972, "lng": 6.99658}, {"id": "51789-chiara-fischer", "amt": "Notarin", "name": "Chiara Fischer", "strasse": "Eichenhofstraße 1", "plz": "51789", "ort": "Lindlar", "lat": 51.0218, "lng": 7.34917}, {"id": "53797-michael-danzeglocke-ll-m", "amt": "Notar", "name": "Michael Danzeglocke LL.M.", "strasse": "Breiter Weg 1a", "plz": "53797", "ort": "Lohmar", "lat": 50.86017, "lng": 7.25381}, {"id": "40667-dr-sabine-krampen-lietzke", "amt": "Notarin", "name": "Dr. Sabine Krampen-Lietzke", "strasse": "Düsseldorfer Straße 83", "plz": "40667", "ort": "Meerbusch", "lat": 51.2505, "lng": 6.69019}, {"id": "40822-dr-reinhard-busse", "amt": "Notar", "name": "Dr. Reinhard Busse", "strasse": "Neanderstraße 68", "plz": "40822", "ort": "Mettmann", "lat": 51.25439, "lng": 6.9832}, {"id": "47441-dr-andre-fisch", "amt": "Notar", "name": "Dr. André Fisch", "strasse": "Elenastraße 17", "plz": "47441", "ort": "Moers", "lat": 51.44628, "lng": 6.62755}, {"id": "47441-dr-anika-gilberg", "amt": "Notarin", "name": "Dr. Anika Gilberg", "strasse": "Elenastraße 17", "plz": "47441", "ort": "Moers", "lat": 51.44702, "lng": 6.62629}, {"id": "47441-dr-christian-kutschmann-ll-m-univ-of-virginia", "amt": "Notar", "name": "Dr. Christian Kutschmann LL.M. (Univ. of Virginia)", "strasse": "Haagstraße 4", "plz": "47441", "ort": "Moers", "lat": 51.44779, "lng": 6.62935}, {"id": "47441-dr-christian-lettmann", "amt": "Notar", "name": "Dr. Christian Lettmann", "strasse": "Haagstraße 16", "plz": "47441", "ort": "Moers", "lat": 51.44473, "lng": 6.62776}, {"id": "47441-dr-jens-todtenhofer-ll-m", "amt": "Notar", "name": "Dr. Jens Todtenhöfer LL.M.", "strasse": "Neustraße 19", "plz": "47441", "ort": "Moers", "lat": 51.44496, "lng": 6.63077}, {"id": "47441-dr-julie-francastel-l-l-m", "amt": "Notarin", "name": "Dr. Julie Francastel L.L.M.", "strasse": "Haagstraße 4", "plz": "47441", "ort": "Moers", "lat": 51.4459, "lng": 6.62419}, {"id": "40789-dr-jens-heinig", "amt": "Notar", "name": "Dr. Jens Heinig", "strasse": "Poststraße 6", "plz": "40789", "ort": "Monheim am Rhein", "lat": 51.09661, "lng": 6.89744}, {"id": "52156-thomas-klosky", "amt": "Notar", "name": "Thomas Klosky", "strasse": "Trierer Straße 93", "plz": "52156", "ort": "Monschau", "lat": 50.53262, "lng": 6.25015}, {"id": "41239-dirk-piegsa", "amt": "Notar", "name": "Dirk Piegsa", "strasse": "Feldstraße 140", "plz": "41239", "ort": "Mönchengladbach", "lat": 51.16549, "lng": 6.42618}, {"id": "41199-dr-catharina-sophie-von-hertzberg-bolch", "amt": "Notarin", "name": "Dr. Catharina Sophie von Hertzberg-Bölch", "strasse": "Mülgaustraße 5", "plz": "41199", "ort": "Mönchengladbach", "lat": 51.13297, "lng": 6.44494}, {"id": "41063-dr-christian-schmitz", "amt": "Notar", "name": "Dr. Christian Schmitz", "strasse": "Rheinbahnstraße 36", "plz": "41063", "ort": "Mönchengladbach", "lat": 51.20769, "lng": 6.42277}, {"id": "41061-dr-kai-franken", "amt": "Notar", "name": "Dr. Kai Franken", "strasse": "Steinmetzstraße 23", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.19287, "lng": 6.43273}, {"id": "41061-dr-matthias-neuhausen", "amt": "Notar", "name": "Dr. Matthias Neuhausen", "strasse": "Kaiserstraße 51", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.1957, "lng": 6.43131}, {"id": "41061-dr-stefan-heimsoeth", "amt": "Notar", "name": "Dr. Stefan Heimsoeth", "strasse": "Beethovenstraße 59", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.19419, "lng": 6.42952}, {"id": "41236-dr-thomas-kerstan-ll-m-cambridge", "amt": "Notar", "name": "Dr. Thomas Kerstan LL.M.(Cambridge)", "strasse": "Oskar-Graemer-Straße 15", "plz": "41236", "ort": "Mönchengladbach", "lat": 51.16683, "lng": 6.44949}, {"id": "41061-dr-thomas-schultz", "amt": "Notar", "name": "Dr. Thomas Schultz", "strasse": "Bismarckplatz 9", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.19493, "lng": 6.42826}, {"id": "41061-dr-ulrich-becker", "amt": "Notar", "name": "Dr. Ulrich Becker", "strasse": "Bismarckplatz 9", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.19264, "lng": 6.42973}, {"id": "41236-holger-fruh", "amt": "Notar", "name": "Holger Fruh", "strasse": "Oskar-Graemer-Straße 15", "plz": "41236", "ort": "Mönchengladbach", "lat": 51.16758, "lng": 6.44824}, {"id": "41061-oliver-baetzgen", "amt": "Notar", "name": "Oliver Baetzgen", "strasse": "Regentenstraße 43", "plz": "41061", "ort": "Mönchengladbach", "lat": 51.19381, "lng": 6.42616}, {"id": "41334-dr-svenja-gelshorn", "amt": "Notarin", "name": "Dr. Svenja Gelshorn", "strasse": "Alter Postweg 2", "plz": "41334", "ort": "Nettetal", "lat": 51.32628, "lng": 6.2721}, {"id": "41460-dr-anna-zobeley", "amt": "Notarin", "name": "Dr. Anna Zöbeley", "strasse": "Hammer Landstraße 1a", "plz": "41460", "ort": "Neuss", "lat": 51.20714, "lng": 6.70296}, {"id": "41460-dr-martin-lohr", "amt": "Notar", "name": "Dr. Martin Lohr", "strasse": "Erftstraße 94", "plz": "41460", "ort": "Neuss", "lat": 51.20903, "lng": 6.70811}, {"id": "41460-dr-paul-terner-ll-m", "amt": "Notar", "name": "Dr. Paul Terner LL.M.", "strasse": "Kanalstraße 4", "plz": "41460", "ort": "Neuss", "lat": 51.2062, "lng": 6.70953}, {"id": "41460-dr-tobias-kruse", "amt": "Notar", "name": "Dr. Tobias Kruse", "strasse": "Erftstraße 86", "plz": "41460", "ort": "Neuss", "lat": 51.20597, "lng": 6.70652}, {"id": "41460-dr-volker-hustedt", "amt": "Notar", "name": "Dr. Volker Hustedt", "strasse": "Erftstraße 72", "plz": "41460", "ort": "Neuss", "lat": 51.20826, "lng": 6.70506}, {"id": "41460-johanna-vogel-fruher-jurgens-mjur-oxford", "amt": "Notarin", "name": "Johanna Vogel (früher Jürgens) MJur (Oxford)", "strasse": "Kanalstraße 4", "plz": "41460", "ort": "Neuss", "lat": 51.21012, "lng": 6.70523}, {"id": "41460-nikolaus-bardenhewer", "amt": "Notar", "name": "Nikolaus Bardenhewer", "strasse": "Erftstraße 72", "plz": "41460", "ort": "Neuss", "lat": 51.20752, "lng": 6.70631}, {"id": "53859-michael-stutz", "amt": "Notar", "name": "Michael Stutz", "strasse": "Spicher Straße 30", "plz": "53859", "ort": "Niederkassel", "lat": 50.80958, "lng": 7.05635}, {"id": "50259-dr-thomas-flues", "amt": "Notar", "name": "Dr. Thomas Flues", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "lat": 50.99303, "lng": 6.78629}, {"id": "50259-dr-viola-kruse", "amt": "Notarin", "name": "Dr. Viola Kruse", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "lat": 50.99378, "lng": 6.78503}, {"id": "42477-dr-britta-spitzbart", "amt": "Notarin", "name": "Dr. Britta Spitzbart", "strasse": "Kaiserstraße 164", "plz": "42477", "ort": "Radevormwald", "lat": 51.20944, "lng": 7.37208}, {"id": "40878-dr-jan-link", "amt": "Notar", "name": "Dr. Jan Link", "strasse": "Grabenstraße 15", "plz": "40878", "ort": "Ratingen", "lat": 51.29719, "lng": 6.84937}, {"id": "40878-dr-jens-bormann-ll-m-harvard", "amt": "Notar", "name": "Dr. Jens Bormann LL.M. (Harvard)", "strasse": "Grabenstraße 15", "plz": "40878", "ort": "Ratingen", "lat": 51.29644, "lng": 6.85063}, {"id": "42853-andreas-schmitz-vornmoor", "amt": "Notar", "name": "Andreas Schmitz-Vornmoor", "strasse": "Alleestraße 72", "plz": "42853", "ort": "Remscheid", "lat": 51.1833, "lng": 7.1799}, {"id": "42897-dr-markus-zahn", "amt": "Notar", "name": "Dr. Markus Zahn", "strasse": "Kölner Straße 64", "plz": "42897", "ort": "Remscheid", "lat": 51.17301, "lng": 7.28228}, {"id": "53359-dr-guido-kordel-ll-m", "amt": "Notar", "name": "Dr. Guido Kordel LL.M.", "strasse": "Kleine Heeg 13", "plz": "53359", "ort": "Rheinbach", "lat": 50.60788, "lng": 6.95199}, {"id": "53359-dr-mario-leitzen", "amt": "Notar", "name": "Dr. Mario Leitzen", "strasse": "Kleine Heeg 13", "plz": "53359", "ort": "Rheinbach", "lat": 50.60714, "lng": 6.95325}, {"id": "53359-dr-nicole-plate", "amt": "Notarin", "name": "Dr. Nicole Plate", "strasse": "Kriegerstraße 17", "plz": "53359", "ort": "Rheinbach", "lat": 50.60559, "lng": 6.95346}, {"id": "47495-dr-christopher-bjorn-lutz", "amt": "Notar", "name": "Dr. Christopher Björn Lutz", "strasse": "Holzmarkt 8", "plz": "47495", "ort": "Rheinberg", "lat": 51.55062, "lng": 6.60242}, {"id": "51503-dr-thomas-breiken", "amt": "Notar", "name": "Dr. Thomas Breiken", "strasse": "Scharrenbroicher Straße 4", "plz": "51503", "ort": "Rösrath", "lat": 50.90621, "lng": 7.18645}, {"id": "53757-dr-dominik-kolmel", "amt": "Notar", "name": "Dr. Dominik Kölmel", "strasse": "Hennefer Straße 5", "plz": "53757", "ort": "Sankt Augustin", "lat": 50.75891, "lng": 7.20122}, {"id": "53937-christian-mach", "amt": "Notar", "name": "Christian Mach", "strasse": "In den Weiern 24", "plz": "53937", "ort": "Schleiden", "lat": 50.56332, "lng": 6.46155}, {"id": "53937-martin-strahl", "amt": "Notar", "name": "Martin Strahl", "strasse": "Alter Römerweg 3", "plz": "53937", "ort": "Schleiden", "lat": 50.56258, "lng": 6.46281}, {"id": "53721-dirk-hofinghoff", "amt": "Notar", "name": "Dirk Höfinghoff", "strasse": "Wilhelmstraße 62", "plz": "53721", "ort": "Siegburg", "lat": 50.79873, "lng": 7.21506}, {"id": "53721-dr-antonia-clarissa-harbecke-fruher-bautsch", "amt": "Notarin", "name": "Dr. Antonia Clarissa Harbecke (früher Bautsch)", "strasse": "Am Brauhof 2", "plz": "53721", "ort": "Siegburg", "lat": 50.80005, "lng": 7.21184}, {"id": "53721-dr-lars-gohmann", "amt": "Notar", "name": "Dr. Lars Göhmann", "strasse": "Weierstraße 14-16", "plz": "53721", "ort": "Siegburg", "lat": 50.79966, "lng": 7.20848}, {"id": "53721-dr-martin-konstantin-thelen-ll-m-columbia", "amt": "Notar", "name": "Dr. Martin Konstantin Thelen LL.M. (Columbia)", "strasse": "Am Brauhof 2", "plz": "53721", "ort": "Siegburg", "lat": 50.80079, "lng": 7.21058}, {"id": "53721-dr-thorsten-fuhr", "amt": "Notar", "name": "Dr. Thorsten Führ", "strasse": "Weierstraße 14-16", "plz": "53721", "ort": "Siegburg", "lat": 50.80156, "lng": 7.21364}, {"id": "53721-lisa-johanna-morchen", "amt": "Notarin", "name": "Lisa Johanna Mörchen", "strasse": "Bahnhofstraße 23", "plz": "53721", "ort": "Siegburg", "lat": 50.7985, "lng": 7.21205}, {"id": "42651-dr-alexander-stallknecht", "amt": "Notar", "name": "Dr. Alexander Stallknecht", "strasse": "Birkerstraße 1", "plz": "42651", "ort": "Solingen", "lat": 51.17055, "lng": 7.09226}, {"id": "42697-dr-andreas-hariefeld", "amt": "Notar", "name": "Dr. Andreas Hariefeld", "strasse": "Kärntener Straße 9a", "plz": "42697", "ort": "Solingen", "lat": 51.15403, "lng": 6.99124}, {"id": "42653-dr-laura-maibaum", "amt": "Notarin", "name": "Dr. Laura Maibaum", "strasse": "Dycker Feld 72", "plz": "42653", "ort": "Solingen", "lat": 51.20105, "lng": 7.08287}, {"id": "42651-dr-tobias-roth", "amt": "Notar", "name": "Dr. Tobias Roth", "strasse": "Ufergarten 22", "plz": "42651", "ort": "Solingen", "lat": 51.17129, "lng": 7.091}, {"id": "42653-mikolaj-pogorzelski-ll-m-harvard", "amt": "Notar", "name": "Mikolaj Pogorzelski LL.M. (Harvard)", "strasse": "Dycker Feld 72", "plz": "42653", "ort": "Solingen", "lat": 51.2018, "lng": 7.08162}, {"id": "52223-dr-stefan-schmitz", "amt": "Notar", "name": "Dr. Stefan Schmitz", "strasse": "Reitmeisterweg 14", "plz": "52223", "ort": "Stolberg", "lat": 50.74869, "lng": 6.21317}, {"id": "52223-dr-christof-wagner-ll-m-cambridge", "amt": "Notar", "name": "Dr. Christof Wagner LL.M. (Cambridge)", "strasse": "Reitmeisterweg 14", "plz": "52223", "ort": "Stolberg (Rheinland)", "lat": 50.74795, "lng": 6.21442}, {"id": "47638-marc-heggen", "amt": "Notar", "name": "Marc Heggen", "strasse": "Hans-Tenhaeff-Str. 1", "plz": "47638", "ort": "Straelen", "lat": 51.42202, "lng": 6.25409}, {"id": "53840-dr-christoph-huhn", "amt": "Notar", "name": "Dr. Christoph Huhn", "strasse": "Sieglarer Straße 2c", "plz": "53840", "ort": "Troisdorf", "lat": 50.81753, "lng": 7.15767}, {"id": "53840-sabine-uedelhoven-fruher-dillmann", "amt": "Notarin", "name": "Sabine Uedelhoven (früher Dillmann)", "strasse": "Kölner Straße 62", "plz": "53840", "ort": "Troisdorf", "lat": 50.81908, "lng": 7.15745}, {"id": "53840-stephan-romer", "amt": "Notar", "name": "Stephan Römer", "strasse": "Pfarrer-Kenntemich-Platz 1", "plz": "53840", "ort": "Troisdorf", "lat": 50.81982, "lng": 7.1562}, {"id": "47918-tanja-derks-fruher-dahlmanns", "amt": "Notarin", "name": "Tanja Derks (früher Dahlmanns)", "strasse": "Rathausplatz 5", "plz": "47918", "ort": "Tönisvorst", "lat": 51.32747, "lng": 6.44385}, {"id": "42549-dr-julian-stefan-klein-ll-m", "amt": "Notar", "name": "Dr. Julian Stefan Klein LL.M.", "strasse": "Dürerstraße 37", "plz": "42549", "ort": "Velbert", "lat": 51.331, "lng": 7.02248}, {"id": "42555-dr-miriam-pascale-rosenberger", "amt": "Notarin", "name": "Dr. Miriam Pascale Rosenberger", "strasse": "Sambeck 10", "plz": "42555", "ort": "Velbert", "lat": 51.35176, "lng": 7.11466}, {"id": "41749-dr-adrian-cavin-ll-m-georgetown-university", "amt": "Notar", "name": "Dr. Adrian Cavin LL.M. (Georgetown University)", "strasse": "Grefrather Straße 22", "plz": "41749", "ort": "Viersen", "lat": 51.29018, "lng": 6.35612}, {"id": "41747-dr-oliver-gehse", "amt": "Notar", "name": "Dr. Oliver Gehse", "strasse": "Willy-Brandt-Ring 33", "plz": "41747", "ort": "Viersen", "lat": 51.25206, "lng": 6.38032}, {"id": "41751-dr-stephan-oelers", "amt": "Notar", "name": "Dr. Stephan Oelers", "strasse": "Viersener Straße 26", "plz": "41751", "ort": "Viersen", "lat": 51.25004, "lng": 6.32066}, {"id": "41751-dr-tobias-wilms", "amt": "Notar", "name": "Dr. Tobias Wilms", "strasse": "Viersener Straße 61", "plz": "41751", "ort": "Viersen", "lat": 51.25078, "lng": 6.3194}, {"id": "51545-dr-paul-sebastian-hager", "amt": "Notar", "name": "Dr. Paul Sebastian Hager", "strasse": "Kaiserstraße 28", "plz": "51545", "ort": "Waldbröl", "lat": 50.85913, "lng": 7.59813}, {"id": "41849-dr-ulrike-josefine-gisbertz", "amt": "Notarin", "name": "Dr. Ulrike Josefine Gisbertz", "strasse": "Küstersgäßchen 9", "plz": "41849", "ort": "Wassenberg", "lat": 51.11305, "lng": 6.13289}, {"id": "41844-johannes-christian-freuen", "amt": "Notar", "name": "Johannes Christian Freuen", "strasse": "Bahnhofstraße 36", "plz": "41844", "ort": "Wegberg", "lat": 51.14905, "lng": 6.24542}, {"id": "42929-dr-stefan-meyer", "amt": "Notar", "name": "Dr. Stefan Meyer", "strasse": "An der Feuerwache 2", "plz": "42929", "ort": "Wermelskirchen", "lat": 51.10308, "lng": 7.22408}, {"id": "50389-andre-fabian-gerold", "amt": "Notar", "name": "Andre Fabian Gerold", "strasse": "Römerstraße 39", "plz": "50389", "ort": "Wesseling", "lat": 50.81426, "lng": 6.97872}, {"id": "51674-dr-tim-kasper", "amt": "Notar", "name": "Dr. Tim Kasper", "strasse": "Hauptstraße 41", "plz": "51674", "ort": "Wiehl", "lat": 50.949, "lng": 7.5146}, {"id": "51674-philip-scholz", "amt": "Notar", "name": "Philip Scholz", "strasse": "Hauptstraße 41", "plz": "51674", "ort": "Wiehl", "lat": 50.94826, "lng": 7.51586}, {"id": "51688-dr-thiemo-soester", "amt": "Notar", "name": "Dr. Thiemo Soester", "strasse": "Lenneper Straße 11", "plz": "51688", "ort": "Wipperfürth", "lat": 51.10273, "lng": 7.39724}, {"id": "42103-christoph-dahlkamp", "amt": "Notar", "name": "Christoph Dahlkamp", "strasse": "Erholungstraße 14", "plz": "42103", "ort": "Wuppertal", "lat": 51.25701, "lng": 7.1484}, {"id": "42327-dr-andreas-sailer", "amt": "Notar", "name": "Dr. Andreas Sailer", "strasse": "Bahnstraße 2", "plz": "42327", "ort": "Wuppertal", "lat": 51.24408, "lng": 7.06717}, {"id": "42103-dr-daniel-doetsch-m-jur-oxford", "amt": "Notar", "name": "Dr. Daniel Doetsch M. Jur. (Oxford)", "strasse": "Bankstraße 23", "plz": "42103", "ort": "Wuppertal", "lat": 51.25624, "lng": 7.14535}, {"id": "42115-dr-markus-dohr", "amt": "Notar", "name": "Dr. Markus Dohr", "strasse": "Funckstraße 54", "plz": "42115", "ort": "Wuppertal", "lat": 51.25337, "lng": 7.11706}, {"id": "42103-dr-maximilian-bonner-ll-m", "amt": "Notar", "name": "Dr. Maximilian Bönner LL.M.", "strasse": "Alte Freiheit 26", "plz": "42103", "ort": "Wuppertal", "lat": 51.25549, "lng": 7.14661}, {"id": "42369-jan-martin-stascheit", "amt": "Notar", "name": "Jan Martin Stascheit", "strasse": "Marktstraße 46", "plz": "42369", "ort": "Wuppertal", "lat": 51.2257, "lng": 7.19585}, {"id": "42103-waldemar-hindemit", "amt": "Notar", "name": "Waldemar Hindemit", "strasse": "Bankstraße 23", "plz": "42103", "ort": "Wuppertal", "lat": 51.25394, "lng": 7.14682}, {"id": "42275-caspar-heckscher", "amt": "Notar", "name": "Caspar Heckscher", "strasse": "Geschwister-Scholl-Platz 2", "plz": "42275", "ort": "Wuppertal-Barmen", "lat": 51.27362, "lng": 7.20544}, {"id": "42275-dr-henrich-fabis", "amt": "Notar", "name": "Dr. Henrich Fabis", "strasse": "Geschwister-Scholl-Platz 2", "plz": "42275", "ort": "Wuppertal-Barmen", "lat": 51.27436, "lng": 7.20418}, {"id": "42287-dr-thomas-schwerin", "amt": "Notar", "name": "Dr. Thomas Schwerin", "strasse": "Wettinerstraße 51", "plz": "42287", "ort": "Wuppertal-Barmen", "lat": 51.25079, "lng": 7.196}, {"id": "42287-mark-neukirchen", "amt": "Notar", "name": "Mark Neukirchen", "strasse": "Wettinerstraße 51", "plz": "42287", "ort": "Wuppertal-Barmen", "lat": 51.25005, "lng": 7.19726}, {"id": "42489-dennis-theus", "amt": "Notar", "name": "Dennis Theus", "strasse": "Wilhelmstraße 96", "plz": "42489", "ort": "Wülfrath", "lat": 51.28792, "lng": 7.03828}, {"id": "52146-jan-peterssen", "amt": "Notar", "name": "Jan Peterßen", "strasse": "Morlaixplatz 27", "plz": "52146", "ort": "Würselen", "lat": 50.81938, "lng": 6.14623}, {"id": "46509-dr-moritz-lennart-jaschke", "amt": "Notar", "name": "Dr. Moritz Lennart Jäschke", "strasse": "Karthaus 4-6", "plz": "46509", "ort": "Xanten", "lat": 51.66524, "lng": 6.44244}, {"id": "53909-fabian-alexander-schwarz", "amt": "Notar", "name": "Fabian Alexander Schwarz", "strasse": "Münsterstraße 35", "plz": "53909", "ort": "Zülpich", "lat": 50.67725, "lng": 6.645}];
 const KREISE = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Kreis Kleve","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.109,51.894],[6.185,51.895],[6.289,51.877],[6.311,51.851],[6.375,51.836],[6.418,51.83],[6.433,51.808],[6.499,51.814],[6.545,51.766],[6.5,51.742],[6.473,51.704],[6.432,51.748],[6.421,51.744],[6.364,51.697],[6.39,51.683],[6.362,51.663],[6.334,51.64],[6.311,51.628],[6.343,51.614],[6.345,51.599],[6.382,51.593],[6.378,51.574],[6.409,51.561],[6.505,51.567],[6.496,51.541],[6.492,51.522],[6.483,51.485],[6.511,51.448],[6.525,51.426],[6.478,51.421],[6.406,51.416],[6.39,51.404],[6.385,51.389],[6.363,51.377],[6.322,51.365],[6.268,51.367],[6.223,51.391],[6.215,51.402],[6.231,51.469],[6.179,51.541],[6.091,51.605],[6.106,51.623],[6.039,51.678],[6.051,51.717],[5.964,51.742],[6.005,51.768],[6.001,51.782],[5.965,51.813],[5.965,51.824],[6.017,51.832],[6.068,51.865],[6.169,51.845],[6.145,51.871],[6.107,51.889],[6.109,51.894]]]]}},{"type":"Feature","properties":{"name":"Duisburg","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.82,51.453],[6.827,51.442],[6.819,51.397],[6.821,51.367],[6.841,51.349],[6.805,51.352],[6.788,51.34],[6.724,51.331],[6.662,51.352],[6.678,51.375],[6.648,51.385],[6.633,51.411],[6.669,51.408],[6.689,51.449],[6.677,51.456],[6.663,51.475],[6.662,51.489],[6.644,51.489],[6.637,51.504],[6.688,51.535],[6.698,51.557],[6.796,51.53],[6.797,51.515],[6.835,51.494],[6.824,51.475],[6.831,51.468],[6.82,51.453]]]]}},{"type":"Feature","properties":{"name":"D\u00fcsseldorf","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.811,51.348],[6.813,51.322],[6.816,51.289],[6.811,51.278],[6.84,51.279],[6.947,51.27],[6.938,51.237],[6.886,51.228],[6.917,51.21],[6.93,51.188],[6.908,51.165],[6.897,51.157],[6.923,51.136],[6.918,51.124],[6.852,51.134],[6.856,51.16],[6.798,51.151],[6.789,51.184],[6.736,51.186],[6.733,51.223],[6.697,51.23],[6.711,51.268],[6.743,51.309],[6.723,51.335],[6.788,51.34],[6.805,51.352],[6.811,51.348]]]]}},{"type":"Feature","properties":{"name":"Essen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.012,51.528],[7.031,51.513],[7.068,51.492],[7.081,51.478],[7.123,51.468],[7.142,51.439],[7.142,51.417],[7.12,51.39],[7.121,51.376],[7.086,51.371],[7.023,51.362],[6.935,51.344],[6.922,51.37],[6.956,51.389],[6.954,51.412],[6.964,51.445],[6.927,51.459],[6.93,51.493],[7.012,51.528]]]]}},{"type":"Feature","properties":{"name":"Krefeld","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.647,51.392],[6.66,51.382],[6.678,51.375],[6.662,51.352],[6.706,51.327],[6.631,51.31],[6.508,51.288],[6.524,51.311],[6.497,51.347],[6.487,51.388],[6.545,51.405],[6.647,51.392]]]]}},{"type":"Feature","properties":{"name":"Kreis Mettmann","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.91,51.366],[6.977,51.346],[7.064,51.359],[7.093,51.364],[7.156,51.373],[7.147,51.336],[7.171,51.311],[7.098,51.29],[7.098,51.279],[7.065,51.252],[7.044,51.232],[7.052,51.203],[6.962,51.155],[6.998,51.142],[6.992,51.071],[6.927,51.08],[6.857,51.074],[6.89,51.101],[6.9,51.127],[6.929,51.132],[6.923,51.136],[6.897,51.157],[6.908,51.165],[6.93,51.188],[6.917,51.21],[6.886,51.228],[6.938,51.237],[6.947,51.27],[6.84,51.279],[6.804,51.285],[6.825,51.319],[6.818,51.341],[6.841,51.349],[6.91,51.366]]]]}},{"type":"Feature","properties":{"name":"M\u00f6nchengladbach","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.532,51.226],[6.502,51.229],[6.489,51.176],[6.524,51.184],[6.522,51.14],[6.509,51.15],[6.475,51.135],[6.472,51.105],[6.436,51.104],[6.366,51.098],[6.363,51.128],[6.357,51.135],[6.313,51.168],[6.305,51.183],[6.323,51.187],[6.338,51.21],[6.354,51.232],[6.454,51.235],[6.532,51.226]]]]}},{"type":"Feature","properties":{"name":"M\u00fclheim an der Ruhr","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.909,51.466],[6.922,51.448],[6.97,51.434],[6.95,51.393],[6.921,51.377],[6.898,51.369],[6.833,51.364],[6.827,51.442],[6.82,51.453],[6.909,51.466]]]]}},{"type":"Feature","properties":{"name":"Oberhausen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.796,51.53],[6.829,51.564],[6.846,51.576],[6.872,51.554],[6.892,51.525],[6.918,51.5],[6.913,51.485],[6.909,51.466],[6.82,51.453],[6.819,51.471],[6.818,51.482],[6.797,51.515],[6.796,51.53]]]]}},{"type":"Feature","properties":{"name":"Remscheid","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.295,51.204],[7.302,51.193],[7.309,51.186],[7.294,51.159],[7.26,51.143],[7.229,51.157],[7.16,51.151],[7.131,51.153],[7.146,51.187],[7.202,51.208],[7.259,51.214],[7.26,51.207],[7.295,51.204]]]]}},{"type":"Feature","properties":{"name":"Rhein-Kreis Neuss","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.724,51.331],[6.743,51.309],[6.711,51.268],[6.697,51.23],[6.733,51.223],[6.736,51.186],[6.789,51.184],[6.798,51.151],[6.822,51.14],[6.862,51.156],[6.89,51.105],[6.846,51.074],[6.841,51.055],[6.819,51.043],[6.758,51.064],[6.748,51.045],[6.749,51.034],[6.722,51.014],[6.65,51.023],[6.579,51.029],[6.565,51.051],[6.523,51.057],[6.49,51.034],[6.481,51.06],[6.461,51.089],[6.436,51.104],[6.472,51.105],[6.475,51.135],[6.509,51.15],[6.522,51.14],[6.524,51.184],[6.489,51.176],[6.502,51.229],[6.543,51.233],[6.578,51.242],[6.599,51.265],[6.627,51.288],[6.661,51.307],[6.711,51.335],[6.724,51.331]]]]}},{"type":"Feature","properties":{"name":"Solingen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.136,51.161],[7.131,51.153],[7.166,51.151],[7.173,51.136],[7.174,51.121],[7.146,51.117],[7.121,51.131],[7.08,51.133],[7.081,51.122],[7.0,51.116],[6.998,51.142],[6.973,51.163],[6.99,51.171],[7.046,51.203],[7.109,51.212],[7.111,51.186],[7.124,51.172],[7.136,51.161]]]]}},{"type":"Feature","properties":{"name":"Kreis Viersen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.525,51.426],[6.545,51.405],[6.487,51.388],[6.497,51.347],[6.524,51.311],[6.508,51.288],[6.599,51.265],[6.578,51.242],[6.543,51.233],[6.464,51.25],[6.414,51.219],[6.342,51.228],[6.322,51.198],[6.329,51.187],[6.252,51.193],[6.218,51.173],[6.122,51.176],[6.078,51.187],[6.092,51.225],[6.155,51.304],[6.199,51.339],[6.268,51.367],[6.322,51.365],[6.363,51.377],[6.385,51.389],[6.39,51.404],[6.406,51.416],[6.478,51.421],[6.525,51.426]]]]}},{"type":"Feature","properties":{"name":"Kreis Wesel","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.921,51.742],[6.929,51.724],[6.948,51.713],[6.925,51.697],[6.91,51.671],[6.905,51.656],[6.877,51.629],[6.861,51.606],[6.869,51.588],[6.829,51.564],[6.796,51.53],[6.698,51.557],[6.688,51.535],[6.637,51.504],[6.644,51.489],[6.662,51.489],[6.663,51.475],[6.677,51.456],[6.689,51.449],[6.639,51.418],[6.647,51.392],[6.538,51.408],[6.525,51.426],[6.511,51.448],[6.483,51.485],[6.492,51.522],[6.496,51.541],[6.505,51.567],[6.409,51.561],[6.378,51.574],[6.382,51.593],[6.345,51.599],[6.343,51.614],[6.311,51.628],[6.334,51.64],[6.362,51.663],[6.39,51.683],[6.364,51.697],[6.421,51.744],[6.432,51.748],[6.473,51.704],[6.5,51.742],[6.545,51.766],[6.499,51.814],[6.579,51.79],[6.597,51.794],[6.62,51.802],[6.651,51.799],[6.677,51.777],[6.725,51.779],[6.732,51.767],[6.78,51.765],[6.824,51.744],[6.849,51.737],[6.921,51.742]]]]}},{"type":"Feature","properties":{"name":"Wuppertal","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.304,51.238],[7.294,51.219],[7.295,51.204],[7.254,51.21],[7.235,51.224],[7.173,51.211],[7.153,51.169],[7.124,51.172],[7.111,51.186],[7.109,51.212],[7.044,51.232],[7.065,51.252],[7.098,51.279],[7.098,51.29],[7.132,51.298],[7.183,51.304],[7.195,51.29],[7.262,51.315],[7.277,51.271],[7.273,51.256],[7.304,51.238]]]]}},{"type":"Feature","properties":{"name":"Aachen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.025,50.847],[6.058,50.834],[6.065,50.823],[6.096,50.813],[6.189,50.806],[6.173,50.779],[6.183,50.735],[6.187,50.679],[6.182,50.667],[6.178,50.648],[6.174,50.658],[6.029,50.725],[6.012,50.775],[5.963,50.795],[5.975,50.814],[6.027,50.815],[6.02,50.845],[6.025,50.847]]]]}},{"type":"Feature","properties":{"name":"St\u00e4dteregion Aachen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.078,50.907],[6.09,50.907],[6.109,50.904],[6.151,50.918],[6.197,50.954],[6.229,50.932],[6.23,50.921],[6.22,50.887],[6.241,50.857],[6.258,50.873],[6.299,50.886],[6.324,50.868],[6.338,50.842],[6.345,50.835],[6.34,50.816],[6.3,50.796],[6.32,50.77],[6.351,50.767],[6.345,50.756],[6.312,50.717],[6.285,50.686],[6.299,50.664],[6.324,50.654],[6.377,50.667],[6.384,50.652],[6.391,50.649],[6.404,50.638],[6.392,50.63],[6.381,50.622],[6.389,50.604],[6.413,50.597],[6.397,50.582],[6.365,50.536],[6.377,50.533],[6.322,50.499],[6.253,50.495],[6.181,50.533],[6.176,50.56],[6.197,50.574],[6.233,50.583],[6.252,50.592],[6.21,50.631],[6.16,50.644],[6.177,50.652],[6.182,50.667],[6.187,50.679],[6.183,50.735],[6.173,50.779],[6.189,50.806],[6.096,50.813],[6.065,50.823],[6.058,50.834],[6.074,50.847],[6.076,50.895],[6.078,50.907]]]]}},{"type":"Feature","properties":{"name":"Bonn","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.217,50.646],[7.187,50.648],[7.135,50.642],[7.077,50.629],[7.029,50.65],[7.04,50.654],[7.038,50.672],[7.024,50.702],[7.034,50.721],[7.071,50.767],[7.112,50.765],[7.16,50.755],[7.209,50.739],[7.198,50.723],[7.171,50.7],[7.217,50.646]]]]}},{"type":"Feature","properties":{"name":"K\u00f6ln","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.905,51.061],[6.974,51.01],[7.014,51.015],[7.067,51.01],[7.069,50.991],[7.099,50.981],[7.09,50.954],[7.149,50.942],[7.145,50.919],[7.143,50.882],[7.168,50.864],[7.066,50.827],[7.041,50.845],[6.977,50.839],[6.947,50.841],[6.948,50.834],[6.922,50.859],[6.915,50.878],[6.883,50.907],[6.847,50.913],[6.829,50.924],[6.811,50.935],[6.815,50.946],[6.826,50.961],[6.831,50.972],[6.839,51.014],[6.831,51.036],[6.776,51.061],[6.819,51.043],[6.841,51.055],[6.857,51.081],[6.905,51.061]]]]}},{"type":"Feature","properties":{"name":"Kreis D\u00fcren","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.49,51.034],[6.473,51.022],[6.474,51.011],[6.475,51.0],[6.5,50.986],[6.506,50.975],[6.496,50.959],[6.503,50.948],[6.528,50.93],[6.555,50.89],[6.556,50.875],[6.557,50.864],[6.553,50.849],[6.577,50.846],[6.619,50.836],[6.66,50.833],[6.722,50.801],[6.718,50.782],[6.684,50.77],[6.699,50.733],[6.683,50.71],[6.646,50.728],[6.629,50.72],[6.595,50.704],[6.602,50.689],[6.604,50.67],[6.583,50.636],[6.567,50.621],[6.545,50.597],[6.528,50.593],[6.515,50.6],[6.424,50.616],[6.413,50.597],[6.389,50.604],[6.381,50.622],[6.392,50.63],[6.404,50.638],[6.391,50.649],[6.384,50.652],[6.377,50.667],[6.324,50.654],[6.299,50.664],[6.285,50.686],[6.312,50.717],[6.345,50.756],[6.351,50.767],[6.32,50.77],[6.3,50.796],[6.329,50.804],[6.34,50.816],[6.345,50.835],[6.338,50.842],[6.324,50.868],[6.299,50.886],[6.258,50.873],[6.241,50.857],[6.22,50.887],[6.23,50.921],[6.229,50.932],[6.204,50.946],[6.249,50.99],[6.278,50.998],[6.295,51.017],[6.294,51.029],[6.366,51.019],[6.465,51.045],[6.49,51.034]]]]}},{"type":"Feature","properties":{"name":"Kreis Euskirchen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.703,50.748],[6.727,50.741],[6.783,50.713],[6.849,50.764],[6.864,50.787],[6.872,50.764],[6.909,50.747],[6.9,50.717],[6.86,50.7],[6.862,50.685],[6.875,50.671],[6.869,50.663],[6.884,50.63],[6.91,50.604],[6.888,50.593],[6.936,50.568],[6.934,50.527],[6.905,50.526],[6.889,50.514],[6.896,50.503],[6.903,50.488],[6.905,50.462],[6.817,50.466],[6.753,50.468],[6.765,50.465],[6.752,50.43],[6.777,50.415],[6.781,50.384],[6.814,50.358],[6.791,50.354],[6.675,50.364],[6.664,50.349],[6.628,50.348],[6.608,50.37],[6.561,50.362],[6.514,50.357],[6.508,50.354],[6.509,50.346],[6.45,50.334],[6.455,50.341],[6.448,50.36],[6.424,50.363],[6.392,50.384],[6.394,50.359],[6.394,50.355],[6.421,50.322],[6.408,50.333],[6.34,50.391],[6.375,50.446],[6.322,50.499],[6.377,50.529],[6.353,50.528],[6.363,50.558],[6.39,50.593],[6.418,50.616],[6.491,50.596],[6.509,50.596],[6.544,50.605],[6.563,50.602],[6.561,50.624],[6.57,50.654],[6.596,50.689],[6.59,50.696],[6.612,50.708],[6.628,50.727],[6.647,50.72],[6.705,50.726],[6.703,50.748]]]]}},{"type":"Feature","properties":{"name":"Kreis Heinsberg","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.3,51.179],[6.313,51.168],[6.326,51.153],[6.36,51.102],[6.39,51.091],[6.461,51.089],[6.482,51.056],[6.377,51.035],[6.343,51.015],[6.306,51.025],[6.288,51.025],[6.272,51.005],[6.26,51.001],[6.202,50.973],[6.203,50.954],[6.151,50.918],[6.127,50.901],[6.108,50.912],[6.083,50.922],[6.046,50.931],[6.009,50.948],[6.002,50.959],[5.967,50.983],[5.904,50.978],[5.896,51.004],[5.872,51.051],[5.946,51.035],[5.966,51.042],[5.978,51.063],[6.015,51.094],[6.13,51.15],[6.179,51.162],[6.187,51.192],[6.23,51.174],[6.3,51.179]]]]}},{"type":"Feature","properties":{"name":"Leverkusen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.991,51.085],[7.037,51.091],[7.062,51.069],[7.099,51.044],[7.073,51.014],[6.98,51.007],[6.979,51.022],[6.927,51.08],[6.992,51.071],[6.991,51.085]]]]}},{"type":"Feature","properties":{"name":"Oberbergischer Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.432,51.209],[7.454,51.158],[7.467,51.143],[7.48,51.129],[7.504,51.13],[7.494,51.107],[7.584,51.106],[7.597,51.085],[7.629,51.067],[7.717,51.074],[7.732,51.037],[7.749,50.978],[7.792,50.965],[7.736,50.919],[7.757,50.89],[7.753,50.867],[7.754,50.849],[7.736,50.852],[7.72,50.832],[7.662,50.819],[7.621,50.818],[7.607,50.832],[7.577,50.842],[7.531,50.829],[7.523,50.851],[7.491,50.872],[7.483,50.902],[7.443,50.945],[7.389,50.954],[7.355,50.945],[7.33,50.959],[7.329,50.974],[7.251,50.983],[7.278,51.006],[7.312,51.026],[7.322,51.049],[7.313,51.074],[7.272,51.08],[7.275,51.11],[7.295,51.145],[7.31,51.179],[7.297,51.182],[7.294,51.219],[7.304,51.238],[7.339,51.243],[7.34,51.236],[7.4,51.238],[7.407,51.216],[7.407,51.223],[7.425,51.224],[7.432,51.209]]]]}},{"type":"Feature","properties":{"name":"Rhein-Erft-Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.782,51.061],[6.802,51.035],[6.85,51.022],[6.847,50.984],[6.837,50.969],[6.832,50.954],[6.822,50.939],[6.822,50.935],[6.847,50.924],[6.866,50.899],[6.926,50.889],[6.928,50.863],[6.93,50.837],[6.941,50.841],[6.96,50.831],[6.99,50.82],[7.033,50.796],[6.962,50.801],[6.871,50.779],[6.847,50.782],[6.849,50.764],[6.783,50.713],[6.727,50.741],[6.684,50.77],[6.718,50.782],[6.722,50.801],[6.66,50.833],[6.619,50.836],[6.577,50.846],[6.553,50.849],[6.557,50.864],[6.556,50.875],[6.555,50.89],[6.528,50.93],[6.503,50.948],[6.496,50.959],[6.506,50.975],[6.5,50.986],[6.475,51.0],[6.474,51.011],[6.473,51.022],[6.478,51.026],[6.523,51.057],[6.555,51.036],[6.579,51.022],[6.644,51.02],[6.722,51.014],[6.749,51.034],[6.748,51.045],[6.758,51.064],[6.782,51.061]]]]}},{"type":"Feature","properties":{"name":"Rhein-Sieg-Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.402,50.947],[7.475,50.92],[7.461,50.879],[7.511,50.851],[7.536,50.841],[7.554,50.83],[7.602,50.824],[7.62,50.829],[7.649,50.834],[7.681,50.809],[7.683,50.779],[7.661,50.767],[7.598,50.739],[7.556,50.745],[7.522,50.728],[7.504,50.728],[7.446,50.714],[7.381,50.715],[7.372,50.693],[7.362,50.663],[7.26,50.618],[7.219,50.62],[7.178,50.681],[7.2,50.705],[7.215,50.731],[7.161,50.748],[7.129,50.769],[7.113,50.757],[7.043,50.751],[7.046,50.714],[7.043,50.684],[7.05,50.669],[7.028,50.657],[7.054,50.632],[7.06,50.628],[7.11,50.653],[7.163,50.651],[7.2,50.638],[7.184,50.618],[7.161,50.61],[7.115,50.604],[7.099,50.581],[7.057,50.598],[6.979,50.551],[6.955,50.557],[6.926,50.56],[6.93,50.571],[6.888,50.593],[6.91,50.604],[6.884,50.63],[6.869,50.663],[6.875,50.671],[6.862,50.685],[6.86,50.7],[6.9,50.717],[6.909,50.747],[6.879,50.75],[6.876,50.787],[6.962,50.801],[7.033,50.796],[6.99,50.82],[7.024,50.833],[7.064,50.845],[7.095,50.828],[7.203,50.869],[7.23,50.896],[7.251,50.923],[7.276,50.905],[7.328,50.915],[7.357,50.923],[7.402,50.947]]]]}},{"type":"Feature","properties":{"name":"Rheinisch-Bergischer Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.272,51.144],[7.299,51.1],[7.302,51.066],[7.338,51.068],[7.328,51.041],[7.283,51.025],[7.285,51.002],[7.288,50.969],[7.335,50.967],[7.341,50.964],[7.36,50.953],[7.402,50.947],[7.357,50.923],[7.328,50.915],[7.276,50.905],[7.251,50.923],[7.23,50.896],[7.203,50.869],[7.137,50.878],[7.135,50.9],[7.139,50.923],[7.115,50.937],[7.106,50.962],[7.07,50.984],[7.08,50.995],[7.101,51.026],[7.116,51.06],[7.078,51.092],[7.009,51.079],[6.995,51.104],[7.04,51.128],[7.075,51.129],[7.109,51.134],[7.116,51.119],[7.152,51.11],[7.162,51.125],[7.161,51.14],[7.201,51.149],[7.272,51.144]]]]}}]};
+const FIELDS = { geburtsdatum: "f-geb", telefon: "f-tel", email: "f-mail", notiz: "f-notiz" };
+const byId = new Map(NOTARE.map(n => [n.id, n]));
+const $ = id => document.getElementById(id);
 
-const GROUPS = [
-  { key: "notar", label: "Notar/in" },
-  { key: "anwalt", label: "Anwaltsnotar/in" },
-  { key: "verwalter", label: "Notariatsverwaltung" },
-];
-const groupOf = a => /verwalt/i.test(a) ? "verwalter" : /rechtsanw/i.test(a) ? "anwalt" : "notar";
-NOTARE.forEach((n, i) => { n.id = i; n.g = groupOf(n.amt); });
+let extra = {};           // id -> {geburtsdatum, telefon, email, notiz}
+let store = null;         // db-Sammlung oder null
+let query = "", filter = "all", selected = null, shown = NOTARE;
 
-const active = new Set(GROUPS.map(g => g.key));
-let query = "", selected = null;
+$("n-total").textContent = NOTARE.length;
 
-document.getElementById("n-total").textContent = NOTARE.length;
-const pages = [...new Set(NOTARE.map(n => n.seite))].sort((a, b) => a - b);
-document.getElementById("pages").textContent = pages.length ? `${pages[0]}–${pages[pages.length - 1]}` : "";
+// ---------- Speicher ----------
+const LS_KEY = "notarkarte-angaben";
+function lsLoad() { try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch { return {}; } }
+function lsSave() { try { localStorage.setItem(LS_KEY, JSON.stringify(extra)); return true; } catch { return false; } }
+extra = lsLoad();
 
-// Legende / Filter
-const legend = document.getElementById("legend");
-GROUPS.forEach(g => {
-  const b = document.createElement("button");
-  b.className = "chip"; b.id = "f-" + g.key; b.setAttribute("aria-pressed", "true");
-  b.innerHTML = `<span class="dot ${g.key}"></span>${g.label} <span class="n">${NOTARE.filter(n => n.g === g.key).length}</span>`;
-  b.onclick = () => {
-    active.has(g.key) ? active.delete(g.key) : active.add(g.key);
-    b.setAttribute("aria-pressed", active.has(g.key));
+(async () => {
+  const db = await window.claude?.use?.("db");
+  if (!db) {
+    $("note").textContent += " Eigene Angaben werden nur in diesem Browser gespeichert.";
+    return;
+  }
+  store = db.collection("angaben");
+  store.onSnapshot(snap => {
+    const next = {};
+    snap.docs.forEach(d => { if (d.exists) next[d.id] = d.data(); });
+    extra = next;
     render();
-  };
-  legend.appendChild(b);
-});
+    if (selected && !document.activeElement?.closest?.("#form")) fillForm(selected);
+  }, () => { /* Abo beendet: zuletzt geladene Angaben bleiben sichtbar */ });
+})();
 
-// Karte
-const svg = d3.select("#map");
-const root = svg.append("g");
-const gK = root.append("g"), gL = root.append("g"), gP = root.append("g");
-let projection, path, k = 1;
-
-function layout() {
-  const { width, height } = svg.node().getBoundingClientRect();
-  projection = d3.geoMercator().fitExtent([[16, 16], [width - 16, height - 16]], KREISE);
-  path = d3.geoPath(projection);
-  gK.selectAll("path").data(KREISE.features).join("path")
-    .attr("class", d => "kreis bez-" + d.properties.bezirk).attr("d", path)
-    .append("title").text(d => d.properties.name);
-  gL.selectAll("text").data(KREISE.features).join("text").attr("class", "klabel")
-    .attr("transform", d => `translate(${path.centroid(d)})`).text(d => d.properties.name);
-  drawPins();
+const hasGeb = n => !!extra[n.id]?.geburtsdatum;
+function age(iso) {
+  if (!iso) return null;
+  const [y, m, d] = iso.split("-").map(Number), now = new Date();
+  let a = now.getFullYear() - y;
+  if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) a--;
+  return a;
 }
 
-function visible() {
-  const q = query.trim().toLowerCase();
-  return NOTARE.filter(n => active.has(n.g) &&
-    (!q || `${n.name} ${n.amt} ${n.strasse} ${n.plz} ${n.ort}`.toLowerCase().includes(q)));
+// ---------- Karte ----------
+const svg = d3.select("#map");
+const root = svg.append("g");
+const gK = root.append("g"), gL = root.append("g"), gH = root.append("g"), gP = root.append("g");
+let projection, k = 1, W = 0, H = 0;
+
+function layout() {
+  ({ width: W, height: H } = svg.node().getBoundingClientRect());
+  projection = d3.geoMercator().fitExtent([[16, 16], [W - 16, H - 16]], KREISE);
+  const path = d3.geoPath(projection);
+  NOTARE.forEach(n => [n.x, n.y] = projection([n.lng, n.lat]));
+  gK.selectAll("path").data(KREISE.features).join("path")
+    .attr("class", d => "kreis bez-" + d.properties.bezirk).attr("d", path);
+  gL.selectAll("text").data(KREISE.features).join("text").attr("class", "klabel")
+    .attr("transform", d => `translate(${path.centroid(d)})`).text(d => d.properties.name);
 }
 
 function drawPins() {
-  const vis = visible();
-  gP.selectAll("circle").data(vis, d => d.id).join("circle")
-    .attr("class", d => `pin ${d.g}${selected === d.id ? " sel" : ""}`)
-    .attr("cx", d => projection([d.lng, d.lat])[0])
-    .attr("cy", d => projection([d.lng, d.lat])[1])
-    .on("click", (e, d) => { e.stopPropagation(); select(d.id, false); })
-    .call(sel => sel.selectAll("title").data(d => [d]).join("title").text(d => `${d.name}, ${d.ort}`));
+  gP.selectAll("circle").data(shown, d => d.id).join("circle")
+    .attr("cx", d => d.x).attr("cy", d => d.y)
+    .attr("class", d => "pin" + (hasGeb(d) ? " has" : "") + (d.id === selected ? " sel" : ""))
+    .on("click", (e, d) => { e.stopPropagation(); open(d.id, false); })
+    .call(s => s.selectAll("title").data(d => [d]).join("title").text(d => `${d.name}, ${d.ort}`));
+  const sel = selected && shown.find(n => n.id === selected);
+  gH.selectAll("circle").data(sel ? [sel] : []).join("circle").attr("class", "halo")
+    .attr("cx", d => d.x).attr("cy", d => d.y);
+  gP.selectAll("circle.sel").raise();
   sizePins();
-  return vis;
 }
 
 function sizePins() {
-  gP.selectAll("circle").attr("r", d => (selected === d.id ? 8 : 5.5) / Math.sqrt(k))
-    .attr("stroke-width", d => (selected === d.id ? 3 : d.g === "verwalter" ? 2.2 : 1.2) / Math.sqrt(k));
-  gL.selectAll("text").attr("font-size", 9 / k).attr("display", k >= 1.8 || svg.node().clientWidth > 700 ? null : "none");
-  gP.selectAll("circle.sel").raise();
+  const s = Math.sqrt(k);
+  gP.selectAll("circle").attr("r", d => (d.id === selected ? 7.5 : 4.6) / s)
+    .attr("stroke-width", d => (d.id === selected ? 3 : hasGeb(d) ? 1.1 : 1.8) / s);
+  gH.selectAll("circle").attr("r", 13 / s).attr("stroke-width", 5 / s);
+  gL.selectAll("text").attr("font-size", 9 / k).attr("display", k >= 1.8 || W > 700 ? null : "none");
 }
 
-const zoom = d3.zoom().scaleExtent([1, 40]).on("zoom", e => {
+const zoom = d3.zoom().scaleExtent([1, 60]).on("zoom", e => {
   k = e.transform.k; root.attr("transform", e.transform); sizePins();
 });
-svg.call(zoom).on("click", () => select(null));
-document.getElementById("zin").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1.8);
-document.getElementById("zout").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8);
-document.getElementById("zreset").onclick = () => svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+svg.call(zoom).on("click", () => { if (selected) closeDetail(); });
+$("zin").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1.8);
+$("zout").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8);
+$("zreset").onclick = () => svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
 
-// Verzeichnis
-const list = document.getElementById("list");
-function renderList(vis) {
-  document.getElementById("count").textContent =
-    vis.length === NOTARE.length ? `${vis.length} Einträge` : `${vis.length} von ${NOTARE.length} Einträgen`;
-  const byCity = d3.group(vis, n => n.ort.replace(/-.*/, ""));
-  list.innerHTML = "";
-  [...byCity.keys()].sort((a, b) => a.localeCompare(b, "de")).forEach(city => {
-    const head = document.createElement("li");
-    head.className = "city"; head.innerHTML = `${esc(city)} <span>${byCity.get(city).length}</span>`;
-    list.appendChild(head);
-    byCity.get(city).forEach(n => {
-      const li = document.createElement("li");
-      li.id = "n" + n.id; if (selected === n.id) li.className = "sel";
-      li.innerHTML = `<button><span class="dot ${n.g}"></span><span class="nm">${esc(n.name)}</span>
-        <span class="meta">${esc(n.amt)}<br>${esc(n.strasse)}, <span class="plz">${n.plz}</span> ${esc(n.ort)}</span></button>`;
-      li.querySelector("button").onclick = () => select(n.id, true);
-      list.appendChild(li);
-    });
-  });
+function panTo(n, minZoom) {
+  const t = d3.zoomTransform(svg.node());
+  const [sx, sy] = t.apply([n.x, n.y]);
+  const s = Math.max(t.k, minZoom);
+  if (s === t.k && sx > 40 && sx < W - 40 && sy > 40 && sy < H - 40) return; // schon gut sichtbar
+  svg.transition().duration(450).call(zoom.transform,
+    d3.zoomIdentity.translate(W / 2, H / 2).scale(s).translate(-n.x, -n.y));
 }
 
-function select(id, fly) {
+// ---------- Liste ----------
+function filtered() {
+  const q = query.trim().toLowerCase();
+  return NOTARE.filter(n =>
+    (filter === "all" || (filter === "has") === hasGeb(n)) &&
+    (!q || `${n.name} ${n.strasse} ${n.plz} ${n.ort}`.toLowerCase().includes(q)));
+}
+
+function renderList() {
+  const list = $("list");
+  const done = NOTARE.filter(hasGeb).length;
+  $("count").textContent = `${shown.length} von ${NOTARE.length} · Geburtsdatum bei ${done} erfasst`;
+  const byCity = d3.group(shown, n => n.ort.replace(/[-,(].*/, "").trim());
+  const frag = document.createDocumentFragment();
+  [...byCity.keys()].sort((a, b) => a.localeCompare(b, "de")).forEach(city => {
+    const h = document.createElement("li");
+    h.className = "city"; h.innerHTML = `${esc(city)} <span>${byCity.get(city).length}</span>`;
+    frag.appendChild(h);
+    byCity.get(city).forEach(n => {
+      const a = age(extra[n.id]?.geburtsdatum);
+      const li = document.createElement("li");
+      li.className = "item";
+      li.innerHTML = `<button><i class="dot ${hasGeb(n) ? "has" : "no"}"></i><span class="nm">${esc(n.name)}</span>
+        <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
+      li.firstChild.onclick = () => open(n.id, true);
+      frag.appendChild(li);
+    });
+  });
+  list.replaceChildren(frag);
+}
+
+function render() {
+  shown = filtered();
+  // Reihenfolge der Liste = Reihenfolge für Vor/Zurück
+  shown.sort((a, b) => a.ort.localeCompare(b.ort, "de") || a.name.localeCompare(b.name, "de"));
+  drawPins();
+  renderList();
+  if (selected) updatePos();
+}
+
+$("q").addEventListener("input", e => { query = e.target.value; render(); });
+$("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  filter = b.dataset.f;
+  $("chips").querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === b));
+  render();
+});
+
+// ---------- Einzelansicht ----------
+function open(id, fromList) {
+  flushSave();
   selected = id;
-  const card = document.getElementById("card");
-  list.querySelectorAll("li.sel").forEach(li => li.classList.remove("sel"));
-  gP.selectAll("circle").classed("sel", d => d.id === id);
-  sizePins();
-  if (id === null) { card.hidden = true; return; }
-  const n = NOTARE[id];
-  const li = document.getElementById("n" + id);
-  if (li) { li.classList.add("sel"); if (!fly) li.scrollIntoView({ block: "nearest" }); }
-  const adr = `${n.strasse}, ${n.plz} ${n.ort}`;
-  card.innerHTML = `<button class="close" aria-label="Schließen">×</button>
-    <div class="amt">${esc(n.amt)}</div><div class="nm">${esc(n.name)}</div>
-    <div class="adr">${esc(n.strasse)}<br>${n.plz} ${esc(n.ort)}</div>
-    <div class="row"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">In Google Maps öffnen</a>
-    <a href="https://www.openstreetmap.org/search?query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
-  card.querySelector(".close").onclick = () => select(null);
-  card.hidden = false;
-  if (fly) {
-    const { width, height } = svg.node().getBoundingClientRect();
-    const [x, y] = projection([n.lng, n.lat]);
-    const s = Math.max(k, 5);
-    svg.transition().duration(600).call(zoom.transform,
-      d3.zoomIdentity.translate(width / 2, height / 2).scale(s).translate(-x, -y));
+  const n = byId.get(id);
+  $("v-list").hidden = true; $("v-detail").hidden = false;
+  document.querySelector(".dbody").scrollTop = 0;
+  $("d-amt").textContent = n.amt;
+  $("d-name").textContent = n.name;
+  $("d-adr").innerHTML = `${esc(n.strasse)}<br><span class="plz">${n.plz}</span> ${esc(n.ort)}`;
+  const q = encodeURIComponent(`${n.strasse}, ${n.plz} ${n.ort}`);
+  $("d-links").innerHTML = `<a href="https://maps.apple.com/?q=${q}" target="_blank" rel="noopener">Apple Karten</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">Google Maps</a>
+    <a href="https://www.notar.de/notarsuche/notarsuche?name=${encodeURIComponent(n.name.replace(/^(Prof\. )?(Dr\. )+/, "").split(" ").pop())}" target="_blank" rel="noopener">notar.de</a>`;
+  fillForm(id);
+  $("status").textContent = ""; $("status").className = "status";
+  drawPins();
+  updatePos();
+  panTo(n, fromList ? 4 : 1);
+}
+
+function updatePos() {
+  const i = shown.findIndex(n => n.id === selected);
+  $("pos").textContent = i >= 0 ? `${i + 1} / ${shown.length}` : "";
+  $("prev").disabled = i <= 0;
+  $("next").disabled = i < 0 || i >= shown.length - 1;
+}
+
+function step(d) {
+  const i = shown.findIndex(n => n.id === selected);
+  const n = shown[i + d];
+  if (n) open(n.id, true);
+}
+
+function closeDetail() {
+  flushSave();
+  selected = null;
+  $("v-detail").hidden = true; $("v-list").hidden = false;
+  drawPins();
+}
+
+$("back").onclick = closeDetail;
+$("prev").onclick = () => step(-1);
+$("next").onclick = () => step(1);
+document.addEventListener("keydown", e => {
+  if (!selected || e.target.closest("input, textarea")) return;
+  if (e.key === "ArrowRight") step(1);
+  else if (e.key === "ArrowLeft") step(-1);
+  else if (e.key === "Escape") closeDetail();
+});
+
+function fillForm(id) {
+  const x = extra[id] || {};
+  for (const [f, el] of Object.entries(FIELDS)) $(el).value = x[f] || "";
+  showAge();
+}
+function showAge() {
+  const a = age($("f-geb").value);
+  $("d-age").innerHTML = a !== null && a >= 0 ? `<span class="agebadge">${a} Jahre</span>` : "";
+}
+
+// Speichern: beim Verlassen eines Feldes, Datum sofort, Text nach kurzer Pause
+let timer = null, pending = null;
+function scheduleSave(now) {
+  pending = selected;
+  clearTimeout(timer);
+  timer = setTimeout(flushSave, now ? 0 : 800);
+}
+async function flushSave() {
+  clearTimeout(timer);
+  const id = pending; pending = null;
+  if (!id) return;
+  const data = {};
+  for (const [f, el] of Object.entries(FIELDS)) { const v = $(el).value.trim(); if (v) data[f] = v; }
+  const before = JSON.stringify(extra[id] || {});
+  const { geaendert, ...old } = extra[id] || {};
+  if (JSON.stringify(old) === JSON.stringify(data)) return;
+  data.geaendert = new Date().toISOString();
+  extra = { ...extra, [id]: data };
+  const st = $("status");
+  try {
+    if (store) {
+      if (Object.keys(data).length > 1) await store.doc(id).set(data);
+      else await store.doc(id).delete();
+    } else if (!lsSave()) throw new Error("Browser-Speicher nicht verfügbar");
+    if (selected === id) { st.textContent = "Gespeichert " + new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }); st.className = "status ok"; }
+  } catch (e) {
+    extra = { ...extra, [id]: JSON.parse(before) };
+    if (selected === id) { st.textContent = "Nicht gespeichert: " + (e?.code === "invalid_argument" ? "keine Schreibrechte für diese Karte." : (e?.message || "unbekannter Fehler")); st.className = "status err"; }
   }
+  render();
+}
+for (const el of Object.values(FIELDS)) {
+  $(el).addEventListener("input", () => { if (el === "f-geb") showAge(); scheduleSave(el === "f-geb"); });
+  $(el).addEventListener("blur", () => { if (pending) flushSave(); });
 }
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
 
-function render() {
-  const vis = drawPins();
-  if (selected !== null && !vis.some(n => n.id === selected)) select(null);
-  renderList(vis);
-}
-
-document.getElementById("q").addEventListener("input", e => { query = e.target.value; render(); });
-window.addEventListener("resize", () => { layout(); svg.call(zoom.transform, d3.zoomIdentity); });
+window.addEventListener("resize", () => { layout(); svg.call(zoom.transform, d3.zoomIdentity); drawPins(); });
 layout();
 render();
 </script>
