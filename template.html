@@ -1,0 +1,303 @@
+<title>Notarkarte Rheinland</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Kopfzeile, darunter Karte (links, flexibel) + Verzeichnis (rechts, 380px); am Handy untereinander. */
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --ink: #18202e;
+  --muted: #5d6676;
+  --line: #d9dde4;
+  --land: #e7eaef;
+  --land-alt: #dde2e9;
+  --border: #b9c0cb;
+  --seal: #a3262a;        /* hauptberufliche Notare: Siegelrot */
+  --lawyer: #1f5c99;      /* Anwaltsnotare */
+  --admin: #8a6a12;       /* Notariatsverwaltung */
+  --focus: #e0a400;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
+    --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
+    --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
+  --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
+  --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px;
+  display: flex; flex-direction: column;
+}
+header {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px;
+}
+h1 { font-family: var(--display); font-weight: 600; font-size: 1.6rem; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.sub { color: var(--muted); font-size: .85rem; }
+.sub b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.chip {
+  font: inherit; font-size: .8rem; display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.chip[aria-pressed="false"] { opacity: .45; }
+.chip .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.notar { background: var(--seal); }
+.dot.anwalt { background: var(--lawyer); }
+.dot.verwalter { background: transparent; border: 2.5px solid var(--admin); width: 9px; height: 9px; }
+main { flex: 1; min-height: 0; display: flex; }
+#mapwrap { flex: 1; min-width: 0; position: relative; background: var(--bg); }
+#map { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#map:active { cursor: grabbing; }
+.kreis { fill: var(--land); stroke: var(--border); stroke-width: .8; vector-effect: non-scaling-stroke; }
+.kreis.bez-Köln { fill: var(--land-alt); }
+.klabel { font-family: var(--body); fill: var(--muted); text-anchor: middle; pointer-events: none; letter-spacing: .06em; text-transform: uppercase; }
+.pin { cursor: pointer; stroke: var(--surface); }
+.pin.notar { fill: var(--seal); }
+.pin.anwalt { fill: var(--lawyer); }
+.pin.verwalter { fill: var(--surface); stroke: var(--admin); }
+.pin.sel { stroke: var(--focus); }
+.zoom { position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.zoom button {
+  width: 34px; height: 34px; font: 600 1.1rem var(--body); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+}
+#card {
+  position: absolute; left: 12px; bottom: 12px; max-width: min(340px, calc(100% - 24px));
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; box-shadow: 0 6px 20px rgb(0 0 0 / .12);
+}
+#card .amt { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+#card .nm { font-family: var(--display); font-size: 1.2rem; font-weight: 600; margin: 2px 0 6px; }
+#card .adr { line-height: 1.45; }
+#card .row { display: flex; gap: 12px; margin-top: 8px; font-size: .82rem; flex-wrap: wrap; }
+#card a { color: var(--lawyer); }
+#card .close { position: absolute; right: 6px; top: 4px; border: 0; background: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+aside {
+  width: 380px; flex: none; border-left: 1px solid var(--line); background: var(--surface);
+  display: flex; flex-direction: column; min-height: 0;
+}
+.search { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.search input {
+  font: inherit; font-size: 16px; width: 100%; box-sizing: border-box; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink);
+}
+.search .count { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+#list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+#list li { border-bottom: 1px solid var(--line); }
+#list button {
+  all: unset; box-sizing: border-box; width: 100%; padding: 10px 16px; cursor: pointer;
+  display: grid; grid-template-columns: 12px 1fr; gap: 2px 10px; align-items: baseline;
+}
+#list button:hover { background: var(--bg); }
+#list button:focus-visible, .chip:focus-visible, .zoom button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+#list li.sel button { background: var(--bg); box-shadow: inset 3px 0 0 var(--focus); }
+#list .nm { font-weight: 600; }
+#list .meta { grid-column: 2; color: var(--muted); font-size: .82rem; line-height: 1.4; }
+#list .plz { font-family: var(--mono); font-size: .78rem; }
+.city { position: sticky; top: 0; background: var(--surface); padding: 8px 16px 4px; font-family: var(--display); font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.city span { color: var(--muted); font: .78rem var(--mono); }
+.note { padding: 10px 16px; color: var(--muted); font-size: .78rem; border-top: 1px solid var(--line); line-height: 1.45; }
+@media (max-width: 760px) {
+  main { flex-direction: column; }
+  html, body { height: auto; }
+  main { flex: none; }
+  #mapwrap { flex: none; height: 58vh; }
+  aside { width: auto; border-left: 0; border-top: 1px solid var(--line); }
+  #list { overflow: visible; }
+  .legend { margin-left: 0; }
+  #card { left: 8px; bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header>
+  <h1>Notarkarte Rheinland</h1>
+  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare erfasst</div>
+  <div class="legend" id="legend"></div>
+</header>
+<main>
+  <div id="mapwrap">
+    <svg id="map" role="img" aria-label="Karte der Regierungsbezirke Köln und Düsseldorf mit Notarstandorten"></svg>
+    <div class="zoom">
+      <button id="zin" aria-label="Hineinzoomen">+</button>
+      <button id="zout" aria-label="Herauszoomen">−</button>
+      <button id="zreset" aria-label="Ganze Karte zeigen">⤢</button>
+    </div>
+    <div id="card" hidden></div>
+  </div>
+  <aside>
+    <div class="search">
+      <input id="q" type="search" placeholder="Name, Straße, PLZ oder Ort suchen" autocomplete="off">
+      <div class="count" id="count"></div>
+    </div>
+    <ul id="list"></ul>
+    <div class="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, Ergebnisseiten <span id="pages"></span>. Position = Mittelpunkt der Postleitzahl, nicht die genaue Hausnummer.</div>
+  </aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const NOTARE = /*NOTARE*/[];
+const KREISE = /*KREISE*/{};
+
+const GROUPS = [
+  { key: "notar", label: "Notar/in" },
+  { key: "anwalt", label: "Anwaltsnotar/in" },
+  { key: "verwalter", label: "Notariatsverwaltung" },
+];
+const groupOf = a => /verwalt/i.test(a) ? "verwalter" : /rechtsanw/i.test(a) ? "anwalt" : "notar";
+NOTARE.forEach((n, i) => { n.id = i; n.g = groupOf(n.amt); });
+
+const active = new Set(GROUPS.map(g => g.key));
+let query = "", selected = null;
+
+document.getElementById("n-total").textContent = NOTARE.length;
+const pages = [...new Set(NOTARE.map(n => n.seite))].sort((a, b) => a - b);
+document.getElementById("pages").textContent = pages.length ? `${pages[0]}–${pages[pages.length - 1]}` : "";
+
+// Legende / Filter
+const legend = document.getElementById("legend");
+GROUPS.forEach(g => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.id = "f-" + g.key; b.setAttribute("aria-pressed", "true");
+  b.innerHTML = `<span class="dot ${g.key}"></span>${g.label} <span class="n">${NOTARE.filter(n => n.g === g.key).length}</span>`;
+  b.onclick = () => {
+    active.has(g.key) ? active.delete(g.key) : active.add(g.key);
+    b.setAttribute("aria-pressed", active.has(g.key));
+    render();
+  };
+  legend.appendChild(b);
+});
+
+// Karte
+const svg = d3.select("#map");
+const root = svg.append("g");
+const gK = root.append("g"), gL = root.append("g"), gP = root.append("g");
+let projection, path, k = 1;
+
+function layout() {
+  const { width, height } = svg.node().getBoundingClientRect();
+  projection = d3.geoMercator().fitExtent([[16, 16], [width - 16, height - 16]], KREISE);
+  path = d3.geoPath(projection);
+  gK.selectAll("path").data(KREISE.features).join("path")
+    .attr("class", d => "kreis bez-" + d.properties.bezirk).attr("d", path)
+    .append("title").text(d => d.properties.name);
+  gL.selectAll("text").data(KREISE.features).join("text").attr("class", "klabel")
+    .attr("transform", d => `translate(${path.centroid(d)})`).text(d => d.properties.name);
+  drawPins();
+}
+
+function visible() {
+  const q = query.trim().toLowerCase();
+  return NOTARE.filter(n => active.has(n.g) &&
+    (!q || `${n.name} ${n.amt} ${n.strasse} ${n.plz} ${n.ort}`.toLowerCase().includes(q)));
+}
+
+function drawPins() {
+  const vis = visible();
+  gP.selectAll("circle").data(vis, d => d.id).join("circle")
+    .attr("class", d => `pin ${d.g}${selected === d.id ? " sel" : ""}`)
+    .attr("cx", d => projection([d.lng, d.lat])[0])
+    .attr("cy", d => projection([d.lng, d.lat])[1])
+    .on("click", (e, d) => { e.stopPropagation(); select(d.id, false); })
+    .call(sel => sel.selectAll("title").data(d => [d]).join("title").text(d => `${d.name}, ${d.ort}`));
+  sizePins();
+  return vis;
+}
+
+function sizePins() {
+  gP.selectAll("circle").attr("r", d => (selected === d.id ? 8 : 5.5) / Math.sqrt(k))
+    .attr("stroke-width", d => (selected === d.id ? 3 : d.g === "verwalter" ? 2.2 : 1.2) / Math.sqrt(k));
+  gL.selectAll("text").attr("font-size", 9 / k).attr("display", k >= 1.8 || svg.node().clientWidth > 700 ? null : "none");
+  gP.selectAll("circle.sel").raise();
+}
+
+const zoom = d3.zoom().scaleExtent([1, 40]).on("zoom", e => {
+  k = e.transform.k; root.attr("transform", e.transform); sizePins();
+});
+svg.call(zoom).on("click", () => select(null));
+document.getElementById("zin").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1.8);
+document.getElementById("zout").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8);
+document.getElementById("zreset").onclick = () => svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+
+// Verzeichnis
+const list = document.getElementById("list");
+function renderList(vis) {
+  document.getElementById("count").textContent =
+    vis.length === NOTARE.length ? `${vis.length} Einträge` : `${vis.length} von ${NOTARE.length} Einträgen`;
+  const byCity = d3.group(vis, n => n.ort.replace(/-.*/, ""));
+  list.innerHTML = "";
+  [...byCity.keys()].sort((a, b) => a.localeCompare(b, "de")).forEach(city => {
+    const head = document.createElement("li");
+    head.className = "city"; head.innerHTML = `${esc(city)} <span>${byCity.get(city).length}</span>`;
+    list.appendChild(head);
+    byCity.get(city).forEach(n => {
+      const li = document.createElement("li");
+      li.id = "n" + n.id; if (selected === n.id) li.className = "sel";
+      li.innerHTML = `<button><span class="dot ${n.g}"></span><span class="nm">${esc(n.name)}</span>
+        <span class="meta">${esc(n.amt)}<br>${esc(n.strasse)}, <span class="plz">${n.plz}</span> ${esc(n.ort)}</span></button>`;
+      li.querySelector("button").onclick = () => select(n.id, true);
+      list.appendChild(li);
+    });
+  });
+}
+
+function select(id, fly) {
+  selected = id;
+  const card = document.getElementById("card");
+  list.querySelectorAll("li.sel").forEach(li => li.classList.remove("sel"));
+  gP.selectAll("circle").classed("sel", d => d.id === id);
+  sizePins();
+  if (id === null) { card.hidden = true; return; }
+  const n = NOTARE[id];
+  const li = document.getElementById("n" + id);
+  if (li) { li.classList.add("sel"); if (!fly) li.scrollIntoView({ block: "nearest" }); }
+  const adr = `${n.strasse}, ${n.plz} ${n.ort}`;
+  card.innerHTML = `<button class="close" aria-label="Schließen">×</button>
+    <div class="amt">${esc(n.amt)}</div><div class="nm">${esc(n.name)}</div>
+    <div class="adr">${esc(n.strasse)}<br>${n.plz} ${esc(n.ort)}</div>
+    <div class="row"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">In Google Maps öffnen</a>
+    <a href="https://www.openstreetmap.org/search?query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
+  card.querySelector(".close").onclick = () => select(null);
+  card.hidden = false;
+  if (fly) {
+    const { width, height } = svg.node().getBoundingClientRect();
+    const [x, y] = projection([n.lng, n.lat]);
+    const s = Math.max(k, 5);
+    svg.transition().duration(600).call(zoom.transform,
+      d3.zoomIdentity.translate(width / 2, height / 2).scale(s).translate(-x, -y));
+  }
+}
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+function render() {
+  const vis = drawPins();
+  if (selected !== null && !vis.some(n => n.id === selected)) select(null);
+  renderList(vis);
+}
+
+document.getElementById("q").addEventListener("input", e => { query = e.target.value; render(); });
+window.addEventListener("resize", () => { layout(); svg.call(zoom.transform, d3.zoomIdentity); });
+layout();
+render();
+</script>

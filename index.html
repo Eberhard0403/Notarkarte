@@ -1,0 +1,303 @@
+<title>Notarkarte Rheinland</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: Kopfzeile, darunter Karte (links, flexibel) + Verzeichnis (rechts, 380px); am Handy untereinander. */
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --ink: #18202e;
+  --muted: #5d6676;
+  --line: #d9dde4;
+  --land: #e7eaef;
+  --land-alt: #dde2e9;
+  --border: #b9c0cb;
+  --seal: #a3262a;        /* hauptberufliche Notare: Siegelrot */
+  --lawyer: #1f5c99;      /* Anwaltsnotare */
+  --admin: #8a6a12;       /* Notariatsverwaltung */
+  --focus: #e0a400;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
+    --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
+    --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151c; --surface: #181d26; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2a313d;
+  --land: #1f2530; --land-alt: #242b37; --border: #3c4554;
+  --seal: #e0585c; --lawyer: #5fa0e0; --admin: #d4ad45; --focus: #ffd257;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px;
+  display: flex; flex-direction: column;
+}
+header {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 20px;
+}
+h1 { font-family: var(--display); font-weight: 600; font-size: 1.6rem; margin: 0; letter-spacing: .01em; text-wrap: balance; }
+.sub { color: var(--muted); font-size: .85rem; }
+.sub b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.chip {
+  font: inherit; font-size: .8rem; display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.chip[aria-pressed="false"] { opacity: .45; }
+.chip .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.notar { background: var(--seal); }
+.dot.anwalt { background: var(--lawyer); }
+.dot.verwalter { background: transparent; border: 2.5px solid var(--admin); width: 9px; height: 9px; }
+main { flex: 1; min-height: 0; display: flex; }
+#mapwrap { flex: 1; min-width: 0; position: relative; background: var(--bg); }
+#map { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#map:active { cursor: grabbing; }
+.kreis { fill: var(--land); stroke: var(--border); stroke-width: .8; vector-effect: non-scaling-stroke; }
+.kreis.bez-Köln { fill: var(--land-alt); }
+.klabel { font-family: var(--body); fill: var(--muted); text-anchor: middle; pointer-events: none; letter-spacing: .06em; text-transform: uppercase; }
+.pin { cursor: pointer; stroke: var(--surface); }
+.pin.notar { fill: var(--seal); }
+.pin.anwalt { fill: var(--lawyer); }
+.pin.verwalter { fill: var(--surface); stroke: var(--admin); }
+.pin.sel { stroke: var(--focus); }
+.zoom { position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.zoom button {
+  width: 34px; height: 34px; font: 600 1.1rem var(--body); color: var(--ink);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; cursor: pointer;
+}
+#card {
+  position: absolute; left: 12px; bottom: 12px; max-width: min(340px, calc(100% - 24px));
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; box-shadow: 0 6px 20px rgb(0 0 0 / .12);
+}
+#card .amt { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+#card .nm { font-family: var(--display); font-size: 1.2rem; font-weight: 600; margin: 2px 0 6px; }
+#card .adr { line-height: 1.45; }
+#card .row { display: flex; gap: 12px; margin-top: 8px; font-size: .82rem; flex-wrap: wrap; }
+#card a { color: var(--lawyer); }
+#card .close { position: absolute; right: 6px; top: 4px; border: 0; background: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+aside {
+  width: 380px; flex: none; border-left: 1px solid var(--line); background: var(--surface);
+  display: flex; flex-direction: column; min-height: 0;
+}
+.search { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.search input {
+  font: inherit; font-size: 16px; width: 100%; box-sizing: border-box; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink);
+}
+.search .count { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+#list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+#list li { border-bottom: 1px solid var(--line); }
+#list button {
+  all: unset; box-sizing: border-box; width: 100%; padding: 10px 16px; cursor: pointer;
+  display: grid; grid-template-columns: 12px 1fr; gap: 2px 10px; align-items: baseline;
+}
+#list button:hover { background: var(--bg); }
+#list button:focus-visible, .chip:focus-visible, .zoom button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+#list li.sel button { background: var(--bg); box-shadow: inset 3px 0 0 var(--focus); }
+#list .nm { font-weight: 600; }
+#list .meta { grid-column: 2; color: var(--muted); font-size: .82rem; line-height: 1.4; }
+#list .plz { font-family: var(--mono); font-size: .78rem; }
+.city { position: sticky; top: 0; background: var(--surface); padding: 8px 16px 4px; font-family: var(--display); font-weight: 600; font-size: .95rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.city span { color: var(--muted); font: .78rem var(--mono); }
+.note { padding: 10px 16px; color: var(--muted); font-size: .78rem; border-top: 1px solid var(--line); line-height: 1.45; }
+@media (max-width: 760px) {
+  main { flex-direction: column; }
+  html, body { height: auto; }
+  main { flex: none; }
+  #mapwrap { flex: none; height: 58vh; }
+  aside { width: auto; border-left: 0; border-top: 1px solid var(--line); }
+  #list { overflow: visible; }
+  .legend { margin-left: 0; }
+  #card { left: 8px; bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header>
+  <h1>Notarkarte Rheinland</h1>
+  <div class="sub">Kammerbezirk Rheinland · <b id="n-total">0</b> Notarinnen und Notare erfasst</div>
+  <div class="legend" id="legend"></div>
+</header>
+<main>
+  <div id="mapwrap">
+    <svg id="map" role="img" aria-label="Karte der Regierungsbezirke Köln und Düsseldorf mit Notarstandorten"></svg>
+    <div class="zoom">
+      <button id="zin" aria-label="Hineinzoomen">+</button>
+      <button id="zout" aria-label="Herauszoomen">−</button>
+      <button id="zreset" aria-label="Ganze Karte zeigen">⤢</button>
+    </div>
+    <div id="card" hidden></div>
+  </div>
+  <aside>
+    <div class="search">
+      <input id="q" type="search" placeholder="Name, Straße, PLZ oder Ort suchen" autocomplete="off">
+      <div class="count" id="count"></div>
+    </div>
+    <ul id="list"></ul>
+    <div class="note">Quelle: Notarsuche auf notar.de (Bundesnotarkammer), Kammerbezirk Rheinland, Ergebnisseiten <span id="pages"></span>. Position = Mittelpunkt der Postleitzahl, nicht die genaue Hausnummer.</div>
+  </aside>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const NOTARE = [{"amt": "Notar", "name": "Dr. Julian Boor LL.M.", "strasse": "Karmeliterstraße 6", "plz": "52064", "ort": "Aachen", "seite": 26, "lat": 50.76807, "lng": 6.08015}, {"amt": "Notar", "name": "Prof. Dr. Christoph Terbrack", "strasse": "Aachener-und-Münchener-Allee 1", "plz": "52074", "ort": "Aachen", "seite": 27, "lat": 50.77796, "lng": 6.04041}, {"amt": "Notar", "name": "Thomas Karl Müsgen", "strasse": "Friedrich-Wilhelm-Platz 5-6", "plz": "52062", "ort": "Aachen", "seite": 24, "lat": 50.77805, "lng": 6.08877}, {"amt": "Notar", "name": "Dr. Markus Lepper", "strasse": "Südweststraße 26", "plz": "50126", "ort": "Bergheim", "seite": 27, "lat": 50.96065, "lng": 6.62098}, {"amt": "Notar", "name": "Dr. Patrick Flockenhaus LL.M. (Köln)", "strasse": "Buddestraße 10", "plz": "51429", "ort": "Bergisch Gladbach-Bensberg", "seite": 26, "lat": 50.96806, "lng": 7.2024}, {"amt": "Notar", "name": "Dr. Alexander Grein", "strasse": "Remigiusstr. 16", "plz": "53111", "ort": "Bonn", "seite": 24, "lat": 50.74195, "lng": 7.09904}, {"amt": "Notar", "name": "Dr. Daniel Berresheim", "strasse": "Markt 10-12", "plz": "53111", "ort": "Bonn", "seite": 25, "lat": 50.74411, "lng": 7.09304}, {"amt": "Notarin", "name": "Dr. Thekla Schleifenbaum", "strasse": "Prinz-Albert-Str. 14", "plz": "53113", "ort": "Bonn", "seite": 27, "lat": 50.71942, "lng": 7.12211}, {"amt": "Notar", "name": "Dr. Timm Starke", "strasse": "Münsterstr. 20", "plz": "53111", "ort": "Bonn", "seite": 28, "lat": 50.73978, "lng": 7.09304}, {"amt": "Notarin", "name": "Hanna Bamberger", "strasse": "Am Kurpark 3", "plz": "53177", "ort": "Bonn", "seite": 23, "lat": 50.67438, "lng": 7.13357}, {"amt": "Notar", "name": "Dr. Peter Baumann", "strasse": "Helmholtzstr. 4", "plz": "53123", "ort": "Bonn-Duisdorf", "seite": 27, "lat": 50.71386, "lng": 7.04204}, {"amt": "Rechtsanwältin und Notarin", "name": "Heide Hülsemann", "strasse": "Hohlstraße 15", "plz": "46539", "ort": "Dinslaken", "seite": 26, "lat": 51.58175, "lng": 6.79718}, {"amt": "Rechtsanwalt und Notar", "name": "Josef Könitz", "strasse": "Schillerstraße 73-75", "plz": "46535", "ort": "Dinslaken", "seite": 25, "lat": 51.55913, "lng": 6.7314}, {"amt": "Notar", "name": "Dr. Wilfried Lülsdorf", "strasse": "Römerstraße 24a", "plz": "41539", "ort": "Dormagen", "seite": 27, "lat": 51.09968, "lng": 6.84532}, {"amt": "Rechtsanwalt und Notar", "name": "Björn Richter", "strasse": "Köhnenstr. 11", "plz": "47051", "ort": "Duisburg", "seite": 25, "lat": 51.4328, "lng": 6.77483}, {"amt": "Rechtsanwältin und Notarin", "name": "Dr. Charlotte Weber", "strasse": "Stresemannstraße 20 - 22", "plz": "47051", "ort": "Duisburg", "seite": 27, "lat": 51.4328, "lng": 6.76683}, {"amt": "Rechtsanwältin und Notarin", "name": "Heike Schmitz", "strasse": "Dr.-Hans-Böckler-Str. 10", "plz": "47179", "ort": "Duisburg", "seite": 27, "lat": 51.52635, "lng": 6.74619}, {"amt": "Rechtsanwalt und Notar", "name": "Markus Seele", "strasse": "Duisburger Straße 227", "plz": "47166", "ort": "Duisburg-Hamborn", "seite": 25, "lat": 51.49359, "lng": 6.76895}, {"amt": "Rechtsanwalt und Notar", "name": "Philipp Spiske", "strasse": "Friedrich-Ebert-Str. 209", "plz": "47179", "ort": "Duisburg-Hamborn", "seite": 24, "lat": 51.52635, "lng": 6.75419}, {"amt": "Notar", "name": "Dr. Tim Klawitter", "strasse": "Arndtstr. 11", "plz": "47226", "ort": "Duisburg-Rheinhausen", "seite": 24, "lat": 51.40426, "lng": 6.71728}, {"amt": "Notar", "name": "Dr. Hagen Monath", "strasse": "Holzstraße 1", "plz": "52349", "ort": "Düren", "seite": 28, "lat": 50.80445, "lng": 6.47018}, {"amt": "Notarin", "name": "Katharina Tschernoster", "strasse": "Moltkestraße 45", "plz": "52351", "ort": "Düren", "seite": 23, "lat": 50.7944, "lng": 6.5141}, {"amt": "Notar", "name": "Prof. Dr. Christian Kesseler", "strasse": "Bismarckstraße 2", "plz": "52351", "ort": "Düren", "seite": 26, "lat": 50.7944, "lng": 6.5061}, {"amt": "Notar", "name": "Dr. Dirk Esser", "strasse": "Heinrich-Heine-Allee 4", "plz": "40213", "ort": "Düsseldorf", "seite": 25, "lat": 51.22209, "lng": 6.77271}, {"amt": "Notar", "name": "Dr. Edgar Küperkoch", "strasse": "Kaiserswerther Straße 107", "plz": "40476", "ort": "Düsseldorf", "seite": 27, "lat": 51.24801, "lng": 6.77902}, {"amt": "Notar", "name": "Dr. Paul Rombach LL.M.", "strasse": "Königsallee 70", "plz": "40212", "ort": "Düsseldorf", "seite": 28, "lat": 51.2236, "lng": 6.77653}, {"amt": "Notar", "name": "Marius Klingler", "strasse": "Königsallee 24", "plz": "40212", "ort": "Düsseldorf", "seite": 26, "lat": 51.2236, "lng": 6.78453}, {"amt": "Rechtsanwalt und Notar", "name": "Frank Nass", "strasse": "Am Halben Mond 2", "plz": "46446", "ort": "Emmerich am Rhein", "seite": 26, "lat": 51.84551, "lng": 6.24301}, {"amt": "Notarin", "name": "Dr. Sarah König", "strasse": "Veybachstraße 19", "plz": "53879", "ort": "Euskirchen", "seite": 26, "lat": 50.65332, "lng": 6.78877}, {"amt": "Notar", "name": "Dr. Philipp Perzborn", "strasse": "Hauptstraße 11-13", "plz": "50226", "ort": "Frechen", "seite": 23, "lat": 50.90894, "lng": 6.7921}, {"amt": "Notar", "name": "Dr. Thomas Köther", "strasse": "Ellbachstraße 1", "plz": "52428", "ort": "Jülich", "seite": 26, "lat": 50.94189, "lng": 6.39443}, {"amt": "Notar", "name": "Dr. Jochen Lohaus LL.M.", "strasse": "Hafenstraße 24", "plz": "47533", "ort": "Kleve", "seite": 23, "lat": 51.80916, "lng": 6.12801}, {"amt": "Notar", "name": "Dr. Hans-Jürgen Heil", "strasse": "Ostwall 165", "plz": "47798", "ort": "Krefeld", "seite": 24, "lat": 51.32891, "lng": 6.55991}, {"amt": "Notarin", "name": "Christina Bartels", "strasse": "Kaiser-Wilhelm-Ring 7-9", "plz": "50672", "ort": "Köln", "seite": 27, "lat": 50.94108, "lng": 6.937}, {"amt": "Notar", "name": "Dr. Andreas Bürger", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "seite": 24, "lat": 50.93864, "lng": 6.95788}, {"amt": "Notar", "name": "Dr. Andreas Rethmeier", "strasse": "Drususgasse 1-5", "plz": "50667", "ort": "Köln", "seite": 25, "lat": 50.94081, "lng": 6.95188}, {"amt": "Notar", "name": "Dr. Frank Ellenbeck", "strasse": "Hohenzollernring 2-10", "plz": "50672", "ort": "Köln", "seite": 25, "lat": 50.94358, "lng": 6.933}, {"amt": "Notar", "name": "Dr. Kai Bischoff", "strasse": "Martinstraße 3", "plz": "50667", "ort": "Köln", "seite": 28, "lat": 50.93648, "lng": 6.95188}, {"amt": "Notar", "name": "Dr. Klaus-Jürgen Dinstühler", "strasse": "Kaiser-Wilhelm-Ring 13", "plz": "50672", "ort": "Köln", "seite": 23, "lat": 50.94358, "lng": 6.941}, {"amt": "Notar", "name": "Dr. Tom Oliver Bader", "strasse": "Kaiser-Wilhelm-Ring 22", "plz": "50672", "ort": "Köln", "seite": 23, "lat": 50.94608, "lng": 6.937}, {"amt": "Notarin", "name": "Chiara Fischer", "strasse": "Eichenhofstraße 1", "plz": "51789", "ort": "Lindlar", "seite": 27, "lat": 51.0218, "lng": 7.34917}, {"amt": "Notarin", "name": "Dr. Julie Francastel L.L.M.", "strasse": "Haagstraße 4", "plz": "47441", "ort": "Moers", "seite": 23, "lat": 51.44628, "lng": 6.62755}, {"amt": "Notar", "name": "Dr. Matthias Neuhausen", "strasse": "Kaiserstraße 51", "plz": "41061", "ort": "Mönchengladbach", "seite": 24, "lat": 51.19419, "lng": 6.42552}, {"amt": "Notar", "name": "Dr. Ulrich Becker", "strasse": "Bismarckplatz 9", "plz": "41061", "ort": "Mönchengladbach", "seite": 23, "lat": 51.19419, "lng": 6.43352}, {"amt": "Notar", "name": "Holger Fruh", "strasse": "Oskar-Graemer-Straße 15", "plz": "41236", "ort": "Mönchengladbach", "seite": 25, "lat": 51.16683, "lng": 6.44949}, {"amt": "Notariatsverwalterin", "name": "Andrea Laubenstein", "strasse": "Friedrichstraße 5", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.42844, "lng": 6.88468}, {"amt": "Rechtsanwältin und Notarin", "name": "Andrea Laubenstein", "strasse": "Friedrichstraße 5", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 27, "lat": 51.42411, "lng": 6.88468}, {"amt": "Rechtsanwalt und Notar", "name": "Andreas Jaekel", "strasse": "Gneisenaustraße 25", "plz": "45472", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.43155, "lng": 6.92743}, {"amt": "Rechtsanwältin und Notarin", "name": "Friederike Bolley", "strasse": "Reichspräsidentenstraße 25", "plz": "45470", "ort": "Mülheim an der Ruhr", "seite": 27, "lat": 51.40595, "lng": 6.91038}, {"amt": "Rechtsanwalt und Notar", "name": "Jan Braumann", "strasse": "Friedrich-Ebert-Straße 32", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.42628, "lng": 6.87868}, {"amt": "Rechtsanwalt und Notar", "name": "Jens Hermanns", "strasse": "Beykozplatz 5", "plz": "45470", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.40595, "lng": 6.91838}, {"amt": "Rechtsanwalt und Notar", "name": "Lothar Wiegand", "strasse": "Friedrichstraße 20", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.42844, "lng": 6.88068}, {"amt": "Rechtsanwalt und Notar", "name": "Marcus Hennig", "strasse": "Wallstraße 3", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 26, "lat": 51.42411, "lng": 6.88068}, {"amt": "Rechtsanwalt und Notar", "name": "Norbert Johannknecht", "strasse": "Saarner Straße 314", "plz": "45478", "ort": "Mülheim an der Ruhr", "seite": 24, "lat": 51.43697, "lng": 6.83524}, {"amt": "Rechtsanwalt und Notar", "name": "Peter Troost", "strasse": "Wallstraße 1", "plz": "45468", "ort": "Mülheim an der Ruhr", "seite": 23, "lat": 51.42628, "lng": 6.88668}, {"amt": "Rechtsanwalt und Notar", "name": "Stephan Kupka", "strasse": "Düsseldorfer Straße 133", "plz": "45481", "ort": "Mülheim an der Ruhr", "seite": 23, "lat": 51.38827, "lng": 6.85661}, {"amt": "Notar", "name": "Michael Stutz", "strasse": "Spicher Straße 30", "plz": "53859", "ort": "Niederkassel", "seite": 25, "lat": 50.80958, "lng": 7.05635}, {"amt": "Rechtsanwalt und Notar", "name": "Joachim Weiss", "strasse": "Lothringerstraße 35", "plz": "46045", "ort": "Oberhausen", "seite": 27, "lat": 51.46524, "lng": 6.8541}, {"amt": "Rechtsanwalt und Notar", "name": "Lothar Staudinger", "strasse": "Dudelerstr. 22", "plz": "46147", "ort": "Oberhausen", "seite": 27, "lat": 51.54336, "lng": 6.81726}, {"amt": "Notariatsverwalter", "name": "Maik Zyber", "strasse": "Lothringer Straße 35", "plz": "46045", "ort": "Oberhausen", "seite": 25, "lat": 51.46741, "lng": 6.8601}, {"amt": "Rechtsanwältin und Notarin", "name": "Maren Krauße", "strasse": "Marktstraße 42 - 44", "plz": "46045", "ort": "Oberhausen", "seite": 26, "lat": 51.46957, "lng": 6.8541}, {"amt": "Rechtsanwalt und Notar", "name": "Olaf Funke", "strasse": "Schmachtendorfer Straße 106", "plz": "46147", "ort": "Oberhausen", "seite": 25, "lat": 51.54336, "lng": 6.82526}, {"amt": "Notar", "name": "Dr. Thomas Flues", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "seite": 23, "lat": 50.99303, "lng": 6.79029}, {"amt": "Notarin", "name": "Dr. Viola Kruse", "strasse": "Venloer Straße 85", "plz": "50259", "ort": "Pulheim", "seite": 27, "lat": 50.99303, "lng": 6.78229}, {"amt": "Notarin", "name": "Dr. Britta Spitzbart", "strasse": "Kaiserstraße 164", "plz": "42477", "ort": "Radevormwald", "seite": 25, "lat": 51.20944, "lng": 7.37208}, {"amt": "Notar", "name": "Dr. Jan Link", "strasse": "Grabenstraße 15", "plz": "40878", "ort": "Ratingen", "seite": 23, "lat": 51.29644, "lng": 6.85063}, {"amt": "Notar", "name": "Andreas Schmitz-Vornmoor", "strasse": "Alleestraße 72", "plz": "42853", "ort": "Remscheid", "seite": 26, "lat": 51.1833, "lng": 7.1759}, {"amt": "Notariatsverwalterin", "name": "Dr. Clara Thekla Constanze Fornefeld", "strasse": "Alleestraße 72", "plz": "42853", "ort": "Remscheid", "seite": 24, "lat": 51.1833, "lng": 7.1839}, {"amt": "Notar", "name": "Dr. Markus Zahn", "strasse": "Kölner Straße 64", "plz": "42897", "ort": "Remscheid", "seite": 24, "lat": 51.17301, "lng": 7.28228}, {"amt": "Notar", "name": "Dr. Martin Konstantin Thelen LL.M. (Columbia)", "strasse": "Am Brauhof 2", "plz": "53721", "ort": "Siegburg", "seite": 25, "lat": 50.80005, "lng": 7.21184}, {"amt": "Notar", "name": "Dr. Stefan Schmitz", "strasse": "Reitmeisterweg 14", "plz": "52223", "ort": "Stolberg", "seite": 23, "lat": 50.74795, "lng": 6.21442}, {"amt": "Rechtsanwalt und Notar", "name": "Mike Steinhauf", "strasse": "Baustraße 8", "plz": "46483", "ort": "Wesel", "seite": 23, "lat": 51.66333, "lng": 6.62322}, {"amt": "Rechtsanwalt und Notar", "name": "Stephan Nicolai", "strasse": "Großer Markt 13 - 15", "plz": "46483", "ort": "Wesel", "seite": 25, "lat": 51.66333, "lng": 6.61522}, {"amt": "Notariatsverwalter", "name": "Dr. Magnus Bleifeld", "strasse": "Drahtzieherweg 15", "plz": "47877", "ort": "Willich", "seite": 24, "lat": 51.26081, "lng": 6.50757}, {"amt": "Notar", "name": "Dr. Thiemo Soester", "strasse": "Lenneper Straße 11", "plz": "51688", "ort": "Wipperfürth", "seite": 25, "lat": 51.10273, "lng": 7.39724}, {"amt": "Notariatsverwalter", "name": "Dr. Felix Flöck", "strasse": "Erholungstraße 14", "plz": "42103", "ort": "Wuppertal", "seite": 26, "lat": 51.25549, "lng": 7.14661}, {"amt": "Notar", "name": "Dr. Henrich Fabis", "strasse": "Geschwister-Scholl-Platz 2", "plz": "42275", "ort": "Wuppertal-Barmen", "seite": 24, "lat": 51.27362, "lng": 7.20544}, {"amt": "Notar", "name": "Dennis Theus", "strasse": "Wilhelmstraße 96", "plz": "42489", "ort": "Wülfrath", "seite": 26, "lat": 51.28792, "lng": 7.03828}, {"amt": "Notar", "name": "Fabian Alexander Schwarz", "strasse": "Münsterstraße 35", "plz": "53909", "ort": "Zülpich", "seite": 23, "lat": 50.67725, "lng": 6.645}];
+const KREISE = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"name":"Kreis Kleve","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.109,51.894],[6.185,51.895],[6.289,51.877],[6.311,51.851],[6.375,51.836],[6.418,51.83],[6.433,51.808],[6.499,51.814],[6.545,51.766],[6.5,51.742],[6.473,51.704],[6.432,51.748],[6.421,51.744],[6.364,51.697],[6.39,51.683],[6.362,51.663],[6.334,51.64],[6.311,51.628],[6.343,51.614],[6.345,51.599],[6.382,51.593],[6.378,51.574],[6.409,51.561],[6.505,51.567],[6.496,51.541],[6.492,51.522],[6.483,51.485],[6.511,51.448],[6.525,51.426],[6.478,51.421],[6.406,51.416],[6.39,51.404],[6.385,51.389],[6.363,51.377],[6.322,51.365],[6.268,51.367],[6.223,51.391],[6.215,51.402],[6.231,51.469],[6.179,51.541],[6.091,51.605],[6.106,51.623],[6.039,51.678],[6.051,51.717],[5.964,51.742],[6.005,51.768],[6.001,51.782],[5.965,51.813],[5.965,51.824],[6.017,51.832],[6.068,51.865],[6.169,51.845],[6.145,51.871],[6.107,51.889],[6.109,51.894]]]]}},{"type":"Feature","properties":{"name":"Duisburg","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.82,51.453],[6.827,51.442],[6.819,51.397],[6.821,51.367],[6.841,51.349],[6.805,51.352],[6.788,51.34],[6.724,51.331],[6.662,51.352],[6.678,51.375],[6.648,51.385],[6.633,51.411],[6.669,51.408],[6.689,51.449],[6.677,51.456],[6.663,51.475],[6.662,51.489],[6.644,51.489],[6.637,51.504],[6.688,51.535],[6.698,51.557],[6.796,51.53],[6.797,51.515],[6.835,51.494],[6.824,51.475],[6.831,51.468],[6.82,51.453]]]]}},{"type":"Feature","properties":{"name":"D\u00fcsseldorf","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.811,51.348],[6.813,51.322],[6.816,51.289],[6.811,51.278],[6.84,51.279],[6.947,51.27],[6.938,51.237],[6.886,51.228],[6.917,51.21],[6.93,51.188],[6.908,51.165],[6.897,51.157],[6.923,51.136],[6.918,51.124],[6.852,51.134],[6.856,51.16],[6.798,51.151],[6.789,51.184],[6.736,51.186],[6.733,51.223],[6.697,51.23],[6.711,51.268],[6.743,51.309],[6.723,51.335],[6.788,51.34],[6.805,51.352],[6.811,51.348]]]]}},{"type":"Feature","properties":{"name":"Essen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.012,51.528],[7.031,51.513],[7.068,51.492],[7.081,51.478],[7.123,51.468],[7.142,51.439],[7.142,51.417],[7.12,51.39],[7.121,51.376],[7.086,51.371],[7.023,51.362],[6.935,51.344],[6.922,51.37],[6.956,51.389],[6.954,51.412],[6.964,51.445],[6.927,51.459],[6.93,51.493],[7.012,51.528]]]]}},{"type":"Feature","properties":{"name":"Krefeld","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.647,51.392],[6.66,51.382],[6.678,51.375],[6.662,51.352],[6.706,51.327],[6.631,51.31],[6.508,51.288],[6.524,51.311],[6.497,51.347],[6.487,51.388],[6.545,51.405],[6.647,51.392]]]]}},{"type":"Feature","properties":{"name":"Kreis Mettmann","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.91,51.366],[6.977,51.346],[7.064,51.359],[7.093,51.364],[7.156,51.373],[7.147,51.336],[7.171,51.311],[7.098,51.29],[7.098,51.279],[7.065,51.252],[7.044,51.232],[7.052,51.203],[6.962,51.155],[6.998,51.142],[6.992,51.071],[6.927,51.08],[6.857,51.074],[6.89,51.101],[6.9,51.127],[6.929,51.132],[6.923,51.136],[6.897,51.157],[6.908,51.165],[6.93,51.188],[6.917,51.21],[6.886,51.228],[6.938,51.237],[6.947,51.27],[6.84,51.279],[6.804,51.285],[6.825,51.319],[6.818,51.341],[6.841,51.349],[6.91,51.366]]]]}},{"type":"Feature","properties":{"name":"M\u00f6nchengladbach","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.532,51.226],[6.502,51.229],[6.489,51.176],[6.524,51.184],[6.522,51.14],[6.509,51.15],[6.475,51.135],[6.472,51.105],[6.436,51.104],[6.366,51.098],[6.363,51.128],[6.357,51.135],[6.313,51.168],[6.305,51.183],[6.323,51.187],[6.338,51.21],[6.354,51.232],[6.454,51.235],[6.532,51.226]]]]}},{"type":"Feature","properties":{"name":"M\u00fclheim an der Ruhr","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.909,51.466],[6.922,51.448],[6.97,51.434],[6.95,51.393],[6.921,51.377],[6.898,51.369],[6.833,51.364],[6.827,51.442],[6.82,51.453],[6.909,51.466]]]]}},{"type":"Feature","properties":{"name":"Oberhausen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.796,51.53],[6.829,51.564],[6.846,51.576],[6.872,51.554],[6.892,51.525],[6.918,51.5],[6.913,51.485],[6.909,51.466],[6.82,51.453],[6.819,51.471],[6.818,51.482],[6.797,51.515],[6.796,51.53]]]]}},{"type":"Feature","properties":{"name":"Remscheid","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.295,51.204],[7.302,51.193],[7.309,51.186],[7.294,51.159],[7.26,51.143],[7.229,51.157],[7.16,51.151],[7.131,51.153],[7.146,51.187],[7.202,51.208],[7.259,51.214],[7.26,51.207],[7.295,51.204]]]]}},{"type":"Feature","properties":{"name":"Rhein-Kreis Neuss","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.724,51.331],[6.743,51.309],[6.711,51.268],[6.697,51.23],[6.733,51.223],[6.736,51.186],[6.789,51.184],[6.798,51.151],[6.822,51.14],[6.862,51.156],[6.89,51.105],[6.846,51.074],[6.841,51.055],[6.819,51.043],[6.758,51.064],[6.748,51.045],[6.749,51.034],[6.722,51.014],[6.65,51.023],[6.579,51.029],[6.565,51.051],[6.523,51.057],[6.49,51.034],[6.481,51.06],[6.461,51.089],[6.436,51.104],[6.472,51.105],[6.475,51.135],[6.509,51.15],[6.522,51.14],[6.524,51.184],[6.489,51.176],[6.502,51.229],[6.543,51.233],[6.578,51.242],[6.599,51.265],[6.627,51.288],[6.661,51.307],[6.711,51.335],[6.724,51.331]]]]}},{"type":"Feature","properties":{"name":"Solingen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.136,51.161],[7.131,51.153],[7.166,51.151],[7.173,51.136],[7.174,51.121],[7.146,51.117],[7.121,51.131],[7.08,51.133],[7.081,51.122],[7.0,51.116],[6.998,51.142],[6.973,51.163],[6.99,51.171],[7.046,51.203],[7.109,51.212],[7.111,51.186],[7.124,51.172],[7.136,51.161]]]]}},{"type":"Feature","properties":{"name":"Kreis Viersen","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.525,51.426],[6.545,51.405],[6.487,51.388],[6.497,51.347],[6.524,51.311],[6.508,51.288],[6.599,51.265],[6.578,51.242],[6.543,51.233],[6.464,51.25],[6.414,51.219],[6.342,51.228],[6.322,51.198],[6.329,51.187],[6.252,51.193],[6.218,51.173],[6.122,51.176],[6.078,51.187],[6.092,51.225],[6.155,51.304],[6.199,51.339],[6.268,51.367],[6.322,51.365],[6.363,51.377],[6.385,51.389],[6.39,51.404],[6.406,51.416],[6.478,51.421],[6.525,51.426]]]]}},{"type":"Feature","properties":{"name":"Kreis Wesel","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.921,51.742],[6.929,51.724],[6.948,51.713],[6.925,51.697],[6.91,51.671],[6.905,51.656],[6.877,51.629],[6.861,51.606],[6.869,51.588],[6.829,51.564],[6.796,51.53],[6.698,51.557],[6.688,51.535],[6.637,51.504],[6.644,51.489],[6.662,51.489],[6.663,51.475],[6.677,51.456],[6.689,51.449],[6.639,51.418],[6.647,51.392],[6.538,51.408],[6.525,51.426],[6.511,51.448],[6.483,51.485],[6.492,51.522],[6.496,51.541],[6.505,51.567],[6.409,51.561],[6.378,51.574],[6.382,51.593],[6.345,51.599],[6.343,51.614],[6.311,51.628],[6.334,51.64],[6.362,51.663],[6.39,51.683],[6.364,51.697],[6.421,51.744],[6.432,51.748],[6.473,51.704],[6.5,51.742],[6.545,51.766],[6.499,51.814],[6.579,51.79],[6.597,51.794],[6.62,51.802],[6.651,51.799],[6.677,51.777],[6.725,51.779],[6.732,51.767],[6.78,51.765],[6.824,51.744],[6.849,51.737],[6.921,51.742]]]]}},{"type":"Feature","properties":{"name":"Wuppertal","bezirk":"D\u00fcsseldorf"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.304,51.238],[7.294,51.219],[7.295,51.204],[7.254,51.21],[7.235,51.224],[7.173,51.211],[7.153,51.169],[7.124,51.172],[7.111,51.186],[7.109,51.212],[7.044,51.232],[7.065,51.252],[7.098,51.279],[7.098,51.29],[7.132,51.298],[7.183,51.304],[7.195,51.29],[7.262,51.315],[7.277,51.271],[7.273,51.256],[7.304,51.238]]]]}},{"type":"Feature","properties":{"name":"Aachen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.025,50.847],[6.058,50.834],[6.065,50.823],[6.096,50.813],[6.189,50.806],[6.173,50.779],[6.183,50.735],[6.187,50.679],[6.182,50.667],[6.178,50.648],[6.174,50.658],[6.029,50.725],[6.012,50.775],[5.963,50.795],[5.975,50.814],[6.027,50.815],[6.02,50.845],[6.025,50.847]]]]}},{"type":"Feature","properties":{"name":"St\u00e4dteregion Aachen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.078,50.907],[6.09,50.907],[6.109,50.904],[6.151,50.918],[6.197,50.954],[6.229,50.932],[6.23,50.921],[6.22,50.887],[6.241,50.857],[6.258,50.873],[6.299,50.886],[6.324,50.868],[6.338,50.842],[6.345,50.835],[6.34,50.816],[6.3,50.796],[6.32,50.77],[6.351,50.767],[6.345,50.756],[6.312,50.717],[6.285,50.686],[6.299,50.664],[6.324,50.654],[6.377,50.667],[6.384,50.652],[6.391,50.649],[6.404,50.638],[6.392,50.63],[6.381,50.622],[6.389,50.604],[6.413,50.597],[6.397,50.582],[6.365,50.536],[6.377,50.533],[6.322,50.499],[6.253,50.495],[6.181,50.533],[6.176,50.56],[6.197,50.574],[6.233,50.583],[6.252,50.592],[6.21,50.631],[6.16,50.644],[6.177,50.652],[6.182,50.667],[6.187,50.679],[6.183,50.735],[6.173,50.779],[6.189,50.806],[6.096,50.813],[6.065,50.823],[6.058,50.834],[6.074,50.847],[6.076,50.895],[6.078,50.907]]]]}},{"type":"Feature","properties":{"name":"Bonn","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.217,50.646],[7.187,50.648],[7.135,50.642],[7.077,50.629],[7.029,50.65],[7.04,50.654],[7.038,50.672],[7.024,50.702],[7.034,50.721],[7.071,50.767],[7.112,50.765],[7.16,50.755],[7.209,50.739],[7.198,50.723],[7.171,50.7],[7.217,50.646]]]]}},{"type":"Feature","properties":{"name":"K\u00f6ln","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.905,51.061],[6.974,51.01],[7.014,51.015],[7.067,51.01],[7.069,50.991],[7.099,50.981],[7.09,50.954],[7.149,50.942],[7.145,50.919],[7.143,50.882],[7.168,50.864],[7.066,50.827],[7.041,50.845],[6.977,50.839],[6.947,50.841],[6.948,50.834],[6.922,50.859],[6.915,50.878],[6.883,50.907],[6.847,50.913],[6.829,50.924],[6.811,50.935],[6.815,50.946],[6.826,50.961],[6.831,50.972],[6.839,51.014],[6.831,51.036],[6.776,51.061],[6.819,51.043],[6.841,51.055],[6.857,51.081],[6.905,51.061]]]]}},{"type":"Feature","properties":{"name":"Kreis D\u00fcren","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.49,51.034],[6.473,51.022],[6.474,51.011],[6.475,51.0],[6.5,50.986],[6.506,50.975],[6.496,50.959],[6.503,50.948],[6.528,50.93],[6.555,50.89],[6.556,50.875],[6.557,50.864],[6.553,50.849],[6.577,50.846],[6.619,50.836],[6.66,50.833],[6.722,50.801],[6.718,50.782],[6.684,50.77],[6.699,50.733],[6.683,50.71],[6.646,50.728],[6.629,50.72],[6.595,50.704],[6.602,50.689],[6.604,50.67],[6.583,50.636],[6.567,50.621],[6.545,50.597],[6.528,50.593],[6.515,50.6],[6.424,50.616],[6.413,50.597],[6.389,50.604],[6.381,50.622],[6.392,50.63],[6.404,50.638],[6.391,50.649],[6.384,50.652],[6.377,50.667],[6.324,50.654],[6.299,50.664],[6.285,50.686],[6.312,50.717],[6.345,50.756],[6.351,50.767],[6.32,50.77],[6.3,50.796],[6.329,50.804],[6.34,50.816],[6.345,50.835],[6.338,50.842],[6.324,50.868],[6.299,50.886],[6.258,50.873],[6.241,50.857],[6.22,50.887],[6.23,50.921],[6.229,50.932],[6.204,50.946],[6.249,50.99],[6.278,50.998],[6.295,51.017],[6.294,51.029],[6.366,51.019],[6.465,51.045],[6.49,51.034]]]]}},{"type":"Feature","properties":{"name":"Kreis Euskirchen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.703,50.748],[6.727,50.741],[6.783,50.713],[6.849,50.764],[6.864,50.787],[6.872,50.764],[6.909,50.747],[6.9,50.717],[6.86,50.7],[6.862,50.685],[6.875,50.671],[6.869,50.663],[6.884,50.63],[6.91,50.604],[6.888,50.593],[6.936,50.568],[6.934,50.527],[6.905,50.526],[6.889,50.514],[6.896,50.503],[6.903,50.488],[6.905,50.462],[6.817,50.466],[6.753,50.468],[6.765,50.465],[6.752,50.43],[6.777,50.415],[6.781,50.384],[6.814,50.358],[6.791,50.354],[6.675,50.364],[6.664,50.349],[6.628,50.348],[6.608,50.37],[6.561,50.362],[6.514,50.357],[6.508,50.354],[6.509,50.346],[6.45,50.334],[6.455,50.341],[6.448,50.36],[6.424,50.363],[6.392,50.384],[6.394,50.359],[6.394,50.355],[6.421,50.322],[6.408,50.333],[6.34,50.391],[6.375,50.446],[6.322,50.499],[6.377,50.529],[6.353,50.528],[6.363,50.558],[6.39,50.593],[6.418,50.616],[6.491,50.596],[6.509,50.596],[6.544,50.605],[6.563,50.602],[6.561,50.624],[6.57,50.654],[6.596,50.689],[6.59,50.696],[6.612,50.708],[6.628,50.727],[6.647,50.72],[6.705,50.726],[6.703,50.748]]]]}},{"type":"Feature","properties":{"name":"Kreis Heinsberg","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.3,51.179],[6.313,51.168],[6.326,51.153],[6.36,51.102],[6.39,51.091],[6.461,51.089],[6.482,51.056],[6.377,51.035],[6.343,51.015],[6.306,51.025],[6.288,51.025],[6.272,51.005],[6.26,51.001],[6.202,50.973],[6.203,50.954],[6.151,50.918],[6.127,50.901],[6.108,50.912],[6.083,50.922],[6.046,50.931],[6.009,50.948],[6.002,50.959],[5.967,50.983],[5.904,50.978],[5.896,51.004],[5.872,51.051],[5.946,51.035],[5.966,51.042],[5.978,51.063],[6.015,51.094],[6.13,51.15],[6.179,51.162],[6.187,51.192],[6.23,51.174],[6.3,51.179]]]]}},{"type":"Feature","properties":{"name":"Leverkusen","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.991,51.085],[7.037,51.091],[7.062,51.069],[7.099,51.044],[7.073,51.014],[6.98,51.007],[6.979,51.022],[6.927,51.08],[6.992,51.071],[6.991,51.085]]]]}},{"type":"Feature","properties":{"name":"Oberbergischer Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.432,51.209],[7.454,51.158],[7.467,51.143],[7.48,51.129],[7.504,51.13],[7.494,51.107],[7.584,51.106],[7.597,51.085],[7.629,51.067],[7.717,51.074],[7.732,51.037],[7.749,50.978],[7.792,50.965],[7.736,50.919],[7.757,50.89],[7.753,50.867],[7.754,50.849],[7.736,50.852],[7.72,50.832],[7.662,50.819],[7.621,50.818],[7.607,50.832],[7.577,50.842],[7.531,50.829],[7.523,50.851],[7.491,50.872],[7.483,50.902],[7.443,50.945],[7.389,50.954],[7.355,50.945],[7.33,50.959],[7.329,50.974],[7.251,50.983],[7.278,51.006],[7.312,51.026],[7.322,51.049],[7.313,51.074],[7.272,51.08],[7.275,51.11],[7.295,51.145],[7.31,51.179],[7.297,51.182],[7.294,51.219],[7.304,51.238],[7.339,51.243],[7.34,51.236],[7.4,51.238],[7.407,51.216],[7.407,51.223],[7.425,51.224],[7.432,51.209]]]]}},{"type":"Feature","properties":{"name":"Rhein-Erft-Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[6.782,51.061],[6.802,51.035],[6.85,51.022],[6.847,50.984],[6.837,50.969],[6.832,50.954],[6.822,50.939],[6.822,50.935],[6.847,50.924],[6.866,50.899],[6.926,50.889],[6.928,50.863],[6.93,50.837],[6.941,50.841],[6.96,50.831],[6.99,50.82],[7.033,50.796],[6.962,50.801],[6.871,50.779],[6.847,50.782],[6.849,50.764],[6.783,50.713],[6.727,50.741],[6.684,50.77],[6.718,50.782],[6.722,50.801],[6.66,50.833],[6.619,50.836],[6.577,50.846],[6.553,50.849],[6.557,50.864],[6.556,50.875],[6.555,50.89],[6.528,50.93],[6.503,50.948],[6.496,50.959],[6.506,50.975],[6.5,50.986],[6.475,51.0],[6.474,51.011],[6.473,51.022],[6.478,51.026],[6.523,51.057],[6.555,51.036],[6.579,51.022],[6.644,51.02],[6.722,51.014],[6.749,51.034],[6.748,51.045],[6.758,51.064],[6.782,51.061]]]]}},{"type":"Feature","properties":{"name":"Rhein-Sieg-Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.402,50.947],[7.475,50.92],[7.461,50.879],[7.511,50.851],[7.536,50.841],[7.554,50.83],[7.602,50.824],[7.62,50.829],[7.649,50.834],[7.681,50.809],[7.683,50.779],[7.661,50.767],[7.598,50.739],[7.556,50.745],[7.522,50.728],[7.504,50.728],[7.446,50.714],[7.381,50.715],[7.372,50.693],[7.362,50.663],[7.26,50.618],[7.219,50.62],[7.178,50.681],[7.2,50.705],[7.215,50.731],[7.161,50.748],[7.129,50.769],[7.113,50.757],[7.043,50.751],[7.046,50.714],[7.043,50.684],[7.05,50.669],[7.028,50.657],[7.054,50.632],[7.06,50.628],[7.11,50.653],[7.163,50.651],[7.2,50.638],[7.184,50.618],[7.161,50.61],[7.115,50.604],[7.099,50.581],[7.057,50.598],[6.979,50.551],[6.955,50.557],[6.926,50.56],[6.93,50.571],[6.888,50.593],[6.91,50.604],[6.884,50.63],[6.869,50.663],[6.875,50.671],[6.862,50.685],[6.86,50.7],[6.9,50.717],[6.909,50.747],[6.879,50.75],[6.876,50.787],[6.962,50.801],[7.033,50.796],[6.99,50.82],[7.024,50.833],[7.064,50.845],[7.095,50.828],[7.203,50.869],[7.23,50.896],[7.251,50.923],[7.276,50.905],[7.328,50.915],[7.357,50.923],[7.402,50.947]]]]}},{"type":"Feature","properties":{"name":"Rheinisch-Bergischer Kreis","bezirk":"K\u00f6ln"},"geometry":{"type":"MultiPolygon","coordinates":[[[[7.272,51.144],[7.299,51.1],[7.302,51.066],[7.338,51.068],[7.328,51.041],[7.283,51.025],[7.285,51.002],[7.288,50.969],[7.335,50.967],[7.341,50.964],[7.36,50.953],[7.402,50.947],[7.357,50.923],[7.328,50.915],[7.276,50.905],[7.251,50.923],[7.23,50.896],[7.203,50.869],[7.137,50.878],[7.135,50.9],[7.139,50.923],[7.115,50.937],[7.106,50.962],[7.07,50.984],[7.08,50.995],[7.101,51.026],[7.116,51.06],[7.078,51.092],[7.009,51.079],[6.995,51.104],[7.04,51.128],[7.075,51.129],[7.109,51.134],[7.116,51.119],[7.152,51.11],[7.162,51.125],[7.161,51.14],[7.201,51.149],[7.272,51.144]]]]}}]};
+
+const GROUPS = [
+  { key: "notar", label: "Notar/in" },
+  { key: "anwalt", label: "Anwaltsnotar/in" },
+  { key: "verwalter", label: "Notariatsverwaltung" },
+];
+const groupOf = a => /verwalt/i.test(a) ? "verwalter" : /rechtsanw/i.test(a) ? "anwalt" : "notar";
+NOTARE.forEach((n, i) => { n.id = i; n.g = groupOf(n.amt); });
+
+const active = new Set(GROUPS.map(g => g.key));
+let query = "", selected = null;
+
+document.getElementById("n-total").textContent = NOTARE.length;
+const pages = [...new Set(NOTARE.map(n => n.seite))].sort((a, b) => a - b);
+document.getElementById("pages").textContent = pages.length ? `${pages[0]}–${pages[pages.length - 1]}` : "";
+
+// Legende / Filter
+const legend = document.getElementById("legend");
+GROUPS.forEach(g => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.id = "f-" + g.key; b.setAttribute("aria-pressed", "true");
+  b.innerHTML = `<span class="dot ${g.key}"></span>${g.label} <span class="n">${NOTARE.filter(n => n.g === g.key).length}</span>`;
+  b.onclick = () => {
+    active.has(g.key) ? active.delete(g.key) : active.add(g.key);
+    b.setAttribute("aria-pressed", active.has(g.key));
+    render();
+  };
+  legend.appendChild(b);
+});
+
+// Karte
+const svg = d3.select("#map");
+const root = svg.append("g");
+const gK = root.append("g"), gL = root.append("g"), gP = root.append("g");
+let projection, path, k = 1;
+
+function layout() {
+  const { width, height } = svg.node().getBoundingClientRect();
+  projection = d3.geoMercator().fitExtent([[16, 16], [width - 16, height - 16]], KREISE);
+  path = d3.geoPath(projection);
+  gK.selectAll("path").data(KREISE.features).join("path")
+    .attr("class", d => "kreis bez-" + d.properties.bezirk).attr("d", path)
+    .append("title").text(d => d.properties.name);
+  gL.selectAll("text").data(KREISE.features).join("text").attr("class", "klabel")
+    .attr("transform", d => `translate(${path.centroid(d)})`).text(d => d.properties.name);
+  drawPins();
+}
+
+function visible() {
+  const q = query.trim().toLowerCase();
+  return NOTARE.filter(n => active.has(n.g) &&
+    (!q || `${n.name} ${n.amt} ${n.strasse} ${n.plz} ${n.ort}`.toLowerCase().includes(q)));
+}
+
+function drawPins() {
+  const vis = visible();
+  gP.selectAll("circle").data(vis, d => d.id).join("circle")
+    .attr("class", d => `pin ${d.g}${selected === d.id ? " sel" : ""}`)
+    .attr("cx", d => projection([d.lng, d.lat])[0])
+    .attr("cy", d => projection([d.lng, d.lat])[1])
+    .on("click", (e, d) => { e.stopPropagation(); select(d.id, false); })
+    .call(sel => sel.selectAll("title").data(d => [d]).join("title").text(d => `${d.name}, ${d.ort}`));
+  sizePins();
+  return vis;
+}
+
+function sizePins() {
+  gP.selectAll("circle").attr("r", d => (selected === d.id ? 8 : 5.5) / Math.sqrt(k))
+    .attr("stroke-width", d => (selected === d.id ? 3 : d.g === "verwalter" ? 2.2 : 1.2) / Math.sqrt(k));
+  gL.selectAll("text").attr("font-size", 9 / k).attr("display", k >= 1.8 || svg.node().clientWidth > 700 ? null : "none");
+  gP.selectAll("circle.sel").raise();
+}
+
+const zoom = d3.zoom().scaleExtent([1, 40]).on("zoom", e => {
+  k = e.transform.k; root.attr("transform", e.transform); sizePins();
+});
+svg.call(zoom).on("click", () => select(null));
+document.getElementById("zin").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1.8);
+document.getElementById("zout").onclick = () => svg.transition().duration(250).call(zoom.scaleBy, 1 / 1.8);
+document.getElementById("zreset").onclick = () => svg.transition().duration(350).call(zoom.transform, d3.zoomIdentity);
+
+// Verzeichnis
+const list = document.getElementById("list");
+function renderList(vis) {
+  document.getElementById("count").textContent =
+    vis.length === NOTARE.length ? `${vis.length} Einträge` : `${vis.length} von ${NOTARE.length} Einträgen`;
+  const byCity = d3.group(vis, n => n.ort.replace(/-.*/, ""));
+  list.innerHTML = "";
+  [...byCity.keys()].sort((a, b) => a.localeCompare(b, "de")).forEach(city => {
+    const head = document.createElement("li");
+    head.className = "city"; head.innerHTML = `${esc(city)} <span>${byCity.get(city).length}</span>`;
+    list.appendChild(head);
+    byCity.get(city).forEach(n => {
+      const li = document.createElement("li");
+      li.id = "n" + n.id; if (selected === n.id) li.className = "sel";
+      li.innerHTML = `<button><span class="dot ${n.g}"></span><span class="nm">${esc(n.name)}</span>
+        <span class="meta">${esc(n.amt)}<br>${esc(n.strasse)}, <span class="plz">${n.plz}</span> ${esc(n.ort)}</span></button>`;
+      li.querySelector("button").onclick = () => select(n.id, true);
+      list.appendChild(li);
+    });
+  });
+}
+
+function select(id, fly) {
+  selected = id;
+  const card = document.getElementById("card");
+  list.querySelectorAll("li.sel").forEach(li => li.classList.remove("sel"));
+  gP.selectAll("circle").classed("sel", d => d.id === id);
+  sizePins();
+  if (id === null) { card.hidden = true; return; }
+  const n = NOTARE[id];
+  const li = document.getElementById("n" + id);
+  if (li) { li.classList.add("sel"); if (!fly) li.scrollIntoView({ block: "nearest" }); }
+  const adr = `${n.strasse}, ${n.plz} ${n.ort}`;
+  card.innerHTML = `<button class="close" aria-label="Schließen">×</button>
+    <div class="amt">${esc(n.amt)}</div><div class="nm">${esc(n.name)}</div>
+    <div class="adr">${esc(n.strasse)}<br>${n.plz} ${esc(n.ort)}</div>
+    <div class="row"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">In Google Maps öffnen</a>
+    <a href="https://www.openstreetmap.org/search?query=${encodeURIComponent(adr)}" target="_blank" rel="noopener">OpenStreetMap</a></div>`;
+  card.querySelector(".close").onclick = () => select(null);
+  card.hidden = false;
+  if (fly) {
+    const { width, height } = svg.node().getBoundingClientRect();
+    const [x, y] = projection([n.lng, n.lat]);
+    const s = Math.max(k, 5);
+    svg.transition().duration(600).call(zoom.transform,
+      d3.zoomIdentity.translate(width / 2, height / 2).scale(s).translate(-x, -y));
+  }
+}
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]); }
+
+function render() {
+  const vis = drawPins();
+  if (selected !== null && !vis.some(n => n.id === selected)) select(null);
+  renderList(vis);
+}
+
+document.getElementById("q").addEventListener("input", e => { query = e.target.value; render(); });
+window.addEventListener("resize", () => { layout(); svg.call(zoom.transform, d3.zoomIdentity); });
+layout();
+render();
+</script>
