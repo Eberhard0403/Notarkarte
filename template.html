@@ -129,6 +129,8 @@ input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px
 fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 14px; margin: 0; display: grid; gap: 12px; }
 legend { font-family: var(--display); font-weight: 600; font-size: 1rem; padding: 0 6px; margin-left: -6px; }
 label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
+.hint { font-size: .72rem; opacity: .8; }
+#d-quelle { margin-left: 6px; color: var(--seal); font-size: .75rem; }
 .agebadge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: var(--seal-soft); color: var(--seal); font: 500 .78rem var(--mono); }
 .status { font-size: .78rem; color: var(--muted); min-height: 1.2em; }
 .status.ok { color: var(--ok); }
@@ -156,7 +158,7 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
       <button id="zout" aria-label="Herauszoomen">−</button>
       <button id="zreset" aria-label="Ganze Karte zeigen">⤢</button>
     </div>
-    <div class="legend"><span><i class="dot has"></i>Geb.-Datum erfasst</span><span><i class="dot no"></i>offen</span><span><i class="dot grp">3</i>mehrere</span></div>
+    <div class="legend"><span><i class="dot has"></i>Alter bekannt</span><span><i class="dot no"></i>offen</span><span><i class="dot grp">3</i>mehrere</span></div>
   </div>
 
   <aside>
@@ -165,8 +167,8 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
         <input id="q" type="search" placeholder="Name, Straße, PLZ oder Ort" autocomplete="off" aria-label="Suchen">
         <div class="chips" id="chips">
           <button class="chip" id="c-all" data-f="all" aria-pressed="true">Alle</button>
-          <button class="chip" id="c-open" data-f="open" aria-pressed="false">Geburtsdatum offen</button>
-          <button class="chip" id="c-has" data-f="has" aria-pressed="false">Geburtsdatum erfasst</button>
+          <button class="chip" id="c-open" data-f="open" aria-pressed="false">Alter offen</button>
+          <button class="chip" id="c-has" data-f="has" aria-pressed="false">Alter bekannt</button>
         </div>
         <div class="count" id="count"></div>
       </div>
@@ -203,6 +205,12 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
           <label for="f-geb">Geburtsdatum <span id="d-age"></span>
             <input id="f-geb" type="date" max="2010-12-31">
           </label>
+          <label for="f-jahr">Geburtsjahr <span class="hint">falls kein genaues Datum bekannt</span>
+            <input id="f-jahr" type="number" min="1930" max="2010" step="1" inputmode="numeric">
+          </label>
+          <label for="f-quelle">Quelle <a id="d-quelle" target="_blank" rel="noopener"></a>
+            <input id="f-quelle" type="url" autocomplete="off" placeholder="https://">
+          </label>
           <label for="f-tel">Telefon
             <input id="f-tel" type="tel" autocomplete="off">
           </label>
@@ -223,11 +231,11 @@ label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
 <script>
 const NOTARE = /*NOTARE*/[];
 const KREISE = /*KREISE*/{};
-const FIELDS = { geburtsdatum: "f-geb", telefon: "f-tel", email: "f-mail", notiz: "f-notiz" };
+const FIELDS = { geburtsdatum: "f-geb", geburtsjahr: "f-jahr", quelle: "f-quelle", telefon: "f-tel", email: "f-mail", notiz: "f-notiz" };
 const byId = new Map(NOTARE.map(n => [n.id, n]));
 const $ = id => document.getElementById(id);
 
-let extra = {};           // id -> {geburtsdatum, telefon, email, notiz}
+let extra = {};           // id -> {geburtsdatum, geburtsjahr, quelle, telefon, email, notiz}
 let store = null;         // db-Sammlung oder null
 let query = "", filter = "all", selected = null, shown = NOTARE;
 
@@ -255,13 +263,20 @@ extra = lsLoad();
   }, () => { /* Abo beendet: zuletzt geladene Angaben bleiben sichtbar */ });
 })();
 
-const hasGeb = n => !!extra[n.id]?.geburtsdatum;
+const hasGeb = n => !!(extra[n.id]?.geburtsdatum || extra[n.id]?.geburtsjahr);
 function age(iso) {
   if (!iso) return null;
   const [y, m, d] = iso.split("-").map(Number), now = new Date();
   let a = now.getFullYear() - y;
   if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) a--;
   return a;
+}
+// Alter aus genauem Datum, sonst aus dem Geburtsjahr (dann nur ungefähr: "ca.")
+function ageOf(x) {
+  const a = age(x?.geburtsdatum);
+  if (a !== null) return { a, ca: false };
+  const y = Number(x?.geburtsjahr);
+  return y ? { a: new Date().getFullYear() - y, ca: true } : null;
 }
 
 // ---------- Karte ----------
@@ -325,7 +340,7 @@ function drawPins() {
         g.append("circle").attr("class", "cl").attr("r", 10 + Math.min(6, c.members.length));
         g.append("text").attr("class", "cltx").attr("dy", "0.35em").text(c.members.length);
         g.append("title").text(`${c.members.length} Notare – antippen zum Auffächern\n` +
-          c.members.map(n => n.name).join("\n") + (done ? `\n(${done} mit Geburtsdatum)` : ""));
+          c.members.map(n => n.name).join("\n") + (done ? `\n(${done} mit Alter)` : ""));
         g.on("click", e => { e.stopPropagation(); openCluster(c.members); });
       } else {
         const n = c.members[0], sel = n.id === selected;
@@ -389,7 +404,7 @@ function filtered() {
 function renderList() {
   const list = $("list");
   const done = NOTARE.filter(hasGeb).length;
-  $("count").textContent = `${shown.length} von ${NOTARE.length} · Geburtsdatum bei ${done} erfasst`;
+  $("count").textContent = `${shown.length} von ${NOTARE.length} · Alter bei ${done} bekannt`;
   const byCity = d3.group(shown, n => n.ort.replace(/[-,(].*/, "").trim());
   const frag = document.createDocumentFragment();
   [...byCity.keys()].sort((a, b) => a.localeCompare(b, "de")).forEach(city => {
@@ -403,11 +418,11 @@ function renderList() {
 }
 
 function itemLi(n, fromList) {
-  const a = age(extra[n.id]?.geburtsdatum);
+  const a = ageOf(extra[n.id]);
   const li = document.createElement("li");
   li.className = "item";
   li.innerHTML = `<button><i class="dot ${hasGeb(n) ? "has" : "no"}"></i><span class="nm">${esc(n.name)}</span>
-    <span class="age">${a !== null ? a + " J." : ""}</span><span class="meta">${n.amt.startsWith("Notariatsverw") ? esc(n.amt) + " · " : ""}${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
+    <span class="age">${a ? (a.ca ? "ca. " : "") + a.a + " J." : ""}</span><span class="meta">${n.amt.startsWith("Notariatsverw") ? esc(n.amt) + " · " : ""}${esc(n.strasse)}, ${n.plz} ${esc(n.ort)}</span></button>`;
   li.firstChild.onclick = () => { if (fromList) group = null; open(n.id, fromList); };
   return li;
 }
@@ -521,8 +536,11 @@ function fillForm(id) {
   showAge();
 }
 function showAge() {
-  const a = age($("f-geb").value);
-  $("d-age").innerHTML = a !== null && a >= 0 ? `<span class="agebadge">${a} Jahre</span>` : "";
+  const a = ageOf({ geburtsdatum: $("f-geb").value, geburtsjahr: $("f-jahr").value });
+  $("d-age").innerHTML = a && a.a >= 0 ? `<span class="agebadge">${a.ca ? "ca. " : ""}${a.a} Jahre</span>` : "";
+  const q = $("f-quelle").value.trim(), link = $("d-quelle");
+  link.textContent = /^https?:\/\//.test(q) ? "öffnen ↗" : "";
+  link.href = link.textContent ? q : "#";
 }
 
 // Speichern: beim Verlassen eines Feldes, Datum sofort, Text nach kurzer Pause
@@ -557,7 +575,7 @@ async function flushSave() {
   render();
 }
 for (const el of Object.values(FIELDS)) {
-  $(el).addEventListener("input", () => { if (el === "f-geb") showAge(); scheduleSave(el === "f-geb"); });
+  $(el).addEventListener("input", () => { if (["f-geb", "f-jahr", "f-quelle"].includes(el)) showAge(); scheduleSave(el === "f-geb"); });
   $(el).addEventListener("blur", () => { if (pending) flushSave(); });
 }
 
