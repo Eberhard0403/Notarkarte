@@ -10,11 +10,28 @@ id;name;geburtsjahr;geburtsdatum;quelle
 40625-dr-carsten-lindner;Dr. Carsten Lindner;1982;;https://www.notar-gerresheim.de/en/notaries
 40625-dr-jan-henning-berg;Dr. Jan Henning Berg;1984;;https://www.notar-gerresheim.de/en/notaries
 40721-dr-niklas-mairose;Dr. Niklas Mairose;1976;;https://notar-mairose.de/ihr-notar.html
+40764-christoph-stiefel;Christoph Stiefel;1973;;https://notar-stiefel.de/ueber-mich/
+41061-oliver-baetzgen;Oliver Baetzgen;1972;1972-07-06;https://notar-baetzgen.com/index.php/Notar.html
 41363-dr-christian-hartmann;Dr. Christian Hartmann;1965;;https://notare-juechen.de/
 41363-dr-johannes-hushahn-ll-m;Dr. Johannes Hushahn LL.M.;1980;;https://www.notar-hushahn.de/
+41460-dr-martin-lohr;Dr. Martin Lohr;1969;;https://www.notar-lohr.de/notar/dr-martin-lohr
+41460-dr-paul-terner-ll-m;Dr. Paul Terner LL.M.;1976;;https://www.terner-vogel.de/notare
+41460-dr-tobias-kruse;Dr. Tobias Kruse;1975;;https://notar-kruse.de/ihr-notar/
+41460-dr-volker-hustedt;Dr. Volker Hustedt;1962;;https://notare-h-b.de/notare/
+41460-nikolaus-bardenhewer;Nikolaus Bardenhewer;1976;;https://notare-h-b.de/notare/
+41747-dr-oliver-gehse;Dr. Oliver Gehse;1975;1975-07-22;https://www.notar-gehse.de/ueber-uns/notar
+41749-dr-adrian-cavin-ll-m-georgetown-university;Dr. Adrian Cavin LL.M. (Georgetown University);1983;;https://notar-cavin.de/
 41812-dr-andreas-putzhoven;Dr. Andreas Pützhoven;1969;;https://www.notar-puetzhoven.de/Notar/Notar-Dr-Puetzhoven/
+41812-dr-benedikt-berthold;Dr. Benedikt Berthold;1988;;https://notar-berthold.de/team/
 41836-dr-andreas-brandt;Dr. Andreas Brandt;1982;;https://www.notar-brandt.de/
+42275-caspar-heckscher;Caspar Heckscher;1983;;https://notare-fh.de/notar-notarsozietaet-wuppertal/notar-heckscher/
+42275-dr-henrich-fabis;Dr. Henrich Fabis;1965;;https://notare-fh.de/notar-notarsozietaet-wuppertal/dr-fabis/
+42287-dr-thomas-schwerin;Dr. Thomas Schwerin;1970;;https://schwerin-neukirchen.de/notariat/
+42287-mark-neukirchen;Mark Neukirchen;1987;;https://schwerin-neukirchen.de/notariat/
+42327-dr-andreas-sailer;Dr. Andreas Sailer;1966;;https://www.notar-sailer.de/dr-andreas-sailer.html
+42549-dr-julian-stefan-klein-ll-m;Dr. Julian Stefan Klein LL.M.;1987;;https://www.notarklein.de/
 47226-dr-tim-klawitter;Dr. Tim Klawitter;1963;1963-03-23;https://www.notar-klawitter.de/notariat
+47441-dr-jens-todtenhofer-ll-m;Dr. Jens Todtenhöfer LL.M.;1986;;https://notar-todtenhoefer.de/notar-dr-jens-todtenhofer/
 47475-dr-jan-heskamp;Dr. Jan Heskamp;1979;;https://notar-heskamp.de/notar/
 47533-dr-christian-wolf;Dr. Christian Wolf;1965;;https://www.notar-wolf.de/vita.html
 47608-dr-michael-oyda;Dr. Michael Oyda;1975;;https://notar-oyda.de/Notar-Dr-Oyda/
@@ -27,10 +44,22 @@ id;name;geburtsjahr;geburtsdatum;quelle
 50181-dr-alexander-kiesgen-ll-m;Dr. Alexander Kiesgen LL.M.;1984;;https://www.notar-kiesgen.de/notar-dr-alexander-kiesgen.html
 50667-dr-andreas-burger;Dr. Andreas Bürger;1973;;https://www.bbnotare.de/notare
 50667-dr-kai-bischoff;Dr. Kai Bischoff;1972;;https://www.bbnotare.de/notare
+50667-dr-martin-russmann;Dr. Martin Rüßmann;1975;;https://www.notar-ruessmann.de/Notar-Dr-Ruessmann
+50667-dr-maximilian-freiherr-von-proff-zu-irnich;Dr. Maximilian Freiherr von Proff zu Irnich;1976;;https://www.notarvonproff.de/dr.-maximilian-von-proff
+50668-dr-peter-schmitz;Dr. Peter Schmitz;1965;;https://www.sst-notare.de/
+50668-leontin-schulte-thoma;Leontin Schulte-Thoma;1970;;https://www.sst-notare.de/
+50670-dr-stefan-heinze;Dr. Stefan Heinze;1979;1979-01-08;https://notar-heinze.de/en/notariat/
 50825-dr-alexander-volzmann;Dr. Alexander Völzmann;1979;;https://notar-voelzmann.de/notar_voelzmann/
+50859-manuel-patrick-busch;Manuel Patrick Busch;1983;;https://notar-busch.de/en/notary/
+50935-dr-robert-kleba;Dr. Robert Kleba;1982;;https://www.notar-kleba.de/notar-dr-robert-kleba/
+51143-bernd-olaf-alexander-von-schwander;Bernd Olaf Alexander von Schwander;1982;;https://www.notarvonschwander.de/notar/
+51375-dr-anne-kathrin-lingk;Dr. Anne-Kathrin Lingk;1968;;https://wl-notare.de/dr-anne-kathrin-lingk/
+51375-dr-thilo-weimer;Dr. Thilo Weimer;1965;;https://wl-notare.de/dr-thilo-weimer-notar/
 51429-dr-jorg-ihle;Dr. Jörg Ihle;1971;;https://www.notariat-ihle.de/Notar-Dr-Ihle/
 51465-dr-robert-modl;Dr. Robert Mödl;1976;;https://www.notare-bm.de/notariat/notar-moedl/
 51465-markus-bohlscheid;Markus Bohlscheid;1972;;https://www.notare-bm.de/notariat/notar-bohlscheid/
+51503-dr-thomas-breiken;Dr. Thomas Breiken;1961;;https://www.notarbreikenroesrath.de/notar/
+51545-dr-paul-sebastian-hager;Dr. Paul Sebastian Hager;1975;;http://notar-hager.de/ihr-notar.html
 51643-dr-nikola-halding-hoppenheit;Dr. Nikola Halding-Hoppenheit;1975;;https://www.notare-gummersbach.de/Notarin_Dr_Halding-Hoppenheit
 51643-ute-weyland;Ute Weyland;1963;;https://www.notare-gummersbach.de/Notarin_Weyland
 51766-jonas-thebille;Jonas Thebille;1983;;https://www.notar-thebille.de/notar-jonas-thebille.html
@@ -38,6 +67,9 @@ id;name;geburtsjahr;geburtsdatum;quelle
 52064-dr-marcus-sommer;Dr. Marcus Sommer;1964;;https://www.notarsommer.de/de/notar-aachen
 52064-martin-johannes-rudersdorf-ll-m;Martin Johannes Rudersdorf LL.M.;1979;;https://www.ersfeld-rudersdorf.de/notare
 52074-prof-dr-christoph-terbrack;Prof. Dr. Christoph Terbrack;1969;;https://www.notar-terbrack.de/prof-dr-christoph-terbrack/
+52156-thomas-klosky;Thomas Klosky;1990;;https://www.notar-monschau.de/notar
+52223-dr-christof-wagner-ll-m-cambridge;Dr. Christof Wagner LL.M. (Cambridge);1985;;https://notare-stolberg.de/notare
+52223-dr-stefan-schmitz;Dr. Stefan Schmitz;1968;;https://notare-stolberg.de/notare
 52349-dr-dominik-braun-ll-m-univ-of-chicago;Dr. Dominik Braun LL.M. (Univ. of Chicago);1984;;https://braun-dueren.de/notar-team/
 52349-dr-yvonne-abicht;Dr. Yvonne Abicht;1975;;https://notarin-abicht.de/notarin-dr-yvonne-abicht/
 52351-katharina-tschernoster;Katharina Tschernoster;1984;;https://www.tschernoster.de/notarin.html
@@ -49,4 +81,9 @@ id;name;geburtsjahr;geburtsdatum;quelle
 53179-benno-garschina;Benno Garschina;1963;;https://garschina.de/notar-garschina/
 53332-dr-heiko-worm-ll-m;Dr. Heiko Worm LL.M.;1973;;https://notarworm.de/
 53604-dr-christiane-kluge;Dr. Christiane Kluge;1966;;https://www.notarbadhonnef.de/Notarin_Kluge
+53721-dr-lars-gohmann;Dr. Lars Göhmann;1978;;https://notare-weierstrasse.de/notare/
+53721-dr-thorsten-fuhr;Dr. Thorsten Führ;1977;;https://notare-weierstrasse.de/notare/
+53757-dr-dominik-kolmel;Dr. Dominik Kölmel;1975;;https://www.notar-sankt-augustin.de/notar.php
 53773-stefan-wegerhoff;Stefan Wegerhoff;1966;;https://notar-wegerhoff.de/ihr-notar/
+53797-michael-danzeglocke-ll-m;Michael Danzeglocke LL.M.;1985;;https://notar-lohmar.de/ihr-notar/
+53937-christian-mach;Christian Mach;1984;;https://notar-mach.de/notar/

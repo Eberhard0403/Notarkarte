@@ -96,7 +96,7 @@ id;name;ort;geprueft;geburtsjahr_gefunden
 51766-jonas-thebille;Jonas Thebille;Engelskirchen;ja;ja
 50374-ingo-schreinert-ll-m-eur;Ingo Schreinert LL.M. Eur.;Erftstadt;ja;
 41812-dr-andreas-putzhoven;Dr. Andreas Pützhoven;Erkelenz;ja;ja
-41812-dr-benedikt-berthold;Dr. Benedikt Berthold;Erkelenz;ja;
+41812-dr-benedikt-berthold;Dr. Benedikt Berthold;Erkelenz;ja;ja
 40699-martin-rachuy;Martin Rachuy;Erkrath;ja;
 52249-dr-alexander-bucken;Dr. Alexander Bücken;Eschweiler;ja;
 52249-dr-martin-kley;Dr. Martin Kley;Eschweiler;ja;
@@ -159,136 +159,136 @@ id;name;ort;geprueft;geburtsjahr_gefunden
 50672-dr-julia-sass-ll-m-columbia;Dr. Julia Saß LL.M. (Columbia);Köln;ja;
 50672-dr-tom-oliver-bader;Dr. Tom Oliver Bader;Köln;ja;
 50672-dr-jurgen-kallrath;Dr. Jürgen Kallrath;Köln;ja;
-50672-dr-klaus-jurgen-dinstuhler;Dr. Klaus-Jürgen Dinstühler;Köln;nein;
-50674-dr-marc-hermanns;Dr. Marc Hermanns;Köln;nein;
-50674-dr-robert-schumacher;Dr. Robert Schumacher;Köln;nein;
-51065-dr-marcus-leinenweber;Dr. Marcus Leinenweber;Köln;nein;
-50668-dr-markus-buschbaum-ll-m;Dr. Markus Buschbaum LL.M.;Köln;nein;
-50668-simon-lindow;Simon Lindow;Köln;nein;
-50667-dr-martin-russmann;Dr. Martin Rüßmann;Köln;nein;
-50996-dr-martin-thelen;Dr. Martin Thelen;Köln;nein;
-50667-dr-maximilian-freiherr-von-proff-zu-irnich;Dr. Maximilian Freiherr von Proff zu Irnich;Köln;nein;
-50672-dr-michaela-tschon;Dr. Michaela Tschon;Köln;nein;
-50668-dr-peter-schmitz;Dr. Peter Schmitz;Köln;nein;
-50668-leontin-schulte-thoma;Leontin Schulte-Thoma;Köln;nein;
-50858-dr-rene-zoller;Dr. Rene Zöller;Köln;nein;
-50858-wolfgang-gruntkowski;Wolfgang Gruntkowski;Köln;nein;
-50672-dr-richard-bohr;Dr. Richard Böhr;Köln;nein;
-50935-dr-robert-kleba;Dr. Robert Kleba;Köln;nein;
-50670-dr-stefan-heinze;Dr. Stefan Heinze;Köln;nein;
-50667-dr-stephan-bleisteiner;Dr. Stephan Bleisteiner;Köln;nein;
-51143-dr-till-grone;Dr. Till Gröne;Köln;nein;
-50667-dr-wolfgang-reetz;Dr. Wolfgang Reetz;Köln;nein;
-50674-erich-r-thies;Erich R. Thies;Köln;nein;
-50667-hans-joachim-schaller;Hans Joachim Schaller;Köln;nein;
-50859-manuel-patrick-busch;Manuel Patrick Busch;Köln;nein;
-50935-peter-dobberahn;Peter Dobberahn;Köln;nein;
-50968-peter-pana;Peter Pana;Köln;nein;
-51105-dominik-huren;Dominik Hüren;Köln-Kalk;nein;
-51065-dr-philipp-muller;Dr. Philipp Müller;Köln-Mülheim;nein;
-51143-bernd-olaf-alexander-von-schwander;Bernd Olaf Alexander von Schwander;Köln-Porz;nein;
-53639-dr-timo-hartlich-ll-m;Dr. Timo Hartlich LL.M.;Königswinter;nein;
-40764-christoph-stiefel;Christoph Stiefel;Langenfeld (Rheinland);nein;
-51375-dr-anne-kathrin-lingk;Dr. Anne-Kathrin Lingk;Leverkusen;nein;
-51375-dr-thilo-weimer;Dr. Thilo Weimer;Leverkusen;nein;
-51373-klaus-striewski;Klaus Striewski;Leverkusen;nein;
-51373-susanne-karsten;Susanne Karsten;Leverkusen;nein;
-51379-dr-benjamin-matthias-schulz;Dr. Benjamin Matthias Schulz;Leverkusen-Opladen;nein;
-51379-dr-stefan-lange-parpart;Dr. Stefan Lange-Parpart;Leverkusen-Opladen;nein;
-51789-chiara-fischer;Chiara Fischer;Lindlar;nein;
-53797-michael-danzeglocke-ll-m;Michael Danzeglocke LL.M.;Lohmar;nein;
-40667-dr-sabine-krampen-lietzke;Dr. Sabine Krampen-Lietzke;Meerbusch;nein;
-40822-dr-reinhard-busse;Dr. Reinhard Busse;Mettmann;nein;
-47441-dr-andre-fisch;Dr. André Fisch;Moers;nein;
-47441-dr-anika-gilberg;Dr. Anika Gilberg;Moers;nein;
-47441-dr-christian-kutschmann-ll-m-univ-of-virginia;Dr. Christian Kutschmann LL.M. (Univ. of Virginia);Moers;nein;
-47441-dr-julie-francastel-l-l-m;Dr. Julie Francastel L.L.M.;Moers;nein;
-47441-dr-christian-lettmann;Dr. Christian Lettmann;Moers;nein;
-47441-dr-jens-todtenhofer-ll-m;Dr. Jens Todtenhöfer LL.M.;Moers;nein;
-40789-dr-jens-heinig;Dr. Jens Heinig;Monheim am Rhein;nein;
-52156-thomas-klosky;Thomas Klosky;Monschau;nein;
-41239-dirk-piegsa;Dirk Piegsa;Mönchengladbach;nein;
-41199-dr-catharina-sophie-von-hertzberg-bolch;Dr. Catharina Sophie von Hertzberg-Bölch;Mönchengladbach;nein;
-41063-dr-christian-schmitz;Dr. Christian Schmitz;Mönchengladbach;nein;
-41061-dr-kai-franken;Dr. Kai Franken;Mönchengladbach;nein;
-41061-dr-matthias-neuhausen;Dr. Matthias Neuhausen;Mönchengladbach;nein;
-41061-dr-stefan-heimsoeth;Dr. Stefan Heimsoeth;Mönchengladbach;nein;
-41236-dr-thomas-kerstan-ll-m-cambridge;Dr. Thomas Kerstan LL.M.(Cambridge);Mönchengladbach;nein;
-41236-holger-fruh;Holger Fruh;Mönchengladbach;nein;
-41061-dr-thomas-schultz;Dr. Thomas Schultz;Mönchengladbach;nein;
-41061-dr-ulrich-becker;Dr. Ulrich Becker;Mönchengladbach;nein;
-41061-oliver-baetzgen;Oliver Baetzgen;Mönchengladbach;nein;
-41334-dr-svenja-gelshorn;Dr. Svenja Gelshorn;Nettetal;nein;
-41460-dr-anna-zobeley;Dr. Anna Zöbeley;Neuss;nein;
-41460-dr-martin-lohr;Dr. Martin Lohr;Neuss;nein;
-41460-dr-paul-terner-ll-m;Dr. Paul Terner LL.M.;Neuss;nein;
-41460-johanna-vogel-fruher-jurgens-mjur-oxford;Johanna Vogel (früher Jürgens) MJur (Oxford);Neuss;nein;
-41460-dr-tobias-kruse;Dr. Tobias Kruse;Neuss;nein;
-41460-dr-volker-hustedt;Dr. Volker Hustedt;Neuss;nein;
-41460-nikolaus-bardenhewer;Nikolaus Bardenhewer;Neuss;nein;
-53859-michael-stutz;Michael Stutz;Niederkassel;nein;
-50259-dr-thomas-flues;Dr. Thomas Flues;Pulheim;nein;
-50259-dr-viola-kruse;Dr. Viola Kruse;Pulheim;nein;
-42477-dr-britta-spitzbart;Dr. Britta Spitzbart;Radevormwald;nein;
-40878-dr-jan-link;Dr. Jan Link;Ratingen;nein;
-40878-dr-jens-bormann-ll-m-harvard;Dr. Jens Bormann LL.M. (Harvard);Ratingen;nein;
-42853-andreas-schmitz-vornmoor;Andreas Schmitz-Vornmoor;Remscheid;nein;
-42853-dr-clara-thekla-constanze-fornefeld;Dr. Clara Thekla Constanze Fornefeld;Remscheid;nein;
-42897-dr-markus-zahn;Dr. Markus Zahn;Remscheid;nein;
-53359-dr-guido-kordel-ll-m;Dr. Guido Kordel LL.M.;Rheinbach;nein;
-53359-dr-mario-leitzen;Dr. Mario Leitzen;Rheinbach;nein;
-53359-dr-nicole-plate;Dr. Nicole Plate;Rheinbach;nein;
-47495-dr-christopher-bjorn-lutz;Dr. Christopher Björn Lutz;Rheinberg;nein;
-51503-dr-thomas-breiken;Dr. Thomas Breiken;Rösrath;nein;
-53757-dr-dominik-kolmel;Dr. Dominik Kölmel;Sankt Augustin;nein;
-53937-christian-mach;Christian Mach;Schleiden;nein;
-53937-martin-strahl;Martin Strahl;Schleiden;nein;
-53721-dirk-hofinghoff;Dirk Höfinghoff;Siegburg;nein;
-53721-dr-antonia-clarissa-harbecke-fruher-bautsch;Dr. Antonia Clarissa Harbecke (früher Bautsch);Siegburg;nein;
-53721-dr-martin-konstantin-thelen-ll-m-columbia;Dr. Martin Konstantin Thelen LL.M. (Columbia);Siegburg;nein;
-53721-dr-lars-gohmann;Dr. Lars Göhmann;Siegburg;nein;
-53721-dr-thorsten-fuhr;Dr. Thorsten Führ;Siegburg;nein;
-53721-lisa-johanna-morchen;Lisa Johanna Mörchen;Siegburg;nein;
-42651-dr-alexander-stallknecht;Dr. Alexander Stallknecht;Solingen;nein;
-42697-dr-andreas-hariefeld;Dr. Andreas Hariefeld;Solingen;nein;
-42653-dr-laura-maibaum;Dr. Laura Maibaum;Solingen;nein;
-42653-mikolaj-pogorzelski-ll-m-harvard;Mikolaj Pogorzelski LL.M. (Harvard);Solingen;nein;
-42651-dr-tobias-roth;Dr. Tobias Roth;Solingen;nein;
-52223-dr-stefan-schmitz;Dr. Stefan Schmitz;Stolberg;nein;
-52223-dr-christof-wagner-ll-m-cambridge;Dr. Christof Wagner LL.M. (Cambridge);Stolberg (Rheinland);nein;
-47638-marc-heggen;Marc Heggen;Straelen;nein;
-53840-dr-christoph-huhn;Dr. Christoph Huhn;Troisdorf;nein;
-53840-sabine-uedelhoven-fruher-dillmann;Sabine Uedelhoven (früher Dillmann);Troisdorf;nein;
-53840-stephan-romer;Stephan Römer;Troisdorf;nein;
-47918-tanja-derks-fruher-dahlmanns;Tanja Derks (früher Dahlmanns);Tönisvorst;nein;
-42549-dr-julian-stefan-klein-ll-m;Dr. Julian Stefan Klein LL.M.;Velbert;nein;
-42555-dr-miriam-pascale-rosenberger;Dr. Miriam Pascale Rosenberger;Velbert;nein;
-41749-dr-adrian-cavin-ll-m-georgetown-university;Dr. Adrian Cavin LL.M. (Georgetown University);Viersen;nein;
-41747-dr-oliver-gehse;Dr. Oliver Gehse;Viersen;nein;
-41751-dr-stephan-oelers;Dr. Stephan Oelers;Viersen;nein;
-41751-dr-tobias-wilms;Dr. Tobias Wilms;Viersen;nein;
-51545-dr-paul-sebastian-hager;Dr. Paul Sebastian Hager;Waldbröl;nein;
-41849-dr-ulrike-josefine-gisbertz;Dr. Ulrike Josefine Gisbertz;Wassenberg;nein;
-41844-johannes-christian-freuen;Johannes Christian Freuen;Wegberg;nein;
-42929-dr-stefan-meyer;Dr. Stefan Meyer;Wermelskirchen;nein;
-50389-andre-fabian-gerold;Andre Fabian Gerold;Wesseling;nein;
-51674-dr-tim-kasper;Dr. Tim Kasper;Wiehl;nein;
-51674-philip-scholz;Philip Scholz;Wiehl;nein;
-47877-dr-magnus-bleifeld;Dr. Magnus Bleifeld;Willich;nein;
-51688-dr-thiemo-soester;Dr. Thiemo Soester;Wipperfürth;nein;
-42103-christoph-dahlkamp;Christoph Dahlkamp;Wuppertal;nein;
-42103-dr-felix-flock;Dr. Felix Flöck;Wuppertal;nein;
-42327-dr-andreas-sailer;Dr. Andreas Sailer;Wuppertal;nein;
-42103-dr-daniel-doetsch-m-jur-oxford;Dr. Daniel Doetsch M. Jur. (Oxford);Wuppertal;nein;
-42103-waldemar-hindemit;Waldemar Hindemit;Wuppertal;nein;
-42115-dr-markus-dohr;Dr. Markus Dohr;Wuppertal;nein;
-42103-dr-maximilian-bonner-ll-m;Dr. Maximilian Bönner LL.M.;Wuppertal;nein;
-42369-jan-martin-stascheit;Jan Martin Stascheit;Wuppertal;nein;
-42275-caspar-heckscher;Caspar Heckscher;Wuppertal-Barmen;nein;
-42275-dr-henrich-fabis;Dr. Henrich Fabis;Wuppertal-Barmen;nein;
-42287-dr-thomas-schwerin;Dr. Thomas Schwerin;Wuppertal-Barmen;nein;
-42287-mark-neukirchen;Mark Neukirchen;Wuppertal-Barmen;nein;
-42489-dennis-theus;Dennis Theus;Wülfrath;nein;
-52146-jan-peterssen;Jan Peterßen;Würselen;nein;
-46509-dr-moritz-lennart-jaschke;Dr. Moritz Lennart Jäschke;Xanten;nein;
-53909-fabian-alexander-schwarz;Fabian Alexander Schwarz;Zülpich;nein;
+50672-dr-klaus-jurgen-dinstuhler;Dr. Klaus-Jürgen Dinstühler;Köln;ja;
+50674-dr-marc-hermanns;Dr. Marc Hermanns;Köln;ja;
+50674-dr-robert-schumacher;Dr. Robert Schumacher;Köln;ja;
+51065-dr-marcus-leinenweber;Dr. Marcus Leinenweber;Köln;ja;
+50668-dr-markus-buschbaum-ll-m;Dr. Markus Buschbaum LL.M.;Köln;ja;
+50668-simon-lindow;Simon Lindow;Köln;ja;
+50667-dr-martin-russmann;Dr. Martin Rüßmann;Köln;ja;ja
+50996-dr-martin-thelen;Dr. Martin Thelen;Köln;ja;
+50667-dr-maximilian-freiherr-von-proff-zu-irnich;Dr. Maximilian Freiherr von Proff zu Irnich;Köln;ja;ja
+50672-dr-michaela-tschon;Dr. Michaela Tschon;Köln;ja;
+50668-dr-peter-schmitz;Dr. Peter Schmitz;Köln;ja;ja
+50668-leontin-schulte-thoma;Leontin Schulte-Thoma;Köln;ja;ja
+50858-dr-rene-zoller;Dr. Rene Zöller;Köln;ja;
+50858-wolfgang-gruntkowski;Wolfgang Gruntkowski;Köln;ja;
+50672-dr-richard-bohr;Dr. Richard Böhr;Köln;ja;
+50935-dr-robert-kleba;Dr. Robert Kleba;Köln;ja;ja
+50670-dr-stefan-heinze;Dr. Stefan Heinze;Köln;ja;ja
+50667-dr-stephan-bleisteiner;Dr. Stephan Bleisteiner;Köln;ja;
+51143-dr-till-grone;Dr. Till Gröne;Köln;ja;
+50667-dr-wolfgang-reetz;Dr. Wolfgang Reetz;Köln;ja;
+50674-erich-r-thies;Erich R. Thies;Köln;ja;
+50667-hans-joachim-schaller;Hans Joachim Schaller;Köln;ja;
+50859-manuel-patrick-busch;Manuel Patrick Busch;Köln;ja;ja
+50935-peter-dobberahn;Peter Dobberahn;Köln;ja;
+50968-peter-pana;Peter Pana;Köln;ja;
+51105-dominik-huren;Dominik Hüren;Köln-Kalk;ja;
+51065-dr-philipp-muller;Dr. Philipp Müller;Köln-Mülheim;ja;
+51143-bernd-olaf-alexander-von-schwander;Bernd Olaf Alexander von Schwander;Köln-Porz;ja;ja
+53639-dr-timo-hartlich-ll-m;Dr. Timo Hartlich LL.M.;Königswinter;ja;
+40764-christoph-stiefel;Christoph Stiefel;Langenfeld (Rheinland);ja;ja
+51375-dr-anne-kathrin-lingk;Dr. Anne-Kathrin Lingk;Leverkusen;ja;ja
+51375-dr-thilo-weimer;Dr. Thilo Weimer;Leverkusen;ja;ja
+51373-klaus-striewski;Klaus Striewski;Leverkusen;ja;
+51373-susanne-karsten;Susanne Karsten;Leverkusen;ja;
+51379-dr-benjamin-matthias-schulz;Dr. Benjamin Matthias Schulz;Leverkusen-Opladen;ja;
+51379-dr-stefan-lange-parpart;Dr. Stefan Lange-Parpart;Leverkusen-Opladen;ja;
+51789-chiara-fischer;Chiara Fischer;Lindlar;ja;
+53797-michael-danzeglocke-ll-m;Michael Danzeglocke LL.M.;Lohmar;ja;ja
+40667-dr-sabine-krampen-lietzke;Dr. Sabine Krampen-Lietzke;Meerbusch;ja;
+40822-dr-reinhard-busse;Dr. Reinhard Busse;Mettmann;ja;
+47441-dr-andre-fisch;Dr. André Fisch;Moers;ja;
+47441-dr-anika-gilberg;Dr. Anika Gilberg;Moers;ja;
+47441-dr-christian-kutschmann-ll-m-univ-of-virginia;Dr. Christian Kutschmann LL.M. (Univ. of Virginia);Moers;ja;
+47441-dr-julie-francastel-l-l-m;Dr. Julie Francastel L.L.M.;Moers;ja;
+47441-dr-christian-lettmann;Dr. Christian Lettmann;Moers;ja;
+47441-dr-jens-todtenhofer-ll-m;Dr. Jens Todtenhöfer LL.M.;Moers;ja;ja
+40789-dr-jens-heinig;Dr. Jens Heinig;Monheim am Rhein;ja;
+52156-thomas-klosky;Thomas Klosky;Monschau;ja;ja
+41239-dirk-piegsa;Dirk Piegsa;Mönchengladbach;ja;
+41199-dr-catharina-sophie-von-hertzberg-bolch;Dr. Catharina Sophie von Hertzberg-Bölch;Mönchengladbach;ja;
+41063-dr-christian-schmitz;Dr. Christian Schmitz;Mönchengladbach;ja;
+41061-dr-kai-franken;Dr. Kai Franken;Mönchengladbach;ja;
+41061-dr-matthias-neuhausen;Dr. Matthias Neuhausen;Mönchengladbach;ja;
+41061-dr-stefan-heimsoeth;Dr. Stefan Heimsoeth;Mönchengladbach;ja;
+41236-dr-thomas-kerstan-ll-m-cambridge;Dr. Thomas Kerstan LL.M.(Cambridge);Mönchengladbach;ja;
+41236-holger-fruh;Holger Fruh;Mönchengladbach;ja;
+41061-dr-thomas-schultz;Dr. Thomas Schultz;Mönchengladbach;ja;
+41061-dr-ulrich-becker;Dr. Ulrich Becker;Mönchengladbach;ja;
+41061-oliver-baetzgen;Oliver Baetzgen;Mönchengladbach;ja;ja
+41334-dr-svenja-gelshorn;Dr. Svenja Gelshorn;Nettetal;ja;
+41460-dr-anna-zobeley;Dr. Anna Zöbeley;Neuss;ja;
+41460-dr-martin-lohr;Dr. Martin Lohr;Neuss;ja;ja
+41460-dr-paul-terner-ll-m;Dr. Paul Terner LL.M.;Neuss;ja;ja
+41460-johanna-vogel-fruher-jurgens-mjur-oxford;Johanna Vogel (früher Jürgens) MJur (Oxford);Neuss;ja;
+41460-dr-tobias-kruse;Dr. Tobias Kruse;Neuss;ja;ja
+41460-dr-volker-hustedt;Dr. Volker Hustedt;Neuss;ja;ja
+41460-nikolaus-bardenhewer;Nikolaus Bardenhewer;Neuss;ja;ja
+53859-michael-stutz;Michael Stutz;Niederkassel;ja;
+50259-dr-thomas-flues;Dr. Thomas Flues;Pulheim;ja;
+50259-dr-viola-kruse;Dr. Viola Kruse;Pulheim;ja;
+42477-dr-britta-spitzbart;Dr. Britta Spitzbart;Radevormwald;ja;
+40878-dr-jan-link;Dr. Jan Link;Ratingen;ja;
+40878-dr-jens-bormann-ll-m-harvard;Dr. Jens Bormann LL.M. (Harvard);Ratingen;ja;
+42853-andreas-schmitz-vornmoor;Andreas Schmitz-Vornmoor;Remscheid;ja;
+42853-dr-clara-thekla-constanze-fornefeld;Dr. Clara Thekla Constanze Fornefeld;Remscheid;ja;
+42897-dr-markus-zahn;Dr. Markus Zahn;Remscheid;ja;
+53359-dr-guido-kordel-ll-m;Dr. Guido Kordel LL.M.;Rheinbach;ja;
+53359-dr-mario-leitzen;Dr. Mario Leitzen;Rheinbach;ja;
+53359-dr-nicole-plate;Dr. Nicole Plate;Rheinbach;ja;
+47495-dr-christopher-bjorn-lutz;Dr. Christopher Björn Lutz;Rheinberg;ja;
+51503-dr-thomas-breiken;Dr. Thomas Breiken;Rösrath;ja;ja
+53757-dr-dominik-kolmel;Dr. Dominik Kölmel;Sankt Augustin;ja;ja
+53937-christian-mach;Christian Mach;Schleiden;ja;ja
+53937-martin-strahl;Martin Strahl;Schleiden;ja;
+53721-dirk-hofinghoff;Dirk Höfinghoff;Siegburg;ja;
+53721-dr-antonia-clarissa-harbecke-fruher-bautsch;Dr. Antonia Clarissa Harbecke (früher Bautsch);Siegburg;ja;
+53721-dr-martin-konstantin-thelen-ll-m-columbia;Dr. Martin Konstantin Thelen LL.M. (Columbia);Siegburg;ja;
+53721-dr-lars-gohmann;Dr. Lars Göhmann;Siegburg;ja;ja
+53721-dr-thorsten-fuhr;Dr. Thorsten Führ;Siegburg;ja;ja
+53721-lisa-johanna-morchen;Lisa Johanna Mörchen;Siegburg;ja;
+42651-dr-alexander-stallknecht;Dr. Alexander Stallknecht;Solingen;ja;
+42697-dr-andreas-hariefeld;Dr. Andreas Hariefeld;Solingen;ja;
+42653-dr-laura-maibaum;Dr. Laura Maibaum;Solingen;ja;
+42653-mikolaj-pogorzelski-ll-m-harvard;Mikolaj Pogorzelski LL.M. (Harvard);Solingen;ja;
+42651-dr-tobias-roth;Dr. Tobias Roth;Solingen;ja;
+52223-dr-stefan-schmitz;Dr. Stefan Schmitz;Stolberg;ja;ja
+52223-dr-christof-wagner-ll-m-cambridge;Dr. Christof Wagner LL.M. (Cambridge);Stolberg (Rheinland);ja;ja
+47638-marc-heggen;Marc Heggen;Straelen;ja;
+53840-dr-christoph-huhn;Dr. Christoph Huhn;Troisdorf;ja;
+53840-sabine-uedelhoven-fruher-dillmann;Sabine Uedelhoven (früher Dillmann);Troisdorf;ja;
+53840-stephan-romer;Stephan Römer;Troisdorf;ja;
+47918-tanja-derks-fruher-dahlmanns;Tanja Derks (früher Dahlmanns);Tönisvorst;ja;
+42549-dr-julian-stefan-klein-ll-m;Dr. Julian Stefan Klein LL.M.;Velbert;ja;ja
+42555-dr-miriam-pascale-rosenberger;Dr. Miriam Pascale Rosenberger;Velbert;ja;
+41749-dr-adrian-cavin-ll-m-georgetown-university;Dr. Adrian Cavin LL.M. (Georgetown University);Viersen;ja;ja
+41747-dr-oliver-gehse;Dr. Oliver Gehse;Viersen;ja;ja
+41751-dr-stephan-oelers;Dr. Stephan Oelers;Viersen;ja;
+41751-dr-tobias-wilms;Dr. Tobias Wilms;Viersen;ja;
+51545-dr-paul-sebastian-hager;Dr. Paul Sebastian Hager;Waldbröl;ja;ja
+41849-dr-ulrike-josefine-gisbertz;Dr. Ulrike Josefine Gisbertz;Wassenberg;ja;
+41844-johannes-christian-freuen;Johannes Christian Freuen;Wegberg;ja;
+42929-dr-stefan-meyer;Dr. Stefan Meyer;Wermelskirchen;ja;
+50389-andre-fabian-gerold;Andre Fabian Gerold;Wesseling;ja;
+51674-dr-tim-kasper;Dr. Tim Kasper;Wiehl;ja;
+51674-philip-scholz;Philip Scholz;Wiehl;ja;
+47877-dr-magnus-bleifeld;Dr. Magnus Bleifeld;Willich;ja;
+51688-dr-thiemo-soester;Dr. Thiemo Soester;Wipperfürth;ja;
+42103-christoph-dahlkamp;Christoph Dahlkamp;Wuppertal;ja;
+42103-dr-felix-flock;Dr. Felix Flöck;Wuppertal;ja;
+42327-dr-andreas-sailer;Dr. Andreas Sailer;Wuppertal;ja;ja
+42103-dr-daniel-doetsch-m-jur-oxford;Dr. Daniel Doetsch M. Jur. (Oxford);Wuppertal;ja;
+42103-waldemar-hindemit;Waldemar Hindemit;Wuppertal;ja;
+42115-dr-markus-dohr;Dr. Markus Dohr;Wuppertal;ja;
+42103-dr-maximilian-bonner-ll-m;Dr. Maximilian Bönner LL.M.;Wuppertal;ja;
+42369-jan-martin-stascheit;Jan Martin Stascheit;Wuppertal;ja;
+42275-caspar-heckscher;Caspar Heckscher;Wuppertal-Barmen;ja;ja
+42275-dr-henrich-fabis;Dr. Henrich Fabis;Wuppertal-Barmen;ja;ja
+42287-dr-thomas-schwerin;Dr. Thomas Schwerin;Wuppertal-Barmen;ja;ja
+42287-mark-neukirchen;Mark Neukirchen;Wuppertal-Barmen;ja;ja
+42489-dennis-theus;Dennis Theus;Wülfrath;ja;
+52146-jan-peterssen;Jan Peterßen;Würselen;ja;
+46509-dr-moritz-lennart-jaschke;Dr. Moritz Lennart Jäschke;Xanten;ja;
+53909-fabian-alexander-schwarz;Fabian Alexander Schwarz;Zülpich;ja;
