@@ -1,0 +1,91 @@
+nr;name;ort;geburt;alter
+1;Kornelia Rudolph-Alexander;Kempen;1957;ca. 69
+2;Dr. Timm Starke;Bonn;1959;ca. 67
+3;Dr. Oliver Schwarz;Düsseldorf;21.09.1960;66
+4;Dr. Thomas Breiken;Rösrath;1961;ca. 65
+5;Dr. Dirk Ittner;Düsseldorf;1962;ca. 64
+6;Dr. Volker Hustedt;Neuss;1962;ca. 64
+7;Dr. Tim Klawitter;Duisburg-Rheinhausen;23.03.1963;63
+8;Benno Garschina;Bonn;1963;ca. 63
+9;Dr. Florian Braunfels;Düsseldorf;1963;ca. 63
+10;Ute Weyland;Gummersbach;1963;ca. 63
+11;Dr. Marcus Sommer;Aachen;1964;ca. 62
+12;Dr. Paul Rombach LL.M.;Düsseldorf;1964;ca. 62
+13;Dr. Christian Hartmann;Jüchen;1965;ca. 61
+14;Dr. Christian Wolf;Kleve;1965;ca. 61
+15;Dr. Henrich Fabis;Wuppertal-Barmen;1965;ca. 61
+16;Dr. Peter Schmitz;Köln;1965;ca. 61
+17;Dr. Thilo Weimer;Leverkusen;1965;ca. 61
+18;Dr. Andreas Sailer;Wuppertal;1966;ca. 60
+19;Dr. Christiane Kluge;Bad Honnef;1966;ca. 60
+20;Stefan Wegerhoff;Hennef;1966;ca. 60
+21;Dr. Anne-Kathrin Lingk;Leverkusen;1968;ca. 58
+22;Dr. Stefan Schmitz;Stolberg;1968;ca. 58
+23;Dr. Hagen Monath;Düren;20.06.1969;57
+24;Dr. Alexander Grein;Bonn;1969;ca. 57
+25;Dr. Andreas Pützhoven;Erkelenz;1969;ca. 57
+26;Dr. Martin Lohr;Neuss;1969;ca. 57
+27;Prof. Dr. Christoph Terbrack;Aachen;1969;ca. 57
+28;Dr. Dirk Esser;Düsseldorf;1970;ca. 56
+29;Dr. Hanno Naumann;Bergheim;1970;ca. 56
+30;Dr. Thomas Schwerin;Wuppertal-Barmen;1970;ca. 56
+31;Leontin Schulte-Thoma;Köln;1970;ca. 56
+32;Dr. Jörg Ihle;Bergisch Gladpacn;1971;ca. 55
+33;Dr. Manfred Schaal;Heinsberg;1971;ca. 55
+34;Oliver Baetzgen;Mönchengladbach;06.07.1972;54
+35;Dr. Kai Bischoff;Köln;1972;ca. 54
+36;Markus Bohlscheid;Bergisch Gladbach;1972;ca. 54
+37;Christoph Stiefel;Langenfeld (Rheinland);1973;ca. 53
+38;Dr. Andreas Bürger;Köln;1973;ca. 53
+39;Dr. Heiko Worm LL.M.;Bornheim;1973;ca. 53
+40;Dr. Markus Lepper;Bergheim;1973;ca. 53
+41;Dr. Oliver Gehse;Viersen;22.07.1975;51
+42;Dr. Dominik Kölmel;Sankt Augustin;1975;ca. 51
+43;Dr. Martin Rüßmann;Köln;1975;ca. 51
+44;Dr. Michael Oyda;Geldern;1975;ca. 51
+45;Dr. Nikola Halding-Hoppenheit;Gummersbach;1975;ca. 51
+46;Dr. Paul Sebastian Hager;Waldbröl;1975;ca. 51
+47;Dr. Tobias Kruse;Neuss;1975;ca. 51
+48;Dr. Yvonne Abicht;Düren;1975;ca. 51
+49;Dr. Alexander Rezori;Krefeld;1976;ca. 50
+50;Dr. Maximilian Freiherr von Proff zu Irnich;Köln;1976;ca. 50
+51;Dr. Niklas Mairose;Hilden;1976;ca. 50
+52;Dr. Paul Terner LL.M.;Neuss;1976;ca. 50
+53;Dr. Rainer Oppermann;Düsseldorf;1976;ca. 50
+54;Dr. Robert Mödl;Bergisch Gladbach;1976;ca. 50
+55;Dr. Tobias Clevinghaus;Kerpen;1976;ca. 50
+56;Nikolaus Bardenhewer;Neuss;1976;ca. 50
+57;Dr. Thorsten Führ;Siegburg;1977;ca. 49
+58;Jon Meyer;Düsseldorf;1977;ca. 49
+59;Dr. Andreas Goetze;Krefeld;1978;ca. 48
+60;Dr. Lars Göhmann;Siegburg;1978;ca. 48
+61;Dr. Michael Schüller;Düsseldorf;1978;ca. 48
+62;Dr. Stefan Heinze;Köln;08.01.1979;47
+63;Dr. Alexander Völzmann;Köln;1979;ca. 47
+64;Dr. Jan Heskamp;Kamp-Lintfort;1979;ca. 47
+65;Martin Johannes Rudersdorf LL.M.;Aachen;1979;ca. 47
+66;Dr. Johannes Hushahn LL.M.;Jüchen;1980;ca. 46
+67;Marc Christian Lehmann;Bad Münstereifel;20.07.1981;45
+68;Bernd Olaf Alexander von Schwander;Köln-Porz;1982;ca. 44
+69;Dr. Andreas Brandt;Hückelhoven;1982;ca. 44
+70;Dr. Carsten Lindner;Düsseldorf-Gerresheim;1982;ca. 44
+71;Dr. Robert Kleba;Köln;1982;ca. 44
+72;Dr. Stefan Daniel Josef Schmitz;Bonn;1982;ca. 44
+73;Caspar Heckscher;Wuppertal-Barmen;1983;ca. 43
+74;Dr. Adrian Cavin LL.M. (Georgetown University);Viersen;1983;ca. 43
+75;Jonas Thebille;Engelskirchen;1983;ca. 43
+76;Manuel Patrick Busch;Köln;1983;ca. 43
+77;Christian Mach;Schleiden;1984;ca. 42
+78;Dr. Alexander Kiesgen LL.M.;Bedburg;1984;ca. 42
+79;Dr. Dominik Braun LL.M. (Univ. of Chicago);Düren;1984;ca. 42
+80;Dr. Jan Henning Berg;Düsseldorf-Gerresheim;1984;ca. 42
+81;Dr. Peter Coenen;Gangelt;1984;ca. 42
+82;Katharina Tschernoster;Düren;1984;ca. 42
+83;Dr. Christof Wagner LL.M. (Cambridge);Stolberg (Rheinland);1985;ca. 41
+84;Dr. Julian Boor LL.M.;Aachen;1985;ca. 41
+85;Michael Danzeglocke LL.M.;Lohmar;1985;ca. 41
+86;Dr. Jens Todtenhöfer LL.M.;Moers;1986;ca. 40
+87;Dr. Julian Stefan Klein LL.M.;Velbert;1987;ca. 39
+88;Mark Neukirchen;Wuppertal-Barmen;1987;ca. 39
+89;Dr. Benedikt Berthold;Erkelenz;1988;ca. 38
+90;Thomas Klosky;Monschau;1990;ca. 36
